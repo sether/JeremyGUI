@@ -1,5 +1,5 @@
 ---------
-Backlog 1.0
+Backlog 1.0.1
 ---------
 User gives CSV file
 User gets data  - JSON
@@ -21,6 +21,7 @@ CLI Tutorial
 CLI Guide
 Web server / Web Service
 Wizard for data entry in the GUI/CLI
+Hook into the database application and create the appropriate database
 
 Display the data in a JTable to user
 Allow user to sepcify changes/validate in the data (change database name, change table column names)
