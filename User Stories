@@ -1,0 +1,40 @@
+A User can use a Graphical user interface Application to convert CSV files
+A User can use a Command line interface Application to convert CSV files
+
+A Team member will write code according to a created code conventions document
+A Team member will write Javadoc
+A Team member will run JUnit tests on the API
+
+A User inputs a CSV file
+A User creates a JSON file
+A User creates an XML file
+A User creates a Secure Serialized Object file
+A User creates postgre data
+A User creates SQL Server data
+A User creates MYSQL data?
+
+A Developer can load a CSV file into the API
+
+A User can check a CSV file for errors
+A User can fix a broken CSV file
+A User can Parse column/row name data
+
+A User can Encrypt a file
+A User can Decrypt a file
+
+A User can Log events using a Java logging framework
+
+A User can view the GUI help
+A Developer can undertake the API tutorial
+
+A User can access the web service
+A User can access the support website
+A User can view the Javadoc on the support website
+
+A User can view data in a JTable
+A User can specify changes and or validate the data
+
+
+STILL TO ADD:
+Internationalisation  and Localization
+SQL Server / Server setup
