@@ -1,0 +1,10 @@
+Needs to include at least one of the following:
+-Inheritance & interfaces
+-Enumerations (Preferable to lots of constants)
+-*Inner and/or nested classes
+-Design patters, Singleton, Factory
+-Javadoc
+
+*if not used, include in the GUI
+
+Needs to be complied into a Jar file for use by the GUI
