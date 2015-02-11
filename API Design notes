@@ -8,3 +8,6 @@ Needs to include at least one of the following:
 *if not used, include in the GUI
 
 Needs to be complied into a Jar file for use by the GUI
+
+Must be able to create a database table
+Must be able to create a database
