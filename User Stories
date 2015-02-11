@@ -1,40 +1,48 @@
-A User can use a Graphical user interface Application to convert CSV files
-A User can use a Command line interface Application to convert CSV files
+General
+-A Team member will write code according to a created code conventions document
+-A Team member will write Javadoc
+-Create UML Diagram of API
+-Create UML Diagram of CLI
+-Create UML Diagram of GUI
 
-A Team member will write code according to a created code conventions document
-A Team member will write Javadoc
-A Team member will run JUnit tests on the API
+API
+-A Developer can Log events using a Java logging framework
+-A Developer import a CSV file
+-A Developer creates a JSON file
+-A Developer creates an XML file
+-A Developer creates a Secure Serialized Object file
+-A Developer creates postgre data
+-A Developer creates SQL Server data
+-A Developer creates MYSQL data?
+-A Developer can load a CSV file into the API
+-A Developer can check a CSV file for errors
+-A Developer can fix a broken CSV file
+-A Developer can Parse column/row name data
+-A Developer can Encrypt a file
+-A Developer can Decrypt a file
+-A Team member will run JUnit tests on the API
 
-A User import a CSV file
-A User creates a JSON file
-A User creates an XML file
-A User creates a Secure Serialized Object file
-A User creates postgre data
-A User creates SQL Server data
-A User creates MYSQL data?
+CLI
+-A Developer can undertake the API tutorial
+-A User can use a Command line interface Application to convert CSV files
 
-A Developer can load a CSV file into the API
+GUI
+-A User can use a Graphical user interface Application to convert CSV files
+-A User can use the GUI as a wizard interface
+-localize Graphical User interface
+-internationalize Graphical User interface
+-A User can view the GUI help
+-A User can view data in a Table
+-A User can specify changes and or validate the data
+-A Developer can log events using the API's logging
+-A User can expect input validation and error handling
 
-A User can check a CSV file for errors
-A User can fix a broken CSV file
-A User can Parse column/row name data
+Support Website
+-A User can access the support website
+-A Developer can view the Javadoc on the support website
 
-A User can Encrypt a file
-A User can Decrypt a file
-
-A User can Log events using a Java logging framework
-
-A User can view the GUI help
-A Developer can undertake the API tutorial
-
-A User can access the web service
-A User can access the support website
-A User can view the Javadoc on the support website
-
-A User can view data in a JTable
-A User can specify changes and or validate the data
-
+Web Server
+-A User can access the web service
 
 STILL TO ADD:
-Internationalisation  and Localization
 SQL Server / Server setup
