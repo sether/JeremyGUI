@@ -14,6 +14,12 @@ API
 -A Developer creates postgre data
 -A Developer creates SQL Server data
 -A Developer creates MYSQL data?
+-A Developer can create a postgre table
+-A Developer can create a postgre Database
+-A Developer can create a SQL Server table
+-A Developer can create a SQL Server Database
+-A Developer can create a MYSQL table
+-A Developer can create a MYSQL Database
 -A Developer can load a CSV file into the API
 -A Developer can check a CSV file for errors
 -A Developer can fix a broken CSV file
@@ -43,6 +49,3 @@ Support Website
 
 Web Server
 -A User can access the web service
-
-STILL TO ADD:
-SQL Server / Server setup
