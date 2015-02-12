@@ -1,37 +1,11 @@
 ---------
 Backlog 1.0.1
 ---------
-User gives CSV file
-User gets data  - JSON
-                - XML
-                - Secure Serialzed objects
-                - Database format - Postgre
-                                  - SQL Server
-                                  - MYSQL
-Load CSV file into API
-Check the file
-Fix the file into a usable state
-Encrypt file
-Decrypt file
-Parse column/row name data
-
-Create login framework
-GUI Help
-CLI Tutorial
-CLI Guide
-Web server / Web Service
-Wizard for data entry in the GUI/CLI
-Hook into the database application and create the appropriate database
-
-Display the data in a JTable to user
-Allow user to sepcify changes/validate in the data (change database name, change table column names)
-Validate the users input
-Internationalisation  and Localization
-
-SQL Server / Server setup
-Javadoc doumentation
-JUnit Tests
-Coding convention document
+DUE: 19th Feb
+Coding conventions:
+                - sql statement style
+                - javadoc style
+                - JSON/XML formats
 ---------
 Questions
 ---------
