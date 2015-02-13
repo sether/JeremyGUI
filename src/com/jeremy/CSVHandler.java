@@ -6,22 +6,49 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * @author AlexBrown
+ * @version 1.0
+ * Used to convert a CSV file into usable data.
+ */
 public class CSVHandler {
 	private int lines = 0;
-	private int columns = 0;
+	private int fields = 0;
 	
-	public Object[][] readCSV(String fileName) throws IOException{
+	/**
+	 * Reads a CSV file into a TableData object and returns it
+	 * @param fileName - The name of the file that you wish to read into the program
+	 * @return Table data from the CSV file specified
+	 * @throws IOException
+	 * @see TableData
+	 */
+	public TableData readCSV(String fileName) throws IOException{
 		File csvFile = new File(fileName);
 		return readCSV(csvFile);
 	}
 	
-	public Object[][] readCSV(String directory, String fileName) throws IOException{
+	/**
+	 * Reads a CSV file into a TableData object and returns it
+	 * @param directory - The directory of the file you wish to read
+	 * @param fileName - The name of the file that you wish to read into the program
+	 * @return Table data from the CSV file specified
+	 * @throws IOException
+	 * @see TableData
+	 */
+	public TableData readCSV(String directory, String fileName) throws IOException{
 		File csvFile = new File(directory, fileName);
 		return readCSV(csvFile);
 	}
 	
 	
-	public Object[][] readCSV(File csvFile) throws IOException{
+	/**
+	 * Reads a CSV file into a TableData object and returns it
+	 * @param csvFile - The file that you wish to read into the program
+	 * @return Table data from the CSV file specified
+	 * @throws IOException
+	 * @see TableData
+	 */
+	public TableData readCSV(File csvFile) throws IOException{
 	
 		//make sure file is a real file and we can read it
 		if (csvFile.exists() && csvFile.isFile() && csvFile.canRead()) {
@@ -30,7 +57,7 @@ public class CSVHandler {
 			countFileColumns(csvFile);
 			
 			//create returnable object
-			Object[][] output = new Object[lines][columns];
+			Object[][] output = new Object[lines][fields];
 			
 			//open a file to read
 			BufferedReader reader = new BufferedReader(new FileReader(csvFile));
@@ -54,7 +81,7 @@ public class CSVHandler {
 				reader.close();
 			}
 			
-			return output;
+			return new TableData(output, lines, fields);
 		} else {
 			//TODO: Add API error logging file not found exception
 			//throw error if the file is not found or can't read it
@@ -82,7 +109,7 @@ public class CSVHandler {
 	private void countFileColumns(File csvFile) throws IOException{
 		//TODO: get min columns
 		BufferedReader reader = new BufferedReader(new FileReader(csvFile));
-		columns = 0;
+		fields = 0;
 		
 		try {
 			//read line and make sure its valid
@@ -95,7 +122,7 @@ public class CSVHandler {
 				String[] columnNames = line.split(",");
 				if (line != null && line.length() > 0) {
 					//get column amount
-					columns = columnNames.length;
+					fields = columnNames.length;
 				} else {
 					return;
 				}
@@ -104,14 +131,6 @@ public class CSVHandler {
 			reader.close();
 		}
 		
-	}
-
-	public int getLines() {
-		return lines;
-	}
-
-	public int getColumns() {
-		return columns;
 	}
 	
 }
