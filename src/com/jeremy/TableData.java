@@ -7,7 +7,7 @@ package com.jeremy;
  */
 public class TableData {
 
-	//TODO: Decide how to indentidy header type
+	//TODO: Decide how to identify header type
 	//private ArrayList<String> headerType;
 	private Object[][] tableData;
 	private int lines;
