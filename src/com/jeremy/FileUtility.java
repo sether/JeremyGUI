@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
+ * Used to write a content to a file and any other file operations
  * @author AlexBrown
  * @version 1.0
- * Used to write a content to a file and any other file operations
  */
 public class FileUtility {
 
@@ -15,11 +15,19 @@ public class FileUtility {
 	//TODO: add ability to append
 	
 	/**
-	 * Writes given content to a specified file
-	 * @param fileName - The name of the file that you wish to write to
-	 * @param fileContent - The content to write to the file
-	 * @return True if file has been successfully written
-	 * @throws IOException
+	 * Writes given content to a specified file<br/>
+	 * @param fileName - The name of the file that you wish to write to<br/>
+	 * @param fileContent - The content to write to the file<br/>
+	 * @return True if file has been successfully written<br/>
+	 * <br/>
+	 * <b>USAGE:</b><br/>
+	 * <pre>
+	 * String fileToWrite = "TestData\\TestData.csv";
+	 * String fileOutput = "TestData";
+	 * 
+	 * FileUtility.writeFile(fileToWrite, fileOutput);
+	 * </pre>
+	 * @throws IOException If file is not writable<br/>
 	 */
 	public static boolean writeFile(String fileName, String fileContent) throws IOException{
 		

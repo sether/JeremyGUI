@@ -4,19 +4,19 @@ Backlog 1.0.1
 DUE: 19th Feb
 
 Coding conventions:
-- Java covention: http://www.oracle.com/technetwork/java/codeconventions-150003.pdf
-- MySQL statement style: http://www.realdealmarketing.net/docs/mysql-coding-standards.php
-- Postgre statement style:
-- MSSQL statement style:
+*DONE*- Java covention: http://www.oracle.com/technetwork/java/codeconventions-150003.pdf
+*DONE*- MySQL statement style: http://www.realdealmarketing.net/docs/mysql-coding-standards.php
+*DONE*- Postgre statement style:
+*DONE*- MSSQL statement style:
 OR 
 (Agnostic to SQL servers -- http://www.nyx.net/~bwunder/dbChangeControl/standard.htm)
 
-- Javadoc style: http://www.oracle.com/technetwork/articles/java/index-137868.html
-- JSON formats: https://google-styleguide.googlecode.com/svn/trunk/jsoncstyleguide.xml 
+*DONE*- Javadoc style: http://www.oracle.com/technetwork/articles/java/index-137868.html
+*DONE*- JSON formats: https://google-styleguide.googlecode.com/svn/trunk/jsoncstyleguide.xml 
 
 setup icescrum openshift
 create UML diagrams -class diagrams and use case diagrams
-import CSV for API
+*DONE*import CSV for API
 ---
 export the data to JSON
 export the data to XML
@@ -26,6 +26,5 @@ serialize the data object
 ---------
 Questions
 ---------
-Using Libraries for exporting data of the types needed
-Alex's DB API
+
 

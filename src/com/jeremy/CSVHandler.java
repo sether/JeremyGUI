@@ -7,9 +7,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
+ * Used to convert a CSV file into usable data.
  * @author AlexBrown
  * @version 1.0
- * Used to convert a CSV file into usable data.
  */
 public class CSVHandler {
 	private int lines = 0;
@@ -18,7 +18,14 @@ public class CSVHandler {
 	/**
 	 * Reads a CSV file into a TableData object and returns it
 	 * @param fileName - The name of the file that you wish to read into the program
-	 * @return Table data from the CSV file specified
+	 * @return Table data from the CSV file specified<br/>
+	 * <br/>
+	 * <b>USAGE:</b><br/>
+	 * <pre>
+	 * String fileName = "TestData.csv";
+	 * 
+	 * TableData csvFile = csvHandler.readCSV(fileName);
+	 * </pre>
 	 * @throws IOException
 	 * @see TableData
 	 */
@@ -31,7 +38,15 @@ public class CSVHandler {
 	 * Reads a CSV file into a TableData object and returns it
 	 * @param directory - The directory of the file you wish to read
 	 * @param fileName - The name of the file that you wish to read into the program
-	 * @return Table data from the CSV file specified
+	 * @return Table data from the CSV file specified<br/>
+	 * <br/>
+	 * <b>USAGE:</b><br/>
+	 * <pre>
+	 * String directory = "TestDirectory";
+	 * String fileName = "TestData.csv";
+	 * 
+	 * TableData csvFile = csvHandler.readCSV(directory, fileName);
+	 * </pre>
 	 * @throws IOException
 	 * @see TableData
 	 */
@@ -42,9 +57,19 @@ public class CSVHandler {
 	
 	
 	/**
-	 * Reads a CSV file into a TableData object and returns it
+	 * Reads an already made CSV file into a TableData object and returns it
 	 * @param csvFile - The file that you wish to read into the program
-	 * @return Table data from the CSV file specified
+	 * @return Table data from the CSV file specified<br/>
+	 * <br/>
+	 * <b>USAGE:</b><br/>
+	 * <pre>
+	 * String directory = "TestDirectory";
+	 * String fileName = "TestData.csv";
+	 * 
+	 * File csvFile = new File(directory, fileName);
+	 * 
+	 * TableData csvFile = csvHandler.readCSV(csvFile);
+	 * </pre>
 	 * @throws IOException
 	 * @see TableData
 	 */
