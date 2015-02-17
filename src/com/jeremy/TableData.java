@@ -7,8 +7,9 @@ package com.jeremy;
  */
 public class TableData {
 
-	//TODO: Decide how to identify header type
+	//TODO: Decide how to identify header type like date and number
 	//private ArrayList<String> headerType;
+	private String[] columnHeader;
 	private Object[][] tableData;
 	private int lines;
 	private int fields;
@@ -17,8 +18,20 @@ public class TableData {
 		this.tableData = tableData;
 	}
 	
+	public TableData(Object[][] tableData, String[] columnHeader) {
+		this.tableData = tableData;
+		this.columnHeader = columnHeader;
+	}
+	
 	public TableData(Object[][] tableData, int lines, int fields) {
 		this.tableData = tableData;
+		this.lines = lines;
+		this.fields = fields;
+	}
+	
+	public TableData(Object[][] tableData, String[] columnHeader, int lines, int fields) {
+		this.tableData = tableData;
+		this.columnHeader = columnHeader;
 		this.lines = lines;
 		this.fields = fields;
 	}
@@ -29,6 +42,14 @@ public class TableData {
 
 	public void setTableData(Object[][] tableData) {
 		this.tableData = tableData;
+	}
+
+	public String[] getColumnHeader() {
+		return columnHeader;
+	}
+
+	public void setColumnHeader(String[] columnHeader) {
+		this.columnHeader = columnHeader;
 	}
 
 	public int getLines() {
