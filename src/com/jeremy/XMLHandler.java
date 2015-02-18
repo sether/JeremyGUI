@@ -11,7 +11,8 @@ import java.util.List;
 public class XMLHandler {
 	private final Double XML_VERSION = 1.0;
 	private final String XML_ENCODING = "UTF-8";
-	private final boolean FIRST_LINE_HEADINGS = true;
+	private final boolean ROWNUM_AS_ID = false;
+	private final boolean FIELD_AS_ELEMENT = false;
 	private XMLTag root;
 	private TableData data;
 	
@@ -20,21 +21,11 @@ public class XMLHandler {
 	}
 	
 	public void createXMLObjects(){
-		int rowCount = data.getLines();
-		int colCount = data.getFields();
-		int startLine;
 		Object[][] tableData = data.getTableData();
-		Object[] headings;
-		
-		//create heading array to run parallel with data in element creation
-		if(FIRST_LINE_HEADINGS){
-			headings = tableData[0];
-			startLine = 1;
-		} else {
-			//TODO handle headings set in CSVHandler
-			headings = null;
-			startLine = 0;
-		}
+		Object[] headings = data.getColumnHeader();
+		int rowCount = tableData.length;
+		int colCount = headings.length;
+		int startLine = 0;
 		
 		//create base tag in xml hierarchy
 		this.root = new XMLTag("Table");
@@ -46,11 +37,17 @@ public class XMLHandler {
 			this.root.tags.add(row);
 			
 			//id each row with its row number
-			row.attribs.add(new XMLAttribute("id", i + ""));
+			if(ROWNUM_AS_ID){
+				row.attribs.add(new XMLAttribute("id", i + ""));
+			}
 			
-			//add each field as an element
+			//add each field as an element or as an attribute
 			for(int j = 0; j < colCount; j++){
-				row.elements.add(new XMLElement(headings[j].toString(), tableData[i][j].toString()));
+				if(FIELD_AS_ELEMENT){
+					row.elements.add(new XMLElement(headings[j].toString(), tableData[i][j].toString()));
+				} else {
+					row.attribs.add(new XMLAttribute(headings[j].toString(), tableData[i][j].toString()));
+				}
 			}
 		}
 	}
@@ -72,32 +69,41 @@ public class XMLHandler {
 	private String tagToString(XMLTag tag, int indent){
 		String all = "";
 		int ind = indent;
+		boolean singleLine = (tag.elements.size() == 0 && tag.tags.size() == 0);
 		
 		String line = "";
 		//format tag start and add attributes
 		line = addTab(ind);
 		line = "<" + tag.name;
 		line += attribToString(tag.attribs);
-		line += ">";
-		all += addTab(ind) + line + "\n";
 		
-		//insert elements
-		for(XMLElement elem : tag.elements){
-			line = addTab(ind + 1);
-			line += "<" + elem.name + attribToString(elem.attribs) + ">";
-			line += elem.value;
-			line += "</" + elem.name + ">";
-			all += line + "\n";
+		if(singleLine){ // make single line tag if no child contents exist
+			//close start tag with
+			line += "/>";
+			all += addTab(ind) + line;
+		} else {
+			//close start tag
+			line += ">";
+			all += addTab(ind) + line + "\n";
+			
+			//insert elements
+			for(XMLElement elem : tag.elements){
+				line = addTab(ind + 1);
+				line += "<" + elem.name + attribToString(elem.attribs) + ">";
+				line += elem.value;
+				line += "</" + elem.name + ">";
+				all += line + "\n";
+			}
+			
+			//child tags
+			for(XMLTag child : tag.tags){
+				all += tagToString(child, indent + 1) + "\n";
+			}
+			
+			//close attribute
+			line = "</" + tag.name + ">";
+			all += addTab(ind) + line;
 		}
-		
-		//child tags
-		for(XMLTag child : tag.tags){
-			all += tagToString(child, indent + 1) + "\n";
-		}
-		
-		//close attribute
-		line = "</" + tag.name + ">";
-		all += addTab(ind) + line;
 		
 		return all;
 	}
@@ -105,10 +111,15 @@ public class XMLHandler {
 	//creates a string from a list of attributes
 	private String attribToString(List<XMLAttribute> a){
 		String s = "";
+		XMLAttribute att;
 		if(a.size() > 0){
 			s = " ";
-			for(XMLAttribute att : a){
+			for(int i = 0; i < a.size(); i++){
+				att = a.get(i);
 				s += att.name + "=" + "\"" + att.value + "\"";
+				if(i < a.size() - 1){ // space between attributes if not the last one
+					s += " ";
+				}
 			}
 		}
 		return s;
