@@ -113,21 +113,22 @@ public class CSVHandler {
 							columnHeader[i] = fields[i].trim();
 						}
 						collectedHeader = true;
+						continue;
 					} else if(counter == 0 && !firstLineUsedAsColumnHeader && !collectedHeader) { //first line and not using the headers and hasn't gotten headers already
 						for (int i = 0; i < fields.length; i++) {
 							//create a column name
 							columnHeader[i] = DEFAULT_COLUMN_NAME + i;
 						}
 						collectedHeader = true;
-					} else {
-						//loop through lines
-						for (int i = 0; i < fields.length; i++) {
-							//neaten up fields and add them to the output array
-							output[counter][i] = fields[i].trim();
-						}
-						
-						counter++;
 					}
+					
+					//loop through lines
+					for (int i = 0; i < fields.length; i++) {
+						//neaten up fields and add them to the output array
+						output[counter][i] = fields[i].trim();
+					}
+					
+					counter++;
 				}			
 			} finally{
 				//close after use or on error
