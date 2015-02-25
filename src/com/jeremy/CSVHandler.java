@@ -95,6 +95,12 @@ public class CSVHandler {
 			Object[][] output = new Object[lines][fields];
 			String[] columnHeader = new String[fields];
 			
+			//set up column classes
+			Class[] columnClasses = new Class[fields];
+			for (int i = 0; i < columnClasses.length; i++) {
+				columnClasses[i] = String.class;
+			}
+			
 			//open a file to read
 			BufferedReader reader = new BufferedReader(new FileReader(csvFile));
 			try{
@@ -135,7 +141,8 @@ public class CSVHandler {
 				reader.close();
 			}
 			
-			return new TableData(output, columnHeader, lines, fields);
+			
+			return new TableData(output, columnClasses, columnHeader, lines, fields);
 		} else {
 			//TODO: Add API error logging file not found exception
 			//throw error if the file is not found or can't read it

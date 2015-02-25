@@ -7,30 +7,33 @@ package com.jeremy;
  */
 public class TableData {
 
-	//TODO: Decide how to identify header type like date and number
-	//private ArrayList<String> headerType;
 	private String[] columnHeader;
+	private Class[] columnClasses;	// Use Generics?
 	private Object[][] tableData;
 	private int lines;
 	private int fields;
 	
-	public TableData(Object[][] tableData) {
+	public TableData(Object[][] tableData, Class[] columnClasses) {
 		this.tableData = tableData;
+		this.columnClasses = columnClasses;
 	}
 	
-	public TableData(Object[][] tableData, String[] columnHeader) {
+	public TableData(Object[][] tableData, Class[] columnClasses, String[] columnHeader) {
 		this.tableData = tableData;
+		this.columnClasses = columnClasses;
 		this.columnHeader = columnHeader;
 	}
 	
-	public TableData(Object[][] tableData, int lines, int fields) {
+	public TableData(Object[][] tableData, Class[] columnClasses, int lines, int fields) {
 		this.tableData = tableData;
+		this.columnClasses = columnClasses;
 		this.lines = lines;
 		this.fields = fields;
 	}
 	
-	public TableData(Object[][] tableData, String[] columnHeader, int lines, int fields) {
+	public TableData(Object[][] tableData, Class[] columnClasses, String[] columnHeader, int lines, int fields) {
 		this.tableData = tableData;
+		this.columnClasses = columnClasses;
 		this.columnHeader = columnHeader;
 		this.lines = lines;
 		this.fields = fields;
@@ -50,6 +53,14 @@ public class TableData {
 
 	public void setColumnHeader(String[] columnHeader) {
 		this.columnHeader = columnHeader;
+	}
+
+	public Class[] getColumnClasses() {
+		return columnClasses;
+	}
+
+	public void setColumnClasses(Class[] columnClasses) {
+		this.columnClasses = columnClasses;
 	}
 
 	public int getLines() {
