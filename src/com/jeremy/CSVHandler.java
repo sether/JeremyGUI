@@ -98,6 +98,8 @@ public class CSVHandler {
 			//set up column classes
 			Class[] columnClasses = new Class[fields];
 			for (int i = 0; i < columnClasses.length; i++) {
+				
+				//TODO: figure out what class this should be
 				columnClasses[i] = String.class;
 			}
 			
