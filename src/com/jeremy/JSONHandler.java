@@ -6,6 +6,7 @@ import com.jeremy.JSONTools.JSONProperty;
 
 /**
  * Used to write a content to a file to the JSON format.
+ * More testing
  * @author Anthony Howse
  * @version 1.0
  */
@@ -40,6 +41,5 @@ public class JSONHandler {
 			// Add the member to the JSON Object.
 			theJSON.addMember(mem);
 		}
-		
 	}
 }
