@@ -7,6 +7,7 @@ import java.util.List;
  * Used to convert TableData into an XML Document
  * @author Scott Micklethwaite
  * @version 1.0
+ * Automagic added edition
  */
 public class XMLHandler {
 	private final Double XML_VERSION = 1.0;
