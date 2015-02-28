@@ -17,6 +17,9 @@ public class CSVHandler {
 	
 	private int lines = 0;
 	private int fields = 0;
+	private int[] fieldLength;
+	private int[] fieldPrecision;
+	
 	
 	//TODO: decide default
 	private boolean firstLineUsedAsColumnHeader = false;
@@ -84,8 +87,10 @@ public class CSVHandler {
 		//make sure file is a real file and we can read it
 		if (csvFile.exists() && csvFile.isFile() && csvFile.canRead()) {
 			//count the lines and columns
-			countFileLines(csvFile);
+			
 			countFileColumns(csvFile);
+			countFileLines(csvFile);
+			countFieldLength(csvFile);
 			
 			//get rid of a line if the first line is going to be used as a header
 			if (firstLineUsedAsColumnHeader) {
@@ -96,7 +101,7 @@ public class CSVHandler {
 			String[] columnHeader = new String[fields];
 			
 			//set up column classes
-			Class[] columnClasses = new Class[fields];
+			Class<?>[] columnClasses = new Class[fields];
 			for (int i = 0; i < columnClasses.length; i++) {
 				
 				//TODO: figure out what class this should be
@@ -144,7 +149,7 @@ public class CSVHandler {
 			}
 			
 			
-			return new TableData(output, columnClasses, columnHeader, lines, fields);
+			return new TableData(output, columnClasses, columnHeader, lines, fields, fieldLength);
 		} else {
 			//TODO: Add API error logging file not found exception
 			//throw error if the file is not found or can't read it
@@ -185,7 +190,7 @@ public class CSVHandler {
 				String[] columnNames = line.split(COLUMN_DELIMITER);
 				if (line != null && line.length() > 0) {
 					//get column amount
-					fields = columnNames.length;
+					fields = columnNames.length;	
 				} else {
 					return;
 				}
@@ -194,6 +199,33 @@ public class CSVHandler {
 			reader.close();
 		}
 		
+	}
+	
+	private void countFieldLength(File csvFile) throws IOException{
+		//set up for file reading
+		BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+		
+		try{
+			//
+			fieldLength = new int[fields];
+			String line;
+			while((line = reader.readLine()) != null) {
+				
+				//Split
+				String[] fields = line.split(COLUMN_DELIMITER);
+				
+				//Count
+				for (int i = 0; i < fields.length; i++) {
+					if (fieldLength[i] < fields[i].length()) {
+						fieldLength[i] = fields[i].length();
+					}
+				}
+				
+			}			
+		} finally{
+			//close after use or on error
+			reader.close();
+		}
 	}
 
 	public boolean isFirstLineUsedAsColumnHeader() {

@@ -8,35 +8,46 @@ package com.jeremy;
 public class TableData {
 
 	private String[] columnHeader;
-	private Class[] columnClasses;	// Use Generics?
+	private int[] fieldLength;
+	private int[] fieldPrecision;
+	private Class<?>[] columnClasses;	
 	private Object[][] tableData;
 	private int lines;
 	private int fields;
 	
-	public TableData(Object[][] tableData, Class[] columnClasses) {
+	public TableData(Object[][] tableData, Class<?>[] columnClasses) {
 		this.tableData = tableData;
 		this.columnClasses = columnClasses;
 	}
 	
-	public TableData(Object[][] tableData, Class[] columnClasses, String[] columnHeader) {
+	public TableData(Object[][] tableData, Class<?>[] columnClasses, String[] columnHeader) {
 		this.tableData = tableData;
 		this.columnClasses = columnClasses;
 		this.columnHeader = columnHeader;
 	}
 	
-	public TableData(Object[][] tableData, Class[] columnClasses, int lines, int fields) {
+	public TableData(Object[][] tableData, Class<?>[] columnClasses, int lines, int fields) {
 		this.tableData = tableData;
 		this.columnClasses = columnClasses;
 		this.lines = lines;
 		this.fields = fields;
 	}
 	
-	public TableData(Object[][] tableData, Class[] columnClasses, String[] columnHeader, int lines, int fields) {
+	public TableData(Object[][] tableData, Class<?>[] columnClasses, String[] columnHeader, int lines, int fields) {
 		this.tableData = tableData;
 		this.columnClasses = columnClasses;
 		this.columnHeader = columnHeader;
 		this.lines = lines;
 		this.fields = fields;
+	}
+	
+	public TableData(Object[][] tableData, Class<?>[] columnClasses, String[] columnHeader, int lines, int fields, int[] fieldLength) {
+		this.tableData = tableData;
+		this.columnClasses = columnClasses;
+		this.columnHeader = columnHeader;
+		this.lines = lines;
+		this.fields = fields;
+		this.fieldLength = fieldLength;
 	}
 
 	public Object[][] getTableData() {
@@ -79,7 +90,20 @@ public class TableData {
 		this.fields = fields;
 	}
 
-	
-	
-	
+	public int[] getFieldLength() {
+		return fieldLength;
+	}
+
+	public void setFieldLength(int[] fieldLength) {
+		this.fieldLength = fieldLength;
+	}
+
+	public int[] getFieldPrecision() {
+		return fieldPrecision;
+	}
+
+	public void setFieldPrecision(int[] fieldPrecision) {
+		this.fieldPrecision = fieldPrecision;
+	}
+
 }
