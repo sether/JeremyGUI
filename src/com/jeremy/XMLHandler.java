@@ -12,13 +12,13 @@ import java.util.List;
 public class XMLHandler {
 	private final Double XML_VERSION = 1.0;
 	private final String XML_ENCODING = "UTF-8";
-	private final boolean ROWNUM_AS_ID = false;
-	private final boolean FIELD_AS_ELEMENT = false;
+	private final boolean FIELD_AS_ELEMENT = true;
 	private XMLTag root;
 	private TableData data;
 	
 	public XMLHandler(TableData data){
 		this.data = data;
+		createXMLObjects();
 	}
 	
 	public void createXMLObjects(){
@@ -37,11 +37,6 @@ public class XMLHandler {
 			XMLTag row = new XMLTag("Row");
 			this.root.tags.add(row);
 			
-			//id each row with its row number
-			if(ROWNUM_AS_ID){
-				row.attribs.add(new XMLAttribute("id", i + ""));
-			}
-			
 			//add each field as an element or as an attribute
 			for(int j = 0; j < colCount; j++){
 				if(FIELD_AS_ELEMENT){
@@ -59,6 +54,65 @@ public class XMLHandler {
 		doc += createXMLHeader() + "\n";
 		doc += tagToString(root, 0);
 		return doc;
+	}
+	
+	public String getSchemaString(){
+		String dataStruc;
+		XMLTag container;
+		
+		//create base of structure
+		XMLTag base = new XMLTag("xs:schema");
+		base.attribs.add(new XMLAttribute("attributeFormDefault", "unqualified"));
+		base.attribs.add(new XMLAttribute("elementFormDefault", "qualified"));
+		base.attribs.add(new XMLAttribute("xmlns:xs", "http://www.w3.org/2001/XMLSchema"));
+		
+		//non dynamic xml schema content
+		XMLTag table = new XMLTag("xs:element");
+		base.tags.add(table);
+		table.attribs.add(new XMLAttribute("name", "Table"));
+		
+		XMLTag complex1 = new XMLTag("xs:complexType");
+		table.tags.add(complex1);
+		
+		XMLTag sequence1 = new XMLTag("xs:sequence");
+		complex1.tags.add(sequence1);
+		
+		XMLTag element1 = new XMLTag("xs:element");
+		sequence1.tags.add(element1);
+		element1.attribs.add(new XMLAttribute("name", "Row"));
+		element1.attribs.add(new XMLAttribute("maxOccurs", "unbounded"));
+		element1.attribs.add(new XMLAttribute("minOccurs", "0"));
+		
+		XMLTag complex2 = new XMLTag("xs:complexType");
+		element1.tags.add(complex2);
+		
+		// creates different tag structure from this point depending on if fields should be elements or attributes
+		if(FIELD_AS_ELEMENT){
+			dataStruc = "element";
+			
+			container = new XMLTag("xs:sequence");
+			complex2.tags.add(container);
+		} else {
+			dataStruc = "attribute";
+			
+			XMLTag simpleContent = new XMLTag("xs:simpleContent");
+			complex2.tags.add(simpleContent);
+			
+			container = new XMLTag("xs:extension");
+			container.attribs.add(new XMLAttribute("base", "xs:string"));
+			simpleContent.tags.add(container);
+		}
+		
+		// records field data types as pulled from column classes in TableData object
+		for(int i = 0; i < data.getFields(); i++){
+			XMLTag fieldElement = new XMLTag("xs:" + dataStruc);
+			fieldElement.attribs.add(new XMLAttribute("type", ("xs:" + data.getColumnClasses()[i].getSimpleName().toLowerCase())));
+			fieldElement.attribs.add(new XMLAttribute("name", data.getColumnHeader()[i]));
+			container.tags.add(fieldElement);
+		}
+		
+		//generate xml string and return
+		return tagToString(base, 0);
 	}
 	
 	//returns and xml header as a string
