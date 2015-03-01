@@ -7,7 +7,6 @@ import java.util.List;
  * Used to convert TableData into an XML Document
  * @author Scott Micklethwaite
  * @version 1.0
- * Automagic added edition
  */
 public class XMLHandler {
 	private final Double XML_VERSION = 1.0;
@@ -16,11 +15,19 @@ public class XMLHandler {
 	private XMLTag root;
 	private TableData data;
 	
+	/**
+	 * Default constructor for initializing an XMLHandler. Calls the createXMLObjects method.
+	 * @param data The TableData object that will be converted to an XML file
+	 */
 	public XMLHandler(TableData data){
 		this.data = data;
 		createXMLObjects();
 	}
 	
+	/**
+	 * Creates an XML object structure using TableData. Will create row data as elements or attributes depending on
+	 * the value of FIELD_AS_ELEMENT.
+	 */
 	public void createXMLObjects(){
 		Object[][] tableData = data.getTableData();
 		Object[] headings = data.getColumnHeader();
@@ -48,7 +55,11 @@ public class XMLHandler {
 		}
 	}
 	
-	//constructs an xml document and returns as a string
+	/**
+	 * Constructs an xml document string and returns it. Build this string by creating a header then appending the
+	 * xml document data to this.
+	 * @return XML document contents as a string
+	 */
 	public String getXMLString(){
 		String doc = "";
 		doc += createXMLHeader() + "\n";
@@ -56,6 +67,11 @@ public class XMLHandler {
 		return doc;
 	}
 	
+	/**
+	 * Constructs an XSD schema that matches the structure of the XML string to be generated. Will output a slightly
+	 * different structure as required by using rows as elements or attributes.
+	 * @return XSD document matching the XML document
+	 */
 	public String getSchemaString(){
 		String dataStruc;
 		XMLTag container;
@@ -115,12 +131,22 @@ public class XMLHandler {
 		return tagToString(base, 0);
 	}
 	
-	//returns and xml header as a string
+	/**
+	 * Constructs an XML header for usage at the top of an XML document.
+	 * @return an XML header
+	 */
 	private String createXMLHeader(){
 		return "<?xml version=\"" + XML_VERSION + "\" encoding=\"" + XML_ENCODING + "\"?>";
 	}
 	
-	//converts the contents of an XML tag to a string.
+	/**
+	 * Converts the contents of an XML tag to a string to be used in an XML document. Will create tags and their attributes
+	 * and their child objects such as elements and child tags. Operates recursively when dealing with child tags.
+	 * @param tag The XMLTag object to generate a string from.
+	 * @param indent The initial tab spacing of this tag.
+	 * @return A String containing formatted XML data
+	 */
+	
 	private String tagToString(XMLTag tag, int indent){
 		String all = "";
 		int ind = indent;
@@ -163,7 +189,12 @@ public class XMLHandler {
 		return all;
 	}
 	
-	//creates a string from a list of attributes
+	/**
+	 * Formats a list of XMLAttribute objects into a neatly spaced string. Spaces multiple values apart. This is used
+	 * for neatly adding XML attributes to a tag.
+	 * @param a The list of XMLAttribute objects to use
+	 * @return a string containing XML style attributes.
+	 */
 	private String attribToString(List<XMLAttribute> a){
 		String s = "";
 		XMLAttribute att;
@@ -180,7 +211,11 @@ public class XMLHandler {
 		return s;
 	}
 	
-	//method for creating a number of tab strings from an int
+	/**
+	 * Method for creating a number of tab strings to insert into XML documents.
+	 * @param indent the number of tabs to generate
+	 * @return A string containing the desired number of tabs
+	 */
 	private String addTab(int indent){
 		String s = "";
 		for(int i = 0; i < indent; i++){
@@ -189,6 +224,12 @@ public class XMLHandler {
 		return s;
 	}
 	
+	/**
+	 * A class to represent an XML tag object. XML tags may contain child tags, elements and attributes. A tag must also
+	 * contain a name.
+	 * @author Scott Micklethwaite
+	 * @version 1.0
+	 */
 	private class XMLTag{
 		private List<XMLTag> tags;
 		private List<XMLElement> elements;
@@ -203,6 +244,12 @@ public class XMLHandler {
 		}
 	}
 	
+	/**
+	 * A class for representing an XML element. An element must have a name and a value. It may additionally contain
+	 * a list of attributes.
+	 * @author Scott Micklethwaite
+	 * @version 1.0
+	 */
 	private class XMLElement{
 		private String name;
 		private String value;
@@ -215,6 +262,11 @@ public class XMLHandler {
 		}
 	}
 	
+	/**
+	 * A class for representing an XML attribute. Must contain a name and a value.
+	 * @author Scott Micklethwaite
+	 * @version 1.0
+	 */
 	private class XMLAttribute{
 		private String name;
 		private String value;
