@@ -11,7 +11,7 @@ import java.util.List;
 public class XMLHandler {
 	private final Double XML_VERSION = 1.0;
 	private final String XML_ENCODING = "UTF-8";
-	private final boolean FIELD_AS_ELEMENT = true;
+	private final boolean FIELD_AS_ELEMENT = false;
 	private XMLTag root;
 	private TableData data;
 	
@@ -63,6 +63,7 @@ public class XMLHandler {
 	public String getXMLString(){
 		String doc = "";
 		doc += createXMLHeader() + "\n";
+		doc += createXMLDTD() + "\n";
 		doc += tagToString(root, 0);
 		return doc;
 	}
@@ -137,6 +138,50 @@ public class XMLHandler {
 	 */
 	private String createXMLHeader(){
 		return "<?xml version=\"" + XML_VERSION + "\" encoding=\"" + XML_ENCODING + "\"?>";
+	}
+	
+	/**
+	 * Constructs a DTD for usage with the XML data
+	 * @return an XML DTD
+	 */
+	private String createXMLDTD(){
+		String s = "";
+			//static portion of DTD definition
+			s += "<!DOCTYPE Table [" + "\n";
+			s += "\t" + "<!ELEMENT Table (Row+)>" + "\n";
+			
+			//dynamic portion of DTD
+			String[] st = data.getColumnHeader();
+			if(FIELD_AS_ELEMENT){ // formatted differently if rows are elements or attributes
+				s += "\t" + "<!ELEMENT Row (";
+				
+				//add heading names neatly into row content declaration
+				for(int i = 0; i < st.length; i++){
+					s += st[i];
+					if(i < st.length - 1){ //space and comma separated unless last value
+						s += ", ";
+					}
+				}
+				s += ")>" + "\n";
+				
+				//add element data definitions
+				for(int i = 0; i < st.length; i++){
+					s += "\t" + "<!ELEMENT " + st[i] + " (#PCDATA)>" + "\n";
+				}
+			} else {
+				//add empty row element declaration
+				s += "\t" + "<!ELEMENT Row EMPTY>" + "\n";
+				
+				//add attribute data definitions
+				for(int i = 0; i < st.length; i++){
+					s += "\t" + "<!ATTLIST Row " + st[i] + " CDATA \"\">" + "\n";
+				}
+			}
+			
+			//end of static DTD
+			s += "]>";
+			
+		return s;
 	}
 	
 	/**
