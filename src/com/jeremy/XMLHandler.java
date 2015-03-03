@@ -18,6 +18,17 @@ public class XMLHandler {
 	/**
 	 * Default constructor for initializing an XMLHandler. Calls the createXMLObjects method.
 	 * @param data The TableData object that will be converted to an XML file
+	 * <br/>
+	 * <b>USAGE:</b><br/>
+	 * <pre>
+	 * CSVHandler csv = new CSVHandler();
+	 * TableData data = csv.readCSV("TestData/LasData.csv");
+	 * 
+	 * XMLHandler xml = new XMLHandler(data);
+	 *
+	 * FileUtility.writeFile("TestData/test.xml", xml.getXMLString());
+	 * FileUtility.writeFile("TestData/test.xsd", xml.getSchemaString());
+	 * </pre>
 	 */
 	public XMLHandler(TableData data){
 		this.data = data;
@@ -28,7 +39,7 @@ public class XMLHandler {
 	 * Creates an XML object structure using TableData. Will create row data as elements or attributes depending on
 	 * the value of FIELD_AS_ELEMENT.
 	 */
-	public void createXMLObjects(){
+	private void createXMLObjects(){
 		Object[][] tableData = data.getTableData();
 		Object[] headings = data.getColumnHeader();
 		int rowCount = tableData.length;
@@ -59,6 +70,14 @@ public class XMLHandler {
 	 * Constructs an xml document string and returns it. Build this string by creating a header then appending the
 	 * xml document data to this.
 	 * @return XML document contents as a string
+	 * <br/>
+	 * <b>USAGE:</b><br/>
+	 * <pre>
+	 * TableData data = csv.readCSV("TestData/LasData.csv");
+	 * XMLHandler xml = new XMLHandler(data);
+	 * 
+	 * String s = xml.getXMLString()
+	 * </pre>
 	 */
 	public String getXMLString(){
 		String doc = "";
@@ -72,6 +91,14 @@ public class XMLHandler {
 	 * Constructs an XSD schema that matches the structure of the XML string to be generated. Will output a slightly
 	 * different structure as required by using rows as elements or attributes.
 	 * @return XSD document matching the XML document
+	 * <br/>
+	 * <b>USAGE:</b><br/>
+	 * <pre>
+	 * TableData data = csv.readCSV("TestData/LasData.csv");
+	 * XMLHandler xml = new XMLHandler(data);
+	 * 
+	 * String s = xml.getSchemaString()
+	 * </pre>
 	 */
 	public String getSchemaString(){
 		String dataStruc;
@@ -135,6 +162,14 @@ public class XMLHandler {
 	/**
 	 * Constructs an XML header for usage at the top of an XML document.
 	 * @return an XML header
+	 * <br/>
+	 * <b>USAGE:</b><br/>
+	 * <pre>
+	 * TableData data = csv.readCSV("TestData/LasData.csv");
+	 * XMLHandler xml = new XMLHandler(data);
+	 * 
+	 * String s = xml.createXMLHeader()
+	 * </pre>
 	 */
 	private String createXMLHeader(){
 		return "<?xml version=\"" + XML_VERSION + "\" encoding=\"" + XML_ENCODING + "\"?>";
@@ -143,43 +178,51 @@ public class XMLHandler {
 	/**
 	 * Constructs a DTD for usage with the XML data
 	 * @return an XML DTD
+	 * <br/>
+	 * <b>USAGE:</b><br/>
+	 * <pre>
+	 * TableData data = csv.readCSV("TestData/LasData.csv");
+	 * XMLHandler xml = new XMLHandler(data);
+	 * 
+	 * String s = xml.createXMLDTD()
+	 * </pre>
 	 */
 	private String createXMLDTD(){
 		String s = "";
-			//static portion of DTD definition
-			s += "<!DOCTYPE Table [" + "\n";
-			s += "\t" + "<!ELEMENT Table (Row+)>" + "\n";
+		//static portion of DTD definition
+		s += "<!DOCTYPE Table [" + "\n";
+		s += "\t" + "<!ELEMENT Table (Row+)>" + "\n";
+		
+		//dynamic portion of DTD
+		String[] st = data.getColumnHeader();
+		if(FIELD_AS_ELEMENT){ // formatted differently if rows are elements or attributes
+			s += "\t" + "<!ELEMENT Row (";
 			
-			//dynamic portion of DTD
-			String[] st = data.getColumnHeader();
-			if(FIELD_AS_ELEMENT){ // formatted differently if rows are elements or attributes
-				s += "\t" + "<!ELEMENT Row (";
-				
-				//add heading names neatly into row content declaration
-				for(int i = 0; i < st.length; i++){
-					s += st[i];
-					if(i < st.length - 1){ //space and comma separated unless last value
-						s += ", ";
-					}
-				}
-				s += ")>" + "\n";
-				
-				//add element data definitions
-				for(int i = 0; i < st.length; i++){
-					s += "\t" + "<!ELEMENT " + st[i] + " (#PCDATA)>" + "\n";
-				}
-			} else {
-				//add empty row element declaration
-				s += "\t" + "<!ELEMENT Row EMPTY>" + "\n";
-				
-				//add attribute data definitions
-				for(int i = 0; i < st.length; i++){
-					s += "\t" + "<!ATTLIST Row " + st[i] + " CDATA \"\">" + "\n";
+			//add heading names neatly into row content declaration
+			for(int i = 0; i < st.length; i++){
+				s += st[i];
+				if(i < st.length - 1){ //space and comma separated unless last value
+					s += ", ";
 				}
 			}
+			s += ")>" + "\n";
 			
-			//end of static DTD
-			s += "]>";
+			//add element data definitions
+			for(int i = 0; i < st.length; i++){
+				s += "\t" + "<!ELEMENT " + st[i] + " (#PCDATA)>" + "\n";
+			}
+		} else {
+			//add empty row element declaration
+			s += "\t" + "<!ELEMENT Row EMPTY>" + "\n";
+			
+			//add attribute data definitions
+			for(int i = 0; i < st.length; i++){
+				s += "\t" + "<!ATTLIST Row " + st[i] + " CDATA \"\">" + "\n";
+			}
+		}
+		
+		//end of static DTD
+		s += "]>";
 			
 		return s;
 	}
@@ -190,8 +233,17 @@ public class XMLHandler {
 	 * @param tag The XMLTag object to generate a string from.
 	 * @param indent The initial tab spacing of this tag.
 	 * @return A String containing formatted XML data
+	 * <br/>
+	 * <b>USAGE:</b><br/>
+	 * <pre>
+	 * XMLTag tag = new XMLTag("Table");
+	 * XMLTag row = new XMLTag("Row");
+	 * tag.tags.add(row);
+	 * row.elements.add(new XMLElement("id", "1"));
+	 * 
+	 * String s = xml.tagToString(tag, 0);
+	 * </pre>
 	 */
-	
 	private String tagToString(XMLTag tag, int indent){
 		String all = "";
 		int ind = indent;
@@ -239,6 +291,15 @@ public class XMLHandler {
 	 * for neatly adding XML attributes to a tag.
 	 * @param a The list of XMLAttribute objects to use
 	 * @return a string containing XML style attributes.
+	 * <br/>
+	 * <b>USAGE:</b><br/>
+	 * <pre>
+	 * ArrayList<XMLAttribute> list = new ArrayList<XMLAttribute>();
+	 * list.add(new XMLAttribute("id", "01"));
+	 * list.add(new XMLAttribute("name", "frank"));
+	 * 
+	 * String s = xml.attribToString(list);
+	 * </pre>
 	 */
 	private String attribToString(List<XMLAttribute> a){
 		String s = "";
@@ -260,6 +321,12 @@ public class XMLHandler {
 	 * Method for creating a number of tab strings to insert into XML documents.
 	 * @param indent the number of tabs to generate
 	 * @return A string containing the desired number of tabs
+	 * <br/>
+	 * <b>USAGE:</b><br/>
+	 * <pre>
+	 * String text = "this needs 2 tabs before it";
+	 * text = addTab(2) + text;
+	 * </pre>
 	 */
 	private String addTab(int indent){
 		String s = "";
