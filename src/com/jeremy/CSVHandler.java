@@ -101,13 +101,18 @@ public class CSVHandler {
 			countFileLines(csvFile);
 			countFieldLengths(csvFile);
 			
+			fieldPrecision = new int[fields];
+			for(int i = 0; i < fieldPrecision.length; i++) {
+				fieldPrecision[i] = 0;
+			}
+			
 			//get rid of a line if the first line is going to be used as a header
 			if (firstLineUsedAsColumnHeader) {
 				lines--;
 			}
 			
 			//read in file data, find column classes, get headers and return all info in a datatable
-			return new TableData(readFileDataIn(csvFile), findColumnClasses(csvFile), getFileName(csvFile.getName()), getHeaders(csvFile), lines, fields, fieldLength);
+			return new TableData(readFileDataIn(csvFile), findColumnClasses(csvFile), getFileName(csvFile.getName()), getHeaders(csvFile), lines, fields, fieldLength, fieldPrecision);
 		} else {
 			//TODO: Add API error logging file not found exception
 			//throw error if the file is not found or can't read it
@@ -126,7 +131,7 @@ public class CSVHandler {
 			return fileName;
 		}
 		
-		
+		 
 		
 		return fileName.substring(0, extentionPosition);
 	}
@@ -213,53 +218,53 @@ public class CSVHandler {
 	//TODO: allow for multiple date formats
 	private void checkDate(File csvFile, Class<?>[] columnClasses) throws IOException{
 		//create reader
-				BufferedReader reader = null;
-				try{
-					
-					//iterate through each column
-					for (int i = 0; i < columnClasses.length; i++) {
-						
-						//set up variables to use
-						boolean skippedFirstLine = false;
-						boolean isDate = true;
-						
-						//Initialize
-						reader = new BufferedReader(new FileReader(csvFile));
-						String line;
-						
-						//iterate through each line
-						while ((line = reader.readLine()) != null) {
-							
-							
-							if (!skippedFirstLine && firstLineUsedAsColumnHeader) {
-								line = reader.readLine();
-								skippedFirstLine = true;
-							}
-							String[] fields = line.split(COLUMN_DELIMITER);
-							
-							//create date format for testing
-							SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-							try {
-								
-								//see if date
-								dateFormat.parse(fields[i]);
-							} catch (ParseException e) {
-								
-								isDate = false;
-								break;
-							}
-							
+		BufferedReader reader = null;
+		try{
 			
-						} 
-						if (isDate) {
-							columnClasses[i] = Date.class;
-						}
-						
+			//iterate through each column
+			for (int i = 0; i < columnClasses.length; i++) {
+				
+				//set up variables to use
+				boolean skippedFirstLine = false;
+				boolean isDate = true;
+				
+				//Initialize
+				reader = new BufferedReader(new FileReader(csvFile));
+				String line;
+				
+				//iterate through each line
+				while ((line = reader.readLine()) != null) {
+					
+					
+					if (!skippedFirstLine && firstLineUsedAsColumnHeader) {
+						line = reader.readLine();
+						skippedFirstLine = true;
 					}
-				} finally{
-					//close after use or on error
-					reader.close();
+					String[] fields = line.split(COLUMN_DELIMITER);
+					
+					//create date format for testing
+					SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+					try {
+						
+						//see if date
+						dateFormat.parse(fields[i]);
+					} catch (ParseException e) {
+						
+						isDate = false;
+						break;
+					}
+					
+	
+				} 
+				if (isDate) {
+					columnClasses[i] = Date.class;
 				}
+				
+			}
+		} finally{
+			//close after use or on error
+			reader.close();
+		}
 		
 	}
 	
@@ -267,7 +272,6 @@ public class CSVHandler {
 	private void checkDouble(File csvFile, Class<?>[] columnClasses) throws IOException {
 		
 		//set up precision and reader
-		fieldPrecision = new int[fields];
 		BufferedReader reader = null;
 		try{
 			

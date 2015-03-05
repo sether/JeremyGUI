@@ -46,7 +46,7 @@ public class TableData {
 		this.fields = fields;
 	}
 	
-	public TableData(Object[][] tableData, Class<?>[] columnClasses, String tableName, String[] columnHeader, int lines, int fields, int[] fieldLength) {
+	public TableData(Object[][] tableData, Class<?>[] columnClasses, String tableName, String[] columnHeader, int lines, int fields, int[] fieldLength, int[] fieldPrecision) {
 		this.tableData = tableData;
 		this.columnClasses = columnClasses;
 		this.columnHeader = columnHeader;
@@ -54,6 +54,7 @@ public class TableData {
 		this.lines = lines;
 		this.fields = fields;
 		this.fieldLength = fieldLength;
+		this.fieldPrecision = fieldPrecision;
 	}
 
 	public Object[][] getTableData() {
