@@ -57,6 +57,7 @@ public class JSONHandler {
 	public String processMembers(ArrayList<JSONMember> members) {
 		String s = "";
 		int i = 0;
+		
 		for (JSONMember m:members){
 			s += "{";
 			int j = 0;
