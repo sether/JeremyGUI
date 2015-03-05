@@ -6,7 +6,8 @@ package com.jeremy;
  * @version 1.0
  */
 public class TableData {
-
+	
+	//Table Name
 	private String[] columnHeader;
 	private int[] fieldLength;
 	private int[] fieldPrecision;
@@ -14,37 +15,43 @@ public class TableData {
 	private Object[][] tableData;
 	private int lines;
 	private int fields;
-	
-	public TableData(Object[][] tableData, Class<?>[] columnClasses) {
+	private String tableName;
+
+	public TableData(Object[][] tableData, Class<?>[] columnClasses, String tableName) {
 		this.tableData = tableData;
 		this.columnClasses = columnClasses;
+		this.tableName = tableName;
 	}
 	
-	public TableData(Object[][] tableData, Class<?>[] columnClasses, String[] columnHeader) {
+	public TableData(Object[][] tableData, Class<?>[] columnClasses, String tableName, String[] columnHeader) {
 		this.tableData = tableData;
 		this.columnClasses = columnClasses;
+		this.tableName = tableName;
 		this.columnHeader = columnHeader;
 	}
 	
-	public TableData(Object[][] tableData, Class<?>[] columnClasses, int lines, int fields) {
+	public TableData(Object[][] tableData, Class<?>[] columnClasses, String tableName, int lines, int fields) {
 		this.tableData = tableData;
 		this.columnClasses = columnClasses;
+		this.tableName = tableName;
 		this.lines = lines;
 		this.fields = fields;
 	}
 	
-	public TableData(Object[][] tableData, Class<?>[] columnClasses, String[] columnHeader, int lines, int fields) {
+	public TableData(Object[][] tableData, Class<?>[] columnClasses, String tableName, String[] columnHeader, int lines, int fields) {
 		this.tableData = tableData;
 		this.columnClasses = columnClasses;
+		this.tableName = tableName;
 		this.columnHeader = columnHeader;
 		this.lines = lines;
 		this.fields = fields;
 	}
 	
-	public TableData(Object[][] tableData, Class<?>[] columnClasses, String[] columnHeader, int lines, int fields, int[] fieldLength) {
+	public TableData(Object[][] tableData, Class<?>[] columnClasses, String tableName, String[] columnHeader, int lines, int fields, int[] fieldLength) {
 		this.tableData = tableData;
 		this.columnClasses = columnClasses;
 		this.columnHeader = columnHeader;
+		this.tableName = tableName;
 		this.lines = lines;
 		this.fields = fields;
 		this.fieldLength = fieldLength;
@@ -66,11 +73,11 @@ public class TableData {
 		this.columnHeader = columnHeader;
 	}
 
-	public Class[] getColumnClasses() {
+	public Class<?>[] getColumnClasses() {
 		return columnClasses;
 	}
 
-	public void setColumnClasses(Class[] columnClasses) {
+	public void setColumnClasses(Class<?>[] columnClasses) {
 		this.columnClasses = columnClasses;
 	}
 
@@ -104,6 +111,14 @@ public class TableData {
 
 	public void setFieldPrecision(int[] fieldPrecision) {
 		this.fieldPrecision = fieldPrecision;
+	}
+	
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
 
 }
