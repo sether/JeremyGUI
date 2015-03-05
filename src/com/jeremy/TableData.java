@@ -7,7 +7,6 @@ package com.jeremy;
  */
 public class TableData {
 	
-	//Table Name
 	private String[] columnHeader;
 	private int[] fieldLength;
 	private int[] fieldPrecision;

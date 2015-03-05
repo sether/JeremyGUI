@@ -20,7 +20,6 @@ public class CSVHandler {
 	private static final String DEFAULT_COLUMN_NAME = "Column";
 	private static final String COLUMN_DELIMITER = ",";
 	private static final String DATE_FORMAT = "dd/MM/yyyy";	//locale
-	Locale l = new Locale(Locale.ENGLISH.toString(), Locale.UK.toString());
 	
 	private int lines = 0;
 	private int fields = 0;
@@ -413,13 +412,15 @@ public class CSVHandler {
 		try{
 			//loop through file adding 1 to lines each line
 			int counter = 0;
+			boolean gotHeader = false;
 			String line;
 			while((line = reader.readLine()) != null) {
 				//split line up for processing
 				String[] fields = line.split(COLUMN_DELIMITER);
 				
 				//first line and using the headers and hasn't gotten headers already
-				if (counter == 0 && firstLineUsedAsColumnHeader) { 
+				if (counter == 0 && !gotHeader && firstLineUsedAsColumnHeader) { 
+					gotHeader = true;
 					continue;
 				}
 				
