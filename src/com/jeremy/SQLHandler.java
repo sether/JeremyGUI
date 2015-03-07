@@ -1,5 +1,6 @@
 package com.jeremy;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -30,7 +31,30 @@ public class SQLHandler {
 		tblData = data;
 	}
 
-	// Creates the Database for the SQL File
+	/**
+	 * Creates the Database for the designated SQL database type directly
+	 * 
+	 * @param host - A string where the user can designate the databases file path, defaults to local host 
+	 * @param databaseName - A string that specifies the name of the database being created
+	 * <br>
+	 * <b>USAGE:</b></br>
+	 * <pre>
+	 * String host = "localhost:1433";
+	 * String databaseName = "Example";
+	 * 
+	 * CSVHandler csvHandler = new CSVHandler();
+	 * csvHandler.setFirstLineUsedAsColumnHeader(true);
+	 * 
+	 * TableData tableData = csvHandler.readCSV("TestData/testDataType.csv");
+	 * 
+	 * SQLHandler sqlHandler = new SQLHandler(tableData);
+	 * sqlHandler.createDatabase(host, databaseName);
+	 * 
+	 * </pre>
+	 * @throws SQLException
+	 * @see TableData
+	 * @see CSVHandler
+	 */
 	public void createDatabase(String host, String databaseName,
 			SQLType sqlType, String userName, String password) {
 		USER = userName;
@@ -84,8 +108,8 @@ public class SQLHandler {
 	}
 
 	// Creates a Table for the Database
-	public void createTable(String host, String databaseName,
-			SQLType sqlType, String userName, String password) {
+	public void createTable(String host, String databaseName, SQLType sqlType,
+			String userName, String password) {
 		USER = userName;
 		PASSWORD = password;
 		Object[][] data = tblData.getTableData();
@@ -119,17 +143,18 @@ public class SQLHandler {
 			Object[] headings = tblData.getColumnHeader();
 			String tableName = tblData.getTableName();
 			for (int i = 0; i < cols; i++) {
-				if(columnClasses[i] == Boolean.class){
+				if (columnClasses[i] == Boolean.class) {
 					dataType = "BOOLEAN, ";
-				}else if(columnClasses[i] == Integer.class){
+				} else if (columnClasses[i] == Integer.class) {
 					dataType = "INTEGER(" + tblData.getFieldLength()[i] + "), ";
-				}else if(columnClasses[i] == Double.class){
-					dataType = "DECIMAL(" + tblData.getFieldLength()[i] + "," + tblData.getFieldPrecision()[i] + "), ";
-				}else if(columnClasses[i] == Date.class){
+				} else if (columnClasses[i] == Double.class) {
+					dataType = "DECIMAL(" + tblData.getFieldLength()[i] + ","
+							+ tblData.getFieldPrecision()[i] + "), ";
+				} else if (columnClasses[i] == Date.class) {
 					dataType = "DATE, ";
-				}else if(columnClasses[i] == Long.class){
+				} else if (columnClasses[i] == Long.class) {
 					dataType = "BIGINT, ";
-				}else{
+				} else {
 					dataType = "VARCHAR(" + tblData.getFieldLength()[i] + "), ";
 				}
 			}
@@ -172,13 +197,14 @@ public class SQLHandler {
 				valuesMarker += ", ?";
 			}
 		}
-		return "INSERT INTO " + tableName + "(" + tableFields + ") values (" + valuesMarker
-				+ ")";
+		return "INSERT INTO " + tableName + "(" + tableFields + ") values ("
+				+ valuesMarker + ")";
 	}
 
 	// Inserts data into the Database using a pre-made insert statement
-	public void insertDatabase(String host, String databaseName, SQLType sqlType,
-			String userName, String password) throws SQLException {
+	public void insertDatabase(String host, String databaseName,
+			SQLType sqlType, String userName, String password)
+			throws SQLException {
 		final int batchSize = 1000;
 		int count = 0;
 		Object[][] data = tblData.getTableData();
@@ -189,9 +215,9 @@ public class SQLHandler {
 		String tableName = tblData.getTableName();
 		String fields = "";
 		for (int i = 0; i < cols; i++) {
-			if(i == 0){
+			if (i == 0) {
 				fields += headings[i];
-			}else{
+			} else {
 				fields += ", " + headings[i];
 			}
 		}
@@ -263,17 +289,18 @@ public class SQLHandler {
 		String dataType = "";
 		int cols = tblData.getFields();
 		for (int i = 0; i < cols; i++) {
-			if(columnClasses[i] == Boolean.class){
+			if (columnClasses[i] == Boolean.class) {
 				dataType = "BOOLEAN, ";
-			}else if(columnClasses[i] == Integer.class){
+			} else if (columnClasses[i] == Integer.class) {
 				dataType = "INTEGER(" + tblData.getFieldLength()[i] + "), ";
-			}else if(columnClasses[i] == Double.class){
-				dataType = "DECIMAL(" + tblData.getFieldLength()[i] + "," + tblData.getFieldPrecision()[i] + "), ";
-			}else if(columnClasses[i] == Date.class){
+			} else if (columnClasses[i] == Double.class) {
+				dataType = "DECIMAL(" + tblData.getFieldLength()[i] + ","
+						+ tblData.getFieldPrecision()[i] + "), ";
+			} else if (columnClasses[i] == Date.class) {
 				dataType = "DATE, ";
-			}else if(columnClasses[i] == Long.class){
+			} else if (columnClasses[i] == Long.class) {
 				dataType = "BIGINT, ";
-			}else{
+			} else {
 				dataType = "VARCHAR(" + tblData.getFieldLength()[i] + "), ";
 			}
 			fields += headings[i] + " " + dataType;
