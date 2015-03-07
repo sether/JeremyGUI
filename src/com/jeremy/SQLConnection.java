@@ -1,7 +1,9 @@
 package com.jeremy;
 
 import java.sql.Connection;
+
 import com.jeremy.SQLHandler.SQLType;
+
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,27 +16,37 @@ import java.sql.Statement;
  * @version 1.0
  */
 public class SQLConnection {
-	private String driver = ""; //"com.mysql.jdbc.Driver"
+	private String driver = "";
 	private String URL;
 	private String userName;
 	private String password;
 	private Connection connection;
 	private Statement statement;
 
-	public SQLConnection(String databaseURL, SQLType sqlType) {
-		this(databaseURL, "", "", sqlType);
-	}
-
-	public SQLConnection(String databaseURL, String userName, SQLType sqlType) {
-		this(databaseURL, userName, "", sqlType);
-	}
-
+	/**
+	 * The class's constructor that connects to a designated sql database
+	 * 
+	 * @param databaseURL - A string where the user can designate the databases file path, defaults to local host 
+	 * @param userName - A string that specifies the user name of the creator for SQL access
+	 * @param password - A string that specifies the password of the creator for SQL access
+	 * @param sqlType - An enum that specifies which designates what SQL type the database shall be
+	 * <br>
+	 * <b>USAGE:</b></br>
+	 * <pre>
+	 * String host = "localhost:1433";
+	 * String userName = "";
+	 * String password = "";
+	 * private enum SQLType {
+	 * 		SQLSERVER, MYSQL, POSTGRESQL
+	 * };
+	 * 
+	 * SQLConnection sqlConnection = new SQLConnection(host, userName, password, MYSQL);
+	 * </pre>
+	 */
 	public SQLConnection(String databaseURL, String userName, String password, SQLType sqlType) {
 		URL = databaseURL;
 		this.userName = userName;
 		this.password = password;
-
-		// set up the driver
 		try {
 			if(sqlType == SQLType.SQLSERVER){
 				driver = "com.microsoft.jdbc.sqlserver.SQLServerDriver";
@@ -49,8 +61,25 @@ public class SQLConnection {
 		}
 	}
 
+	/**
+	 * Used to create a connection to a sql database
+	 * 
+	 * @return connection - the conenction to the database is returned
+	 * <br>
+	 * <b>USAGE:</b></br>
+	 * <pre>
+	 * String host = "localhost:1433";
+	 * String userName = "";
+	 * String password = "";
+	 * private enum SQLType {
+	 * 		SQLSERVER, MYSQL, POSTGRESQL
+	 * };
+	 * 
+	 * SQLConnection sqlConnection = new SQLConnection(host, userName, password, MYSQL);
+	 * sqlConnection.open();
+	 * </pre>
+	 */
 	public Connection open() {
-		// open the connection to the database and create a statement
 		try {
 			connection = DriverManager.getConnection(URL, userName, password);
 		} catch (SQLException e) {
@@ -59,8 +88,25 @@ public class SQLConnection {
 		return connection;
 	}
 
+	/**
+	 * Used to close an existing connection to a sql database
+	 * 
+	 * <br>
+	 * <b>USAGE:</b></br>
+	 * <pre>
+	 * String host = "localhost:1433";
+	 * String userName = "";
+	 * String password = "";
+	 * private enum SQLType {
+	 * 		SQLSERVER, MYSQL, POSTGRESQL
+	 * };
+	 * 
+	 * SQLConnection sqlConnection = new SQLConnection(host, userName, password, MYSQL);
+	 * sqlConnection.open();
+	 * sqlConnection.close();
+	 * </pre>
+	 */
 	public void close() {
-		// close both the statement and the connection
 		try {
 			statement.close();
 			connection.close();
@@ -69,12 +115,46 @@ public class SQLConnection {
 		}
 	}
 
+	/**
+	 * Used to reset an existing connection to a sql database
+	 * 
+	 * <br>
+	 * <b>USAGE:</b></br>
+	 * <pre>
+	 * String host = "localhost:1433";
+	 * String userName = "";
+	 * String password = "";
+	 * private enum SQLType {
+	 * 		SQLSERVER, MYSQL, POSTGRESQL
+	 * };
+	 * 
+	 * SQLConnection sqlConnection = new SQLConnection(host, userName, password, MYSQL);
+	 * sqlConnection.reset();
+	 * </pre>
+	 */
 	public void resetConnection() {
-		// resets the connection and the statement
 		close();
 		open();
 	}
 
+	/**
+	 * Used to change the driver that an open SQLConnection is connecting through to an existing connection to a sql database
+	 * 
+	 * @param sqlType - An enum that specifies which designates what SQL type the database shall be
+	 * <br>
+	 * <b>USAGE:</b></br>
+	 * <pre>
+	 * String host = "localhost:1433";
+	 * String userName = "";
+	 * String password = "";
+	 * private enum SQLType {
+	 * 		SQLSERVER, MYSQL, POSTGRESQL
+	 * };
+	 * 
+	 * SQLConnection sqlConnection = new SQLConnection(host, userName, password, MYSQL);
+	 * sqlConnection.setDriver(SQLSERVER);
+	 * </pre>
+	 */
 	public void setDriver(SQLType sqlType) {
 		if(sqlType == SQLType.SQLSERVER){
 			this.driver = "";

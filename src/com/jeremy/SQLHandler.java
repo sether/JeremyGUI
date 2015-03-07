@@ -1,6 +1,5 @@
 package com.jeremy;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -18,29 +17,53 @@ public class SQLHandler {
 	private Connection connection = null;
 	private String USER = "username";
 	private String PASSWORD = "password";
-	private String driver = "";
 
 	public enum SQLType {
 		SQLSERVER, MYSQL, POSTGRESQL
 	};
 
 	private static String connectionURL = "";
-
-	// Gets the TableData
+ 
+	/**
+	 * Gets the TableData, also the class's constructor method
+	 * 
+	 * @param data - The data from the specified .csv file
+	 * <br>
+	 * <b>USAGE:</b></br>
+	 * <pre>
+	 * CSVHandler csvHandler = new CSVHandler();
+	 * csvHandler.setFirstLineUsedAsColumnHeader(true);
+	 * 
+	 * TableData tableData = csvHandler.readCSV("TestData/testDataType.csv");
+	 * 
+	 * SQLHandler sqlHandler = new SQLHandler(tableData);
+	 *
+	 * </pre>
+	 * @see TableData
+	 * @see CSVHandler
+	 */
 	public SQLHandler(TableData data) {
 		tblData = data;
 	}
 
 	/**
-	 * Creates the Database for the designated SQL database type directly
+	 * Directly creates the Database for the designated SQL database type
 	 * 
 	 * @param host - A string where the user can designate the databases file path, defaults to local host 
 	 * @param databaseName - A string that specifies the name of the database being created
+	 * @param sqlType - An enum that specifies which designates what SQL type the database shall be
+	 * @param userName - A string that specifies the user name of the creator for SQL access
+	 * @param password - A string that specifies the password of the creator for SQL access
 	 * <br>
 	 * <b>USAGE:</b></br>
 	 * <pre>
 	 * String host = "localhost:1433";
 	 * String databaseName = "Example";
+	 * String userName = "";
+	 * String password = "";
+	 * private enum SQLType {
+	 * 		SQLSERVER, MYSQL, POSTGRESQL
+	 * };
 	 * 
 	 * CSVHandler csvHandler = new CSVHandler();
 	 * csvHandler.setFirstLineUsedAsColumnHeader(true);
@@ -48,7 +71,7 @@ public class SQLHandler {
 	 * TableData tableData = csvHandler.readCSV("TestData/testDataType.csv");
 	 * 
 	 * SQLHandler sqlHandler = new SQLHandler(tableData);
-	 * sqlHandler.createDatabase(host, databaseName);
+	 * sqlHandler.createDatabase(host, databaseName, MYSQL, userName, password);
 	 * 
 	 * </pre>
 	 * @throws SQLException
@@ -107,12 +130,42 @@ public class SQLHandler {
 		}
 	}
 
-	// Creates a Table for the Database
+	/**
+	 * Directly creates a Table for the designated SQL database type
+	 * 
+	 * @param host - A string where the user can designate the databases file path, defaults to local host 
+	 * @param databaseName - A string that specifies the name of the database that the table will be created in
+	 * @param sqlType - An enum that specifies which designates what SQL type the database shall be
+	 * @param userName - A string that specifies the user name of the creator for SQL access
+	 * @param password - A string that specifies the password of the creator for SQL access
+	 * <br>
+	 * <b>USAGE:</b></br>
+	 * <pre>
+	 * String host = "localhost:1433";
+	 * String databaseName = "Example";
+	 * String userName = "";
+	 * String password = "";
+	 * private enum SQLType {
+	 * 		SQLSERVER, MYSQL, POSTGRESQL
+	 * };
+	 * 
+	 * CSVHandler csvHandler = new CSVHandler();
+	 * csvHandler.setFirstLineUsedAsColumnHeader(true);
+	 * 
+	 * TableData tableData = csvHandler.readCSV("TestData/testDataType.csv");
+	 * 
+	 * SQLHandler sqlHandler = new SQLHandler(tableData);
+	 * sqlHandler.createTable(host, databaseName, MYSQL, userName, password);
+	 * 
+	 * </pre>
+	 * @throws SQLException
+	 * @see TableData
+	 * @see CSVHandler
+	 */
 	public void createTable(String host, String databaseName, SQLType sqlType,
 			String userName, String password) {
 		USER = userName;
 		PASSWORD = password;
-		Object[][] data = tblData.getTableData();
 		Statement statement = null;
 		try {
 			if (host.equalsIgnoreCase("")) {
@@ -186,7 +239,33 @@ public class SQLHandler {
 		}
 	}
 
-	// Creates the insert statement for the Database
+	/** 
+	 * Creates the insert statement for the designated SQL database type, used inside of another method(e.g. insertDatabase(), createSQLFile())
+	 * 
+	 * @param tableName - A string that specifies the name of the database that the table will be created in
+	 * @param tableFields - A String specifying the fields that are in the table	 * <br>
+	 * <b>USAGE:</b></br>
+	 * <pre>
+	 * final int batchSize = 1000;
+	 * int count = 0;
+	 * Object[][] data = tblData.getTableData();
+	 * int line = 1;
+	 * int rows = tblData.getLines();
+	 * int cols = tblData.getFields();
+	 * Object[] headings = tblData.getColumnHeader();
+	 * String tableName = tblData.getTableName();
+	 * String fields = "";
+	 * for (int i = 0; i < cols; i++) {
+	 * 		if (i == 0) {
+	 *			fields += headings[i];
+	 *		} else {
+	 *			fields += ", " + headings[i];
+	 *		}
+	 * }
+	 * String sqlInsertStatement = getInsertStatement(tableName, fields);
+	 * 
+	 * </pre>
+	 */
 	private String getInsertStatement(String tableName, String tableFields) {
 		int cols = tblData.getFields();
 		String valuesMarker = "";
@@ -201,7 +280,38 @@ public class SQLHandler {
 				+ valuesMarker + ")";
 	}
 
-	// Inserts data into the Database using a pre-made insert statement
+	/**
+	 * Directly inserts data from a .csv file into an existing Table for the designated SQL database type
+	 * 
+	 * @param host - A string where the user can designate the databases file path, defaults to local host 
+	 * @param databaseName - A string that specifies the name of the database that the table will be created in
+	 * @param sqlType - An enum that specifies which designates what SQL type the database shall be
+	 * @param userName - A string that specifies the user name of the creator for SQL access
+	 * @param password - A string that specifies the password of the creator for SQL access
+	 * <br>
+	 * <b>USAGE:</b></br>
+	 * <pre>
+	 * String host = "localhost:1433";
+	 * String databaseName = "Example";
+	 * String userName = "";
+	 * String password = "";
+	 * private enum SQLType {
+	 * 		SQLSERVER, MYSQL, POSTGRESQL
+	 * };
+	 * 
+	 * CSVHandler csvHandler = new CSVHandler();
+	 * csvHandler.setFirstLineUsedAsColumnHeader(true);
+	 * 
+	 * TableData tableData = csvHandler.readCSV("TestData/testDataType.csv");
+	 * 
+	 * SQLHandler sqlHandler = new SQLHandler(tableData);
+	 * sqlHandler.insertDatabase(host, databaseName, MYSQL, userName, password);
+	 * 
+	 * </pre>
+	 * @throws SQLException
+	 * @see TableData
+	 * @see CSVHandler
+	 */
 	public void insertDatabase(String host, String databaseName,
 			SQLType sqlType, String userName, String password)
 			throws SQLException {
@@ -275,12 +385,33 @@ public class SQLHandler {
 				se.printStackTrace();
 			}
 		}
-
-		// preparedStatement.close();
-		// connection.close();
 	}
 
-	// Creates the string needed for the SQL file
+	/**
+	 * Creates the String for the the designated SQL database type that can then be used to write the .sql file
+	 * 
+	 * @param databaseName - A string that specifies the name of the database that the table will be created in
+	 * @return SQLFileBuildString - A string that can then be sent to the FileUtilty.writeFile() to create an sql.file
+	 * <br>
+	 * <b>USAGE:</b></br>
+	 * <pre>
+	 * String databaseName = "Example";
+	 * 
+	 * CSVHandler csvHandler = new CSVHandler();
+	 * csvHandler.setFirstLineUsedAsColumnHeader(true);
+	 * 
+	 * TableData tableData = csvHandler.readCSV("TestData/testDataType.csv");
+	 * 
+	 * SQLHandler sqlHandler = new SQLHandler(tableData);
+	 * sqlHandler.createSQLFile(databaseName);
+	 * 
+	 * FileUtility.writeFile("TestData/test.sql", s);
+	 * 
+	 * </pre>
+	 * @see TableData
+	 * @see CSVHandler
+	 * @see FileUtility
+	 */
 	public String createSQLFile(String databaseName) {
 		Class<?>[] columnClasses = tblData.getColumnClasses();
 		Object[] headings = tblData.getColumnHeader();
@@ -337,10 +468,4 @@ public class SQLHandler {
 				+ createTable + ";";
 		return SQLFileBuildString;
 	}
-
-	// Use Alex's getters and setter
-
-	// Acquire jar files
-	// Install all database management system
-	// connectionstrings.com (Helpful)
 }
