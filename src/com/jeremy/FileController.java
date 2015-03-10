@@ -11,7 +11,7 @@ public class FileController {
 	// TODO: decide access modifier for other classes, package maybe? 
 
 	public enum OutputType {
-		XML, XML_SCHEMA, JSON
+		XML, XML_SCHEMA, JSON, SQL
 	}
 
 	private TableData tblData = null;
@@ -90,6 +90,9 @@ public class FileController {
 				break;
 			case JSON:
 				output = new JSONHandler(tblData).makeJSON();
+				break;
+			case SQL:
+				output = new SQLHandler(tblData).createSQLFile("Test");
 				break;
 		}
 
