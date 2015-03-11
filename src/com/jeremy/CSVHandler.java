@@ -491,13 +491,11 @@ public class CSVHandler {
 			if (line != null) {
 				//neaten up
 				line = line.trim();
-				System.out.println(line);
 				
 				//split for counting
 				String[] columnNames = line.split(columnDelimiter, -1);
 				if (line != null && line.length() > 0) {
 					//get column amount
-					System.out.println(columnNames.length);
 					fields = columnNames.length;	
 				} else {
 					return;

@@ -16,9 +16,17 @@ public class FileController {
 
 	private TableData tblData = null;
 	private CSVHandler csvHandler;
+	
+	private boolean logErrors = true;
 
 	public FileController(){
 		csvHandler = new CSVHandler();
+	}
+	
+	public FileController(boolean logErrors){
+		csvHandler = new CSVHandler();
+		
+		this.logErrors = logErrors;
 	}
 	
 	public void readFile(String fileName) {
@@ -29,8 +37,9 @@ public class FileController {
 		} catch (IOException e) {
 			
 			//log the error that occurs 
-			Logging.getInstance().log(Level.SEVERE, "Error reading file: " + fileName, e);
-			e.printStackTrace();
+			if (logErrors){
+				Logging.getInstance().log(Level.SEVERE, "Error reading file: " + fileName, e);				
+			}
 		}
 	}
 
@@ -42,8 +51,9 @@ public class FileController {
 		} catch (IOException e) {
 			
 			//log the error that occurs 
-			Logging.getInstance().log(Level.SEVERE, "Error reading file: " + directory + fileName, e);
-			e.printStackTrace();
+			if (logErrors) {
+				Logging.getInstance().log(Level.SEVERE, "Error reading file: " + directory + fileName, e);				
+			}
 		}
 	}
 
@@ -55,8 +65,9 @@ public class FileController {
 		} catch (IOException e) {
 			
 			//log the error that occurs 
-			Logging.getInstance().log(Level.SEVERE, "Error reading file: " + csvFile, e);
-			e.printStackTrace();
+			if (logErrors) {
+				Logging.getInstance().log(Level.SEVERE, "Error reading file: " + csvFile, e);				
+			}
 		}
 	}
 
@@ -99,10 +110,21 @@ public class FileController {
 		try {
 			FileUtility.writeFile(file, output);
 		} catch (IOException e) {
-			Logging.getInstance().log(Level.SEVERE, "Error writing output to file!", e);
 			
-			e.printStackTrace();
+			if (logErrors) {
+				Logging.getInstance().log(Level.SEVERE, "Error writing output to file!", e);
+			}
 		}
+	}
+	
+	/* Internal settings for fileController*/
+	
+	public boolean isLogErrors() {
+		return logErrors;
+	}
+
+	public void setLogErrors(boolean logErrors) {
+		this.logErrors = logErrors;
 	}
 	
 	/*Setters and getters for tblData*/
