@@ -157,6 +157,13 @@ public class XMLHandler {
 			container.tags.add(fieldElement);
 		}
 		
+		//table name tag
+		XMLTag name = new XMLTag("xs:attribute");
+		name.attribs.add(new XMLAttribute("type", "xs:string"));
+		name.attribs.add(new XMLAttribute("name", "name"));
+		complex1.tags.add(name);
+		
+		
 		//generate xml string and return
 		return tagToString(base, 0);
 	}
@@ -193,12 +200,13 @@ public class XMLHandler {
 		String s = "";
 		//static portion of DTD definition
 		s += "<!DOCTYPE Table [" + "\n";
-		s += "\t" + "<!ELEMENT Table (Row+)>" + "\n";
+		s += addTab(1) + "<!ATTLIST Table name CDATA \"\">" + "\n"; // sets table name as attribute
+		s += addTab(1) + "<!ELEMENT Table (Row+)>" + "\n";
 		
 		//dynamic portion of DTD
 		String[] st = data.getColumnHeader();
 		if(fieldAsElement){ // formatted differently if rows are elements or attributes
-			s += "\t" + "<!ELEMENT Row (";
+			s += addTab(2) + "<!ELEMENT Row (";
 			
 			//add heading names neatly into row content declaration
 			for(int i = 0; i < st.length; i++){
@@ -211,15 +219,15 @@ public class XMLHandler {
 			
 			//add element data definitions
 			for(int i = 0; i < st.length; i++){
-				s += "\t" + "<!ELEMENT " + st[i] + " (#PCDATA)>" + "\n";
+				s += addTab(2) + "<!ELEMENT " + st[i] + " (#PCDATA)>" + "\n";
 			}
 		} else {
 			//add empty row element declaration
-			s += "\t" + "<!ELEMENT Row EMPTY>" + "\n";
+			s += addTab(2) + "<!ELEMENT Row EMPTY>" + "\n";
 			
 			//add attribute data definitions
 			for(int i = 0; i < st.length; i++){
-				s += "\t" + "<!ATTLIST Row " + st[i] + " CDATA \"\">" + "\n";
+				s += addTab(2) + "<!ATTLIST Row " + st[i] + " CDATA \"\">" + "\n";
 			}
 		}
 		
