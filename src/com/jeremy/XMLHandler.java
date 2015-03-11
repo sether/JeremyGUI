@@ -11,7 +11,7 @@ import java.util.List;
 public class XMLHandler {
 	private final Double XML_VERSION = 1.0;
 	private final String XML_ENCODING = "UTF-8";
-	private boolean fieldAsElement = true;
+	private boolean fieldAsElement;
 	private XMLTag root;
 	private TableData data;
 	
@@ -24,23 +24,16 @@ public class XMLHandler {
 	 * CSVHandler csv = new CSVHandler();
 	 * TableData data = csv.readCSV("TestData/LasData.csv");
 	 * 
-	 * XMLHandler xml = new XMLHandler(data);
+	 * XMLHandler xml = new XMLHandler(data, true);
 	 *
 	 * FileUtility.writeFile("TestData/test.xml", xml.getXMLString());
 	 * FileUtility.writeFile("TestData/test.xsd", xml.getSchemaString());
 	 * </pre>
 	 */
-	public XMLHandler(TableData data){
+	public XMLHandler(TableData data, boolean val){
 		this.data = data;
-		createXMLObjects();
-	}
-	
-	/**
-	 * A method for setting if row fields should be formatted as XML Elements or Attributes.
-	 * @param val a boolean determining if a field should be an element
-	 */
-	public void setFieldAsElement(boolean val){
 		this.fieldAsElement = val;
+		createXMLObjects();
 	}
 	
 	/**
@@ -56,6 +49,7 @@ public class XMLHandler {
 		
 		//create base tag in xml hierarchy
 		this.root = new XMLTag("Table");
+		this.root.attribs.add(new XMLAttribute("name", data.getTableName()));
 		
 		//iterate through 2d object array
 		for(int i = startLine; i < rowCount; i++){
