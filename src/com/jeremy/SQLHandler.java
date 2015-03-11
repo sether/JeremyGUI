@@ -201,9 +201,8 @@ public class SQLHandler {
 				}
 				fields += headings[i] + " " + dataType + "\n";
 			}
-			System.out.println(fields);
-			String createTable = "CREATE TABLE " + tableName + " ("
-					+ "(id INT NOT NULL AUTO_INCREMENT, \n" + fields + " PRIMARY KEY (id))";
+			String createTable = "CREATE TABLE " + tableName + "(\n"
+					+ "id INT NOT NULL AUTO_INCREMENT, \n" + fields + "PRIMARY KEY (id));";
 			statement.executeUpdate(createTable);
 		} catch (SQLException se) {
 			// Catches errors for JDBC
@@ -418,29 +417,13 @@ public class SQLHandler {
 			} else {
 				dataType = "VARCHAR(" + tblData.getFieldLength()[i] + "), ";
 			}
-			fields += headings[i] + " " + dataType;
+			fields += headings[i] + " " + dataType + "\n";
 		}
-		String createTable = "CREATE TABLE " + tableName + " ("
-				+ "id INTEGER not NULL, " + fields + " PRIMARY KEY (id))";
-		String SQLFileBuildString = "USE master;\n"
-				+ "IF EXISTS(SELECT * FROM sysdatabases WHERE name= '"
+		String createTable = "CREATE TABLE " + tableName + "(\n"
+				+ "id INTEGER not NULL, \n" + fields + " PRIMARY KEY (id))";
+		String SQLFileBuildString = "CREATE DATABASE "
 				+ databaseName
-				+ "')\n"
-				+ "BEGIN\n"
-				+ databaseName
-				+ " database ....',0,1)\n"
-				+ "DROP database "
-				+ databaseName
-				+ ";"
-				+ "\nEND\n"
-				+ databaseName
-				+ " database ....',0,1)\n"
-				+ "CREATE DATABASE "
-				+ databaseName
-				+ ";\n"
-				+ "USE "
-				+ databaseName
-				+ ";\n"
+				+ ";\n\n"
 				+ createTable + ";";
 		return SQLFileBuildString;
 	}
