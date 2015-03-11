@@ -11,7 +11,7 @@ import java.util.List;
 public class XMLHandler {
 	private final Double XML_VERSION = 1.0;
 	private final String XML_ENCODING = "UTF-8";
-	private final boolean FIELD_AS_ELEMENT = false;
+	private boolean fieldAsElement;
 	private XMLTag root;
 	private TableData data;
 	
@@ -24,14 +24,15 @@ public class XMLHandler {
 	 * CSVHandler csv = new CSVHandler();
 	 * TableData data = csv.readCSV("TestData/LasData.csv");
 	 * 
-	 * XMLHandler xml = new XMLHandler(data);
+	 * XMLHandler xml = new XMLHandler(data, true);
 	 *
 	 * FileUtility.writeFile("TestData/test.xml", xml.getXMLString());
 	 * FileUtility.writeFile("TestData/test.xsd", xml.getSchemaString());
 	 * </pre>
 	 */
-	public XMLHandler(TableData data){
+	public XMLHandler(TableData data, boolean val){
 		this.data = data;
+		this.fieldAsElement = val;
 		createXMLObjects();
 	}
 	
@@ -48,6 +49,7 @@ public class XMLHandler {
 		
 		//create base tag in xml hierarchy
 		this.root = new XMLTag("Table");
+		this.root.attribs.add(new XMLAttribute("name", data.getTableName()));
 		
 		//iterate through 2d object array
 		for(int i = startLine; i < rowCount; i++){
@@ -57,7 +59,7 @@ public class XMLHandler {
 			
 			//add each field as an element or as an attribute
 			for(int j = 0; j < colCount; j++){
-				if(FIELD_AS_ELEMENT){
+				if(fieldAsElement){
 					row.elements.add(new XMLElement(headings[j].toString(), tableData[i][j].toString()));
 				} else {
 					row.attribs.add(new XMLAttribute(headings[j].toString(), tableData[i][j].toString()));
@@ -131,7 +133,7 @@ public class XMLHandler {
 		element1.tags.add(complex2);
 		
 		// creates different tag structure from this point depending on if fields should be elements or attributes
-		if(FIELD_AS_ELEMENT){
+		if(fieldAsElement){
 			dataStruc = "element";
 			
 			container = new XMLTag("xs:sequence");
@@ -154,6 +156,13 @@ public class XMLHandler {
 			fieldElement.attribs.add(new XMLAttribute("name", data.getColumnHeader()[i]));
 			container.tags.add(fieldElement);
 		}
+		
+		//table name tag
+		XMLTag name = new XMLTag("xs:attribute");
+		name.attribs.add(new XMLAttribute("type", "xs:string"));
+		name.attribs.add(new XMLAttribute("name", "name"));
+		complex1.tags.add(name);
+		
 		
 		//generate xml string and return
 		return tagToString(base, 0);
@@ -191,12 +200,13 @@ public class XMLHandler {
 		String s = "";
 		//static portion of DTD definition
 		s += "<!DOCTYPE Table [" + "\n";
-		s += "\t" + "<!ELEMENT Table (Row+)>" + "\n";
+		s += addTab(1) + "<!ATTLIST Table name CDATA \"\">" + "\n"; // sets table name as attribute
+		s += addTab(1) + "<!ELEMENT Table (Row+)>" + "\n";
 		
 		//dynamic portion of DTD
 		String[] st = data.getColumnHeader();
-		if(FIELD_AS_ELEMENT){ // formatted differently if rows are elements or attributes
-			s += "\t" + "<!ELEMENT Row (";
+		if(fieldAsElement){ // formatted differently if rows are elements or attributes
+			s += addTab(2) + "<!ELEMENT Row (";
 			
 			//add heading names neatly into row content declaration
 			for(int i = 0; i < st.length; i++){
@@ -209,15 +219,15 @@ public class XMLHandler {
 			
 			//add element data definitions
 			for(int i = 0; i < st.length; i++){
-				s += "\t" + "<!ELEMENT " + st[i] + " (#PCDATA)>" + "\n";
+				s += addTab(2) + "<!ELEMENT " + st[i] + " (#PCDATA)>" + "\n";
 			}
 		} else {
 			//add empty row element declaration
-			s += "\t" + "<!ELEMENT Row EMPTY>" + "\n";
+			s += addTab(2) + "<!ELEMENT Row EMPTY>" + "\n";
 			
 			//add attribute data definitions
 			for(int i = 0; i < st.length; i++){
-				s += "\t" + "<!ATTLIST Row " + st[i] + " CDATA \"\">" + "\n";
+				s += addTab(2) + "<!ATTLIST Row " + st[i] + " CDATA \"\">" + "\n";
 			}
 		}
 		

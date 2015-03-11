@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 
 /**
@@ -18,16 +17,18 @@ import java.util.Locale;
  */
 public class CSVHandler {
 	private static final String DEFAULT_COLUMN_NAME = "Column";
-	private static final String COLUMN_DELIMITER = ",";
-	private static final String DATE_FORMAT = "dd/MM/yyyy";	//locale
+	private static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
+	private static final String DEFAULT_COLUMN_DELIMITER = ",";
 	
+	private Object[][] data;
 	private int lines = 0;
 	private int fields = 0;
 	private int[] fieldLength;
 	private int[] fieldPrecision;
+	private String dateFormat = DEFAULT_DATE_FORMAT;
+	private String columnDelimiter = DEFAULT_COLUMN_DELIMITER;
 	
 	
-	//TODO: decide default
 	private boolean firstLineUsedAsColumnHeader = false;
 	
 	/**
@@ -111,10 +112,11 @@ public class CSVHandler {
 				lines--;
 			}
 			
+			data = readFileDataIn(csvFile);
+			
 			//read in file data, find column classes, get headers and return all info in a datatable
-			return new TableData(readFileDataIn(csvFile), findColumnClasses(csvFile), getFileName(csvFile.getName()), getHeaders(csvFile), lines, fields, fieldLength, fieldPrecision);
+			return new TableData(data, findColumnClasses(csvFile), getFileName(csvFile.getName()), getHeaders(csvFile), lines, fields, fieldLength, fieldPrecision);
 		} else {
-			//TODO: Add API error logging file not found exception
 			//throw error if the file is not found or can't read it
 			throw new FileNotFoundException("Could not find file: " + csvFile.getAbsoluteFile());
 		}
@@ -136,12 +138,6 @@ public class CSVHandler {
 		return fileName.substring(0, extentionPosition);
 	}
 	
-	/*	other data types not checked
-	 * byte		0	
-	 * short	0
-	 * float	0.0f
-	 * char		'\u0000'
-	*/
 	private Class<?>[] findColumnClasses(File csvFile) throws IOException {
 		
 		//set up column classes to be defaulted to String
@@ -194,7 +190,7 @@ public class CSVHandler {
 						line = reader.readLine();
 						skippedFirstLine = true;
 					}
-					String[] fields = line.split(COLUMN_DELIMITER);
+					String[] fields = line.split(columnDelimiter, -1);
 					
 					if (!fields[i].equalsIgnoreCase("true") && !fields[i].equalsIgnoreCase("false")) {
 						isBoolean = false;
@@ -215,7 +211,6 @@ public class CSVHandler {
 		
 	}
 
-	//TODO: allow for multiple date formats
 	private void checkDate(File csvFile, Class<?>[] columnClasses) throws IOException{
 		//create reader
 		BufferedReader reader = null;
@@ -240,14 +235,14 @@ public class CSVHandler {
 						line = reader.readLine();
 						skippedFirstLine = true;
 					}
-					String[] fields = line.split(COLUMN_DELIMITER);
+					String[] fields = line.split(columnDelimiter, -1);
 					
 					//create date format for testing
-					SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+					SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
 					try {
 						
 						//see if date
-						dateFormat.parse(fields[i]);
+						simpleDateFormat.parse(fields[i]);
 					} catch (ParseException e) {
 						
 						isDate = false;
@@ -300,10 +295,10 @@ public class CSVHandler {
 					}
 					
 					//split lines into columns
-					String[] fields = line.split(COLUMN_DELIMITER);
+					String[] fields = line.split(columnDelimiter, -1);
 					
 					//split by decimal place
-					fields = fields[i].split("\\.");
+					fields = fields[i].split("\\.", -1);
 					
 					//if there was only one decimal place
 					if (fields.length == 2) {
@@ -356,57 +351,51 @@ public class CSVHandler {
 	private void checkNumber(File csvFile, Class<?>[] columnClasses) throws IOException {
 		
 		//create
-		BufferedReader reader = null;
-		try{
+		//BufferedReader reader = null;
+
+		
+		//iterate through each column
+		for (int i = 0; i < columnClasses.length; i++) {
 			
-			//iterate through each column
-			for (int i = 0; i < columnClasses.length; i++) {
-				
-				//set up variables to use
-				boolean skippedFirstLine = false;
-				boolean isInt = true;
-				boolean isLong = true;
-				
-				//Initialize
-				reader = new BufferedReader(new FileReader(csvFile));
-				String line;
-				
-				//iterate through each line
-				while ((line = reader.readLine()) != null) {
-					
-					
-					if (!skippedFirstLine && firstLineUsedAsColumnHeader) {
-						line = reader.readLine();
-						skippedFirstLine = true;
-					}
-					
-					try {
-						//test if both values are integers on either side of the decimal place
-						Integer.parseInt(line.split(COLUMN_DELIMITER)[i]);
-					} catch (NumberFormatException e) {
-						isInt = false;
-						try { 
-							Long.parseLong(line.split(COLUMN_DELIMITER)[i]);
-						} catch (NumberFormatException ex) {
-							isLong = false;
-							break;	
-						}						
-					}
-	
-				} 
-				if (isInt) {
-					columnClasses[i] = Integer.class;
-				} else if(isLong) {
-					columnClasses[i] = Long.class;
+			//set up variables to use
+			boolean skippedFirstLine = false;
+			boolean isInt = true;
+			boolean isLong = true;
+			
+			//Initialize
+			//reader = new BufferedReader(new FileReader(csvFile));
+			//String line;
+			
+			//iterate through each line
+			for(int j = 0; j < data[0].length; j++) {
+				if (!skippedFirstLine && firstLineUsedAsColumnHeader) {
+					skippedFirstLine = true;
+					continue;
 				}
 				
+				try {
+					//test if both values are integers on either side of the decimal place
+					Integer.parseInt(data[i][j].toString(), -1);
+				} catch (NumberFormatException e) {
+					isInt = false;
+					try { 
+						Long.parseLong(data[i][j].toString(), -1);
+					} catch (NumberFormatException ex) {
+						isLong = false;
+						break;	
+					}						
+				} 
+
+			} 
+			if (isInt) {
+				columnClasses[i] = Integer.class;
+			} else if(isLong) {
+				columnClasses[i] = Long.class;
 			}
-		} finally{
-			//close after use or on error
-			reader.close();
+			
 		}
-		
 	}
+		
 
 	private Object[][] readFileDataIn(File csvFile) throws IOException{
 		Object[][] output = new Object[lines][fields];
@@ -420,7 +409,7 @@ public class CSVHandler {
 			String line;
 			while((line = reader.readLine()) != null) {
 				//split line up for processing
-				String[] fields = line.split(COLUMN_DELIMITER);
+				String[] fields = line.split(columnDelimiter,-1);
 				
 				//first line and using the headers and hasn't gotten headers already
 				if (counter == 0 && !gotHeader && firstLineUsedAsColumnHeader) { 
@@ -431,7 +420,7 @@ public class CSVHandler {
 				//loop through lines
 				for (int i = 0; i < fields.length; i++) {
 					//neaten up fields and add them to the output array
-					output[counter][i] = fields[i].trim();
+					output[counter][i] = fields[i];
 				}
 				
 				counter++;
@@ -452,7 +441,7 @@ public class CSVHandler {
 			try{
 				//loop through file adding 1 to lines each line
 				String line = reader.readLine();
-				String[] fields = line.split(COLUMN_DELIMITER);
+				String[] fields = line.split(columnDelimiter, -1);
 				
 				for (int i = 0; i < fields.length; i++) {
 					
@@ -493,7 +482,6 @@ public class CSVHandler {
 	}
 	
 	private void countFileColumns(File csvFile) throws IOException{
-		//TODO: get max columns
 		BufferedReader reader = new BufferedReader(new FileReader(csvFile));
 		fields = 0;
 		
@@ -505,7 +493,7 @@ public class CSVHandler {
 				line = line.trim();
 				
 				//split for counting
-				String[] columnNames = line.split(COLUMN_DELIMITER);
+				String[] columnNames = line.split(columnDelimiter, -1);
 				if (line != null && line.length() > 0) {
 					//get column amount
 					fields = columnNames.length;	
@@ -534,7 +522,7 @@ public class CSVHandler {
 					skippedFirstLine = true;
 				}
 				//Split
-				String[] fields = line.split(COLUMN_DELIMITER);
+				String[] fields = line.split(columnDelimiter, -1);
 				
 				//Count
 				for (int i = 0; i < fields.length; i++) {
@@ -556,6 +544,22 @@ public class CSVHandler {
 
 	public void setFirstLineUsedAsColumnHeader(boolean firstLineUsedAsColumnHeader) {
 		this.firstLineUsedAsColumnHeader = firstLineUsedAsColumnHeader;
+	}
+
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
+	}
+
+	public String getColumnDelimiter() {
+		return columnDelimiter;
+	}
+
+	public void setColumnDelimiter(String columnDelimiter) {
+		this.columnDelimiter = columnDelimiter;
 	}
 	
 }
