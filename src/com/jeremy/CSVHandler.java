@@ -375,11 +375,11 @@ public class CSVHandler {
 				
 				try {
 					//test if both values are integers on either side of the decimal place
-					Integer.parseInt(data[i][j].toString(), -1);
+					Integer.parseInt(data[j][i].toString(), -1);
 				} catch (NumberFormatException e) {
 					isInt = false;
 					try { 
-						Long.parseLong(data[i][j].toString(), -1);
+						Long.parseLong(data[j][i].toString(), -1);
 					} catch (NumberFormatException ex) {
 						isLong = false;
 						break;	
@@ -491,11 +491,13 @@ public class CSVHandler {
 			if (line != null) {
 				//neaten up
 				line = line.trim();
+				System.out.println(line);
 				
 				//split for counting
 				String[] columnNames = line.split(columnDelimiter, -1);
 				if (line != null && line.length() > 0) {
 					//get column amount
+					System.out.println(columnNames.length);
 					fields = columnNames.length;	
 				} else {
 					return;

@@ -1,6 +1,7 @@
 package com.jeremy;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,9 +16,7 @@ import java.util.Date;
 public class SQLHandler {
 	private TableData tblData;
 	private Connection connection = null;
-	private String USER = "username";
-	private String PASSWORD = "password";
-
+	
 	public enum SQLType {
 		SQLSERVER, MYSQL, POSTGRESQL
 	};
@@ -80,8 +79,6 @@ public class SQLHandler {
 	 */
 	public void createDatabase(String host, String databaseName,
 			SQLType sqlType, String userName, String password) {
-		USER = userName;
-		PASSWORD = password;
 		Connection connection = null;
 		Statement statement = null;
 		try {
@@ -95,25 +92,19 @@ public class SQLHandler {
 				}
 			}
 			if (sqlType == SQLType.SQLSERVER) {
-				connectionURL = "jdbc:microsoft:sqlserver://" + host
-						+ databaseName;
+				connectionURL = "jdbc:microsoft:sqlserver://" + host;
 			} else if (sqlType == SQLType.MYSQL) {
-				connectionURL = "jdbc:mysql://" + host + databaseName;
+				connectionURL = "jdbc:mysql://" + host;
 			} else if (sqlType == SQLType.POSTGRESQL) {
-				connectionURL = "jdbc:postgresql://" + host + databaseName;
+				connectionURL = "jdbc:postgresql://" + host;
 			}
-			SQLConnection sqlConnection = new SQLConnection(connectionURL,
-					USER, PASSWORD, sqlType);
-			connection = sqlConnection.open();
+			connection = DriverManager.getConnection(connectionURL, userName, password);
 			statement = connection.createStatement();
-			String createDatabase = "CREATE DATABASE" + databaseName;
+			String createDatabase = "CREATE DATABASE " + databaseName;
 			statement.executeUpdate(createDatabase);
 		} catch (SQLException se) {
 			// Catches errors for JDBC
 			se.printStackTrace();
-		} catch (Exception e) {
-			// Catches errors for Class.forName
-			e.printStackTrace();
 		} finally {
 			try {
 				if (statement != null)
@@ -164,8 +155,6 @@ public class SQLHandler {
 	 */
 	public void createTable(String host, String databaseName, SQLType sqlType,
 			String userName, String password) {
-		USER = userName;
-		PASSWORD = password;
 		Statement statement = null;
 		try {
 			if (host.equalsIgnoreCase("")) {
@@ -185,9 +174,7 @@ public class SQLHandler {
 			} else if (sqlType == SQLType.POSTGRESQL) {
 				connectionURL = "jdbc:postgresql://" + host + databaseName;
 			}
-			SQLConnection sqlConnection = new SQLConnection(connectionURL,
-					USER, PASSWORD, sqlType);
-			connection = sqlConnection.open();
+			connection = DriverManager.getConnection(connectionURL, userName, password);
 			statement = connection.createStatement();
 			String fields = "";
 			String dataType = " VARCHAR(255), ";
@@ -196,13 +183,11 @@ public class SQLHandler {
 			Object[] headings = tblData.getColumnHeader();
 			String tableName = tblData.getTableName();
 			for (int i = 0; i < cols; i++) {
-				if (columnClasses[i] == Boolean.class) {
-					dataType = "BOOLEAN, ";
-				} else if (columnClasses[i] == Integer.class) {
-					dataType = "INTEGER(" + tblData.getFieldLength()[i] + "), ";
+				if (columnClasses[i] == Integer.class) {
+					dataType = "INT, ";
 				} else if (columnClasses[i] == Double.class) {
 					dataType = "DECIMAL(" + tblData.getFieldLength()[i] + ","
-							+ tblData.getFieldPrecision()[i] + "), ";
+						+ tblData.getFieldPrecision()[i] + "), ";
 				} else if (columnClasses[i] == Date.class) {
 					dataType = "DATE, ";
 				} else if (columnClasses[i] == Long.class) {
@@ -210,19 +195,14 @@ public class SQLHandler {
 				} else {
 					dataType = "VARCHAR(" + tblData.getFieldLength()[i] + "), ";
 				}
+				fields += headings[i] + " " + dataType + "\n";
 			}
-			for (int i = 0; i < cols; i++) {
-				fields += headings[i] + " " + dataType;
-			}
-			String createTable = "CREATE TABLE" + tableName + " ("
-					+ "(id INTEGER not NULL, " + fields + " PRIMARY KEY (id))";
+			String createTable = "CREATE TABLE " + tableName + "(\n"
+					+ "id INT NOT NULL AUTO_INCREMENT, \n" + fields + "PRIMARY KEY (id));";
 			statement.executeUpdate(createTable);
 		} catch (SQLException se) {
 			// Catches errors for JDBC
 			se.printStackTrace();
-		} catch (Exception e) {
-			// Catches errors for Class.forName
-			e.printStackTrace();
 		} finally {
 			try {
 				if (statement != null)
@@ -351,9 +331,7 @@ public class SQLHandler {
 			} else if (sqlType == SQLType.POSTGRESQL) {
 				connectionURL = "jdbc:postgresql://" + host + databaseName;
 			}
-			SQLConnection sqlConnection = new SQLConnection(connectionURL,
-					USER, PASSWORD, sqlType);
-			connection = sqlConnection.open();
+			connection = DriverManager.getConnection(connectionURL, userName, password);
 			preparedStatement = connection.prepareStatement(sqlInsertStatement);
 			for (int i = line; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
@@ -368,9 +346,6 @@ public class SQLHandler {
 		} catch (SQLException se) {
 			// Catches errors for JDBC
 			se.printStackTrace();
-		} catch (Exception e) {
-			// Catches errors for Class.forName
-			e.printStackTrace();
 		} finally {
 			try {
 				if (preparedStatement != null)
@@ -420,10 +395,8 @@ public class SQLHandler {
 		String dataType = "";
 		int cols = tblData.getFields();
 		for (int i = 0; i < cols; i++) {
-			if (columnClasses[i] == Boolean.class) {
-				dataType = "BOOLEAN, ";
-			} else if (columnClasses[i] == Integer.class) {
-				dataType = "INTEGER(" + tblData.getFieldLength()[i] + "), ";
+			if (columnClasses[i] == Integer.class) {
+				dataType = "INT, ";
 			} else if (columnClasses[i] == Double.class) {
 				dataType = "DECIMAL(" + tblData.getFieldLength()[i] + ","
 						+ tblData.getFieldPrecision()[i] + "), ";
@@ -434,37 +407,13 @@ public class SQLHandler {
 			} else {
 				dataType = "VARCHAR(" + tblData.getFieldLength()[i] + "), ";
 			}
-			fields += headings[i] + " " + dataType;
+			fields += headings[i] + " " + dataType + "\n";
 		}
-		String createTable = "CREATE TABLE " + tableName + " ("
-				+ "id INTEGER not NULL, " + fields + " PRIMARY KEY (id))";
-		String SQLFileBuildString = "USE master;\n" + "GO\n"
-				+ "IF EXISTS(SELECT * FROM sysdatabases WHERE name= '"
+		String createTable = "CREATE TABLE " + tableName + "(\n"
+				+ "id INTEGER not NULL, \n" + fields + " PRIMARY KEY (id))";
+		String SQLFileBuildString = "CREATE DATABASE "
 				+ databaseName
-				+ "')\n"
-				+ "BEGIN\n"
-				+ "RAISERROR('Dropping existing "
-				+ databaseName
-				+ " database ....',0,1)\n"
-				+ "DROP database "
-				+ databaseName
-				+ ";"
-				+ "\nEND\n"
-				+ "GO\n"
-				+ "RAISERROR('Creating "
-				+ databaseName
-				+ " database ....',0,1)\n"
-				+ "GO\n"
-				+ "CREATE DATABASE "
-				+ databaseName
-				+ ";\n"
-				+ "GO\n"
-				+ "USE "
-				+ databaseName
-				+ ";\n"
-				+ "GO\n"
-				+ "RAISERROR('Creating Tables ....',0,1)\n"
-				+ "GO\n"
+				+ ";\n\n"
 				+ createTable + ";";
 		return SQLFileBuildString;
 	}
