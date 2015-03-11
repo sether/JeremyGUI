@@ -1,5 +1,6 @@
 package com.jeremy;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -42,6 +43,8 @@ public class JSONHandler {
 		int rows = tblData.getLines();
 		int cols = tblData.getFields();
 		Date created = new Date();
+		SimpleDateFormat sf = new SimpleDateFormat();
+		String date = sf.format(created);
 		String[] classes = new String[cols];
 		
 		/* Create the top level JSON Object which contains base properties about the file input to the JSONHandler.
@@ -50,7 +53,7 @@ public class JSONHandler {
 		topLevelObject = new JSONObject();
 		topLevelObject.addProperty("numRows", String.valueOf(rows));
 		topLevelObject.addProperty("numColumns", String.valueOf(cols));
-		topLevelObject.addProperty("created", created.toString());
+		topLevelObject.addProperty("created", date);
 		topLevelObject.addProperty("fileName", "LasData.csv");
 		topLevelObject.addProperty("user", "");
 		topLevelObject.addProperty("clientNo", "");
