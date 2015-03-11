@@ -12,7 +12,7 @@ import com.jeremy.TableData;
 import com.jeremy.XMLHandler;
 
 /**
- * A JUnit test class for the XMLHandler class
+ * A JUnit test class for the XMLHandler class. Expected strings have been validated to XML standards.
  * @author Scott Micklethwaite
  * @version 1.0
  */
@@ -43,17 +43,6 @@ public class XMLHandlerTest {
 		int fields = headers.length;
 		
 		this.tblData = new TableData(data, classes, name, headers, lines, fields);
-		
-		
-		try {
-			XMLHandler xml = new XMLHandler(tblData, true);
-			
-			FileUtility.writeFile("TestData/test.xml", xml.getXMLString());
-			FileUtility.writeFile("TestData/test.xsd", xml.getSchemaString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	/**
