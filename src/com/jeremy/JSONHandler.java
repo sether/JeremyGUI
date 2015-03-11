@@ -157,16 +157,16 @@ public class JSONHandler {
 		
 		return s;		
 	}
-
-	public static String JSONHeader() {
+	// JSON Header string
+	private static String JSONHeader() {
 		return "{";
 	}
 	
-	public static String JSONFooter() {
+	private static String JSONFooter() {
 		return "}";
 	}
 
-	public class JSONObject {
+	private class JSONObject {
 		private ArrayList<JSONObject> subObjects;
 		
 		private ArrayList<JSONMember> members;
@@ -223,7 +223,7 @@ public class JSONHandler {
 		}
 	}	
 	
-	public class JSONMember {
+	private class JSONMember {
 		String name;
 		ArrayList<JSONProperty> properties;
 		
@@ -242,7 +242,7 @@ public class JSONHandler {
 		
 	}
 	
-	public class JSONProperty {
+	private class JSONProperty {
 		private String name;
 		private String value;
 		
