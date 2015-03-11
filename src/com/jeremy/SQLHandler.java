@@ -92,8 +92,7 @@ public class SQLHandler {
 				}
 			}
 			if (sqlType == SQLType.SQLSERVER) {
-				connectionURL = "jdbc:microsoft:sqlserver://" + host
-						+ databaseName;
+				connectionURL = "jdbc:microsoft:sqlserver://" + host;
 			} else if (sqlType == SQLType.MYSQL) {
 				connectionURL = "jdbc:mysql://" + host;
 			} else if (sqlType == SQLType.POSTGRESQL) {
@@ -101,14 +100,11 @@ public class SQLHandler {
 			}
 			connection = DriverManager.getConnection(connectionURL, userName, password);
 			statement = connection.createStatement();
-			String createDatabase = "CREATE DATABASE" + databaseName;
+			String createDatabase = "CREATE DATABASE " + databaseName;
 			statement.executeUpdate(createDatabase);
 		} catch (SQLException se) {
 			// Catches errors for JDBC
 			se.printStackTrace();
-		} catch (Exception e) {
-			// Catches errors for Class.forName
-			e.printStackTrace();
 		} finally {
 			try {
 				if (statement != null)
@@ -207,9 +203,6 @@ public class SQLHandler {
 		} catch (SQLException se) {
 			// Catches errors for JDBC
 			se.printStackTrace();
-		} catch (Exception e) {
-			// Catches errors for Class.forName
-			e.printStackTrace();
 		} finally {
 			try {
 				if (statement != null)
@@ -353,9 +346,6 @@ public class SQLHandler {
 		} catch (SQLException se) {
 			// Catches errors for JDBC
 			se.printStackTrace();
-		} catch (Exception e) {
-			// Catches errors for Class.forName
-			e.printStackTrace();
 		} finally {
 			try {
 				if (preparedStatement != null)
