@@ -11,7 +11,7 @@ import java.util.List;
 public class XMLHandler {
 	private final Double XML_VERSION = 1.0;
 	private final String XML_ENCODING = "UTF-8";
-	private final boolean FIELD_AS_ELEMENT = false;
+	private boolean fieldAsElement = true;
 	private XMLTag root;
 	private TableData data;
 	
@@ -36,6 +36,14 @@ public class XMLHandler {
 	}
 	
 	/**
+	 * A method for setting if row fields should be formatted as XML Elements or Attributes.
+	 * @param val a boolean determining if a field should be an element
+	 */
+	public void setFieldAsElement(boolean val){
+		this.fieldAsElement = val;
+	}
+	
+	/**
 	 * Creates an XML object structure using TableData. Will create row data as elements or attributes depending on
 	 * the value of FIELD_AS_ELEMENT.
 	 */
@@ -57,7 +65,7 @@ public class XMLHandler {
 			
 			//add each field as an element or as an attribute
 			for(int j = 0; j < colCount; j++){
-				if(FIELD_AS_ELEMENT){
+				if(fieldAsElement){
 					row.elements.add(new XMLElement(headings[j].toString(), tableData[i][j].toString()));
 				} else {
 					row.attribs.add(new XMLAttribute(headings[j].toString(), tableData[i][j].toString()));
@@ -131,7 +139,7 @@ public class XMLHandler {
 		element1.tags.add(complex2);
 		
 		// creates different tag structure from this point depending on if fields should be elements or attributes
-		if(FIELD_AS_ELEMENT){
+		if(fieldAsElement){
 			dataStruc = "element";
 			
 			container = new XMLTag("xs:sequence");
@@ -195,7 +203,7 @@ public class XMLHandler {
 		
 		//dynamic portion of DTD
 		String[] st = data.getColumnHeader();
-		if(FIELD_AS_ELEMENT){ // formatted differently if rows are elements or attributes
+		if(fieldAsElement){ // formatted differently if rows are elements or attributes
 			s += "\t" + "<!ELEMENT Row (";
 			
 			//add heading names neatly into row content declaration
