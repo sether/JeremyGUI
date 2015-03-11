@@ -83,10 +83,10 @@ public class FileController {
 
 		switch (outputType) {
 			case XML:
-				output = new XMLHandler(tblData).getXMLString();
+				output = new XMLHandler(tblData, true).getXMLString();
 				break;
 			case XML_SCHEMA:
-				output = new XMLHandler(tblData).getSchemaString();
+				output = new XMLHandler(tblData, true).getSchemaString();
 				break;
 			case JSON:
 				output = new JSONHandler(tblData).makeJSON();
