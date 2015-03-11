@@ -51,7 +51,7 @@ public class JSONHandler {
 		topLevelObject.addProperty("numRows", String.valueOf(rows));
 		topLevelObject.addProperty("numColumns", String.valueOf(cols));
 		topLevelObject.addProperty("created", created.toString());
-		topLevelObject.addProperty("fileName", created.toString());
+		topLevelObject.addProperty("fileName", "LasData.csv");
 		topLevelObject.addProperty("user", "");
 		topLevelObject.addProperty("clientNo", "");
 		
