@@ -92,7 +92,13 @@ public class SQLHandler {
 				}
 			}
 			if (sqlType == SQLType.SQLSERVER) {
-				connectionURL = "jdbc:microsoft:sqlserver://" + host;
+				connectionURL = "jdbc:sqlserver://MYPC\\SQLEXPRESS;databaseName=MYDB;integratedSecurity=true";
+				try {
+					Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				//connection = DriverManager.getConnection(connectionURL);
 			} else if (sqlType == SQLType.MYSQL) {
 				connectionURL = "jdbc:mysql://" + host;
 			} else if (sqlType == SQLType.POSTGRESQL) {

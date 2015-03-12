@@ -2,7 +2,10 @@ package com.jeremy;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
+
+import com.jeremy.SQLHandler.SQLType;
 
 public class FileController {
 
@@ -11,7 +14,7 @@ public class FileController {
 	// TODO: decide access modifier for other classes, package maybe? 
 
 	public enum OutputType {
-		XML, XML_ELEMENTS, JSON, SQL
+		XML, XML_ELEMENTS, JSON
 	}
 
 	private TableData tblData = null;
@@ -102,9 +105,6 @@ public class FileController {
 			case JSON:
 				output = new JSONHandler(tblData).stringifyJSON();
 				break;
-			case SQL:
-				output = new SQLHandler(tblData).createSQLFile("Test");
-				break;
 		}
 
 		try {
@@ -117,7 +117,43 @@ public class FileController {
 		}
 	}
 	
-	/* Internal settings for fileController*/
+	public void outputToSQLFile(File file, String databaseName, SQLType sqlType) {
+		String output = new SQLHandler(tblData).createSQLFile(databaseName, sqlType);
+		
+		try {
+			FileUtility.writeFile(file, output);
+		} catch (IOException e) {
+			if (logErrors) {
+				Logging.getInstance().log(Level.SEVERE, "Error writing output to file!", e);
+			}
+		}
+		
+	}
+	
+	public void outputToDatabase(String host, String databaseName, SQLType sqlType, String userName, String password) {
+		SQLHandler sql = new SQLHandler(tblData);
+		
+		sql.createDatabase(host, databaseName, sqlType, userName, password);
+		sql.createTable(host, databaseName, sqlType, userName, password);
+		sql.insertDatabase(host, databaseName, sqlType, userName, password);
+	}
+	
+	
+	/* Stream-lined methods */
+	
+	public void csvToXML(){
+		
+	}
+	
+	public void csvToJSON() {
+		
+	}
+	
+	public void csvToSQL(){
+		
+	}
+	
+	/* Internal settings for fileController */
 	
 	public boolean isLogErrors() {
 		return logErrors;
@@ -127,7 +163,7 @@ public class FileController {
 		this.logErrors = logErrors;
 	}
 	
-	/*Setters and getters for tblData*/
+	/* Setters and getters for tblData */
 	
 	public Object[][] getTableData() {
 		return tblData.getTableData();

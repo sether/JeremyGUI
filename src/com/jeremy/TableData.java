@@ -2,50 +2,30 @@ package com.jeremy;
 
 /**
  * Used to store and edit data from a csv file.
+ * 
  * @author AlexBrown
  * @version 1.0
  */
 public class TableData {
-	
+
 	private String[] columnHeader;
 	private int[] fieldLength;
 	private int[] fieldPrecision;
-	private Class<?>[] columnClasses;	
+	private Class<?>[] columnClasses;
 	private Object[][] tableData;
 	private int lines;
 	private int fields;
 	private String tableName;
 
-	public TableData(Object[][] tableData, Class<?>[] columnClasses, String tableName) {
-		this.tableData = tableData;
-		this.columnClasses = columnClasses;
-		this.tableName = tableName;
-	}
-	
-	public TableData(Object[][] tableData, Class<?>[] columnClasses, String tableName, String[] columnHeader) {
-		this.tableData = tableData;
-		this.columnClasses = columnClasses;
-		this.tableName = tableName;
-		this.columnHeader = columnHeader;
-	}
-	
-	public TableData(Object[][] tableData, Class<?>[] columnClasses, String tableName, int lines, int fields) {
-		this.tableData = tableData;
-		this.columnClasses = columnClasses;
-		this.tableName = tableName;
+	public TableData(Object[][] data, Class<?>[] classes, String name, String[] headers, int lines, int fields) {
+		this.tableData = data;
+		this.columnClasses = classes;
+		this.tableName = name;
+		this.columnHeader = headers;
 		this.lines = lines;
 		this.fields = fields;
 	}
-	
-	public TableData(Object[][] tableData, Class<?>[] columnClasses, String tableName, String[] columnHeader, int lines, int fields) {
-		this.tableData = tableData;
-		this.columnClasses = columnClasses;
-		this.tableName = tableName;
-		this.columnHeader = columnHeader;
-		this.lines = lines;
-		this.fields = fields;
-	}
-	
+
 	public TableData(Object[][] tableData, Class<?>[] columnClasses, String tableName, String[] columnHeader, int lines, int fields, int[] fieldLength, int[] fieldPrecision) {
 		this.tableData = tableData;
 		this.columnClasses = columnClasses;
@@ -112,7 +92,7 @@ public class TableData {
 	public void setFieldPrecision(int[] fieldPrecision) {
 		this.fieldPrecision = fieldPrecision;
 	}
-	
+
 	public String getTableName() {
 		return tableName;
 	}
