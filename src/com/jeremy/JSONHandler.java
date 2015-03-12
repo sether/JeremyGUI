@@ -37,7 +37,7 @@ public class JSONHandler {
 	 * This method is called when creating a JSONHandler object.
 	 * 
 	 */
-	public void makeJSON() {
+	private void makeJSON() {
 		Object[][] data = tblData.getTableData();
 		Object[] headings = tblData.getColumnHeader();	
 		int rows = tblData.getLines();
@@ -302,11 +302,11 @@ public class JSONHandler {
 			this.name = name;
 		}
 		
-		public void addProperty(JSONProperty prop) {
+		private void addProperty(JSONProperty prop) {
 			this.properties.add(prop);
 		}
 		
-		public ArrayList<JSONProperty> getProperties() {
+		private ArrayList<JSONProperty> getProperties() {
 			return this.properties;
 		}	
 	}

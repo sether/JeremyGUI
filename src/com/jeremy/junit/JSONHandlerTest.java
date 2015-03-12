@@ -2,6 +2,9 @@ package com.jeremy.junit;
 
 import static org.junit.Assert.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,22 +40,22 @@ public class JSONHandlerTest {
 		
 		this.tblData = new TableData(data, classes, name, headers, lines, fields);
 	}
-	
-	@Test
-	public void testJSONHandler() {
-		assertNotNull("tblData is not null", tblData);
-	}
 
 	@Test
 	public void testMakeJSON() {
 		JSONHandler json = new JSONHandler(tblData);
+		assertNotNull(json);
 	}
 
 	@Test
 	public void testStringifyJSON() {
+		Date now = new Date();
+		SimpleDateFormat sf = new SimpleDateFormat();
+		String rNow = sf.format(now);
 		JSONHandler json = new JSONHandler(tblData);
+		
 		String actual = json.stringifyJSON();
-		String expected = "{\"numRows\":\"3\",\"numColumns\":\"5\",\"created\":\"11/03/15 11:21 PM\",\"fileName\":\"LasData.csv\",\"user\":\"\",\"columnInfo\": [{\"Column 0\":\"Integer\",\"Column 1\":\"String\",\"Column 2\":\"Float\",\"Column 3\":\"Long\",\"Column 4\":\"Boolean\"}],\"data\": [{\"int\":\"1\",\"string\":\"one\",\"float\":\"0.01\",\"long\":\"1\",\"boolean\":\"true\"},{\"int\":\"2\",\"string\":\"two\",\"float\":\"0.02\",\"long\":\"2\",\"boolean\":\"false\"},{\"int\":\"3\",\"string\":\"three\",\"float\":\"0.03\",\"long\":\"3\",\"boolean\":\"true\"}]}";
+		String expected = "{\"numRows\":\"3\",\"numColumns\":\"5\",\"created\":" + "\"" + rNow + "\"" + ",\"fileName\":\"Test Table.csv\",\"user\":\"\",\"columnInfo\": [{\"Column 0\":\"Integer\",\"Column 1\":\"String\",\"Column 2\":\"Float\",\"Column 3\":\"Long\",\"Column 4\":\"Boolean\"}],\"data\": [{\"int\":\"1\",\"string\":\"one\",\"float\":\"0.01\",\"long\":\"1\",\"boolean\":\"true\"},{\"int\":\"2\",\"string\":\"two\",\"float\":\"0.02\",\"long\":\"2\",\"boolean\":\"false\"},{\"int\":\"3\",\"string\":\"three\",\"float\":\"0.03\",\"long\":\"3\",\"boolean\":\"true\"}]}";
 		assertEquals("Same?", expected, actual);
 	}
 
