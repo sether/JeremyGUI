@@ -293,8 +293,7 @@ public class SQLHandler {
 	 * @see CSVHandler
 	 */
 	public void insertDatabase(String host, String databaseName,
-			SQLType sqlType, String userName, String password)
-			throws SQLException {
+			SQLType sqlType, String userName, String password){
 		final int batchSize = 1000;
 		int count = 0;
 		Object[][] data = tblData.getTableData();
@@ -366,6 +365,7 @@ public class SQLHandler {
 	 * Creates the String for the the designated SQL database type that can then be used to write the .sql file
 	 * 
 	 * @param databaseName - A string that specifies the name of the database that the table will be created in
+	 * @param sqlType - An enum that specifies which designates what SQL type the database shall be
 	 * @return SQLFileBuildString - A string that can then be sent to the FileUtilty.writeFile() to create an sql.file
 	 * <br>
 	 * <b>USAGE:</b></br>
@@ -378,7 +378,7 @@ public class SQLHandler {
 	 * TableData tableData = csvHandler.readCSV("TestData/testDataType.csv");
 	 * 
 	 * SQLHandler sqlHandler = new SQLHandler(tableData);
-	 * sqlHandler.createSQLFile(databaseName);
+	 * sqlHandler.createSQLFile(databaseName, MYSQL);
 	 * 
 	 * FileUtility.writeFile("TestData/test.sql", s);
 	 * 
@@ -387,13 +387,17 @@ public class SQLHandler {
 	 * @see CSVHandler
 	 * @see FileUtility
 	 */
-	public String createSQLFile(String databaseName) {
+	public String createSQLFile(String databaseName, SQLType sqlType) {
 		Class<?>[] columnClasses = tblData.getColumnClasses();
 		Object[] headings = tblData.getColumnHeader();
 		String tableName = tblData.getTableName();
 		String fields = "";
 		String dataType = "";
+		String useDatabase = "";
 		int cols = tblData.getFields();
+		if (sqlType == SQLType.MYSQL) {
+			useDatabase = "USE " + databaseName;
+		}
 		for (int i = 0; i < cols; i++) {
 			if (columnClasses[i] == Integer.class) {
 				dataType = "INT, ";
@@ -413,7 +417,7 @@ public class SQLHandler {
 				+ "id INTEGER not NULL, \n" + fields + " PRIMARY KEY (id))";
 		String SQLFileBuildString = "CREATE DATABASE "
 				+ databaseName
-				+ ";\n\n"
+				+ ";\n" + useDatabase + "\n"
 				+ createTable + ";";
 		return SQLFileBuildString;
 	}
