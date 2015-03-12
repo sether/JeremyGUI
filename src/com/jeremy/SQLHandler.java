@@ -299,7 +299,7 @@ public class SQLHandler {
 	 * @see CSVHandler
 	 */
 	public void insertDatabase(String host, String databaseName,
-			SQLType sqlType, String userName, String password){
+			SQLType sqlType, String userName, String password, Boolean append){
 		final int batchSize = 1000;
 		int count = 0;
 		Object[][] data = tblData.getTableData();

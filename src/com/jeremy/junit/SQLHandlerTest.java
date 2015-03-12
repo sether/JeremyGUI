@@ -43,6 +43,6 @@ public class SQLHandlerTest {
 	
 	@Test
 	public void testInsert(){
-		sql.insertDatabase("", "test", SQLType.MYSQL, "root", "");
+		sql.insertDatabase("", "test", SQLType.MYSQL, "root", "", false);
 	}
 }

@@ -135,7 +135,7 @@ public class FileController {
 		
 		sql.createDatabase(host, databaseName, sqlType, userName, password);
 		sql.createTable(host, databaseName, sqlType, userName, password);
-		sql.insertDatabase(host, databaseName, sqlType, userName, password);
+		sql.insertDatabase(host, databaseName, sqlType, userName, password, false);
 	}
 	
 	
