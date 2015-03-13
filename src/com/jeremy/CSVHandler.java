@@ -9,9 +9,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 /**
  * Used to convert a CSV file into usable data.
+ * 
  * @author AlexBrown
  * @version 1.0
  */
@@ -19,7 +19,7 @@ public class CSVHandler {
 	private static final String DEFAULT_COLUMN_NAME = "Column";
 	private static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
 	private static final String DEFAULT_COLUMN_DELIMITER = ",";
-	
+
 	private Object[][] data;
 	private int lines = 0;
 	private int fields = 0;
@@ -27,63 +27,71 @@ public class CSVHandler {
 	private int[] fieldPrecision;
 	private String dateFormat = DEFAULT_DATE_FORMAT;
 	private String columnDelimiter = DEFAULT_COLUMN_DELIMITER;
-	
-	
+
 	private boolean firstLineUsedAsColumnHeader = false;
-	
+
 	/**
-	 * Reads a CSV file into a TableData object and returns it
-	 * NOTE: Default table name is the file name without the extension
-	 * @param fileName - The name of the file that you wish to read into the program
+	 * Reads a CSV file into a TableData object and returns it NOTE: Default
+	 * table name is the file name without the extension
+	 * 
+	 * @param fileName
+	 *            - The name of the file that you wish to read into the program
 	 * @return Table data from the CSV file specified<br/>
 	 * <br/>
-	 * <b>USAGE:</b><br/>
-	 * <pre>
-	 * String fileName = "TestData.csv";
+	 *         <b>USAGE:</b><br/>
+	 * 
+	 *         <pre>
+	 * String fileName = &quot;TestData.csv&quot;;
 	 * 
 	 * TableData csvFile = csvHandler.readCSV(fileName);
 	 * </pre>
 	 * @throws IOException
 	 * @see TableData
 	 */
-	public TableData readCSV(String fileName) throws IOException{
+	public TableData readCSV(String fileName) throws IOException {
 		File csvFile = new File(fileName);
 		return readCSV(csvFile);
 	}
-	
+
 	/**
-	 * Reads a CSV file into a TableData object and returns it
-	 * NOTE: Default table name is the file name without the extension
-	 * @param directory - The directory of the file you wish to read
-	 * @param fileName - The name of the file that you wish to read into the program
+	 * Reads a CSV file into a TableData object and returns it NOTE: Default
+	 * table name is the file name without the extension
+	 * 
+	 * @param directory
+	 *            - The directory of the file you wish to read
+	 * @param fileName
+	 *            - The name of the file that you wish to read into the program
 	 * @return Table data from the CSV file specified<br/>
 	 * <br/>
-	 * <b>USAGE:</b><br/>
-	 * <pre>
-	 * String directory = "TestDirectory";
-	 * String fileName = "TestData.csv";
+	 *         <b>USAGE:</b><br/>
+	 * 
+	 *         <pre>
+	 * String directory = &quot;TestDirectory&quot;;
+	 * String fileName = &quot;TestData.csv&quot;;
 	 * 
 	 * TableData csvFile = csvHandler.readCSV(directory, fileName);
 	 * </pre>
 	 * @throws IOException
 	 * @see TableData
 	 */
-	public TableData readCSV(String directory, String fileName) throws IOException{
+	public TableData readCSV(String directory, String fileName) throws IOException {
 		File csvFile = new File(directory, fileName);
 		return readCSV(csvFile);
 	}
-	
-	
+
 	/**
 	 * Reads an already made CSV file into a TableData object and returns it
 	 * NOTE: Default table name is the file name without the extension
-	 * @param csvFile - The file that you wish to read into the program
+	 * 
+	 * @param csvFile
+	 *            - The file that you wish to read into the program
 	 * @return Table data from the CSV file specified<br/>
 	 * <br/>
-	 * <b>USAGE:</b><br/>
-	 * <pre>
-	 * String directory = "TestDirectory";
-	 * String fileName = "TestData.csv";
+	 *         <b>USAGE:</b><br/>
+	 * 
+	 *         <pre>
+	 * String directory = &quot;TestDirectory&quot;;
+	 * String fileName = &quot;TestData.csv&quot;;
 	 * 
 	 * File csvFile = new File(directory, fileName);
 	 * 
@@ -92,448 +100,460 @@ public class CSVHandler {
 	 * @throws IOException
 	 * @see TableData
 	 */
-	public TableData readCSV(File csvFile) throws IOException{
-	
-		//make sure file is a real file and we can read it
+	public TableData readCSV(File csvFile) throws IOException {
+
+		// make sure file is a real file and we can read it
 		if (csvFile.exists() && csvFile.isFile() && csvFile.canRead()) {
-			//count the lines and columns as well as the field lengths
-			
+			// count the lines and columns as well as the field lengths
+
 			countFileColumns(csvFile);
 			countFileLines(csvFile);
 			countFieldLengths(csvFile);
-			
+
 			fieldPrecision = new int[fields];
-			for(int i = 0; i < fieldPrecision.length; i++) {
+			for (int i = 0; i < fieldPrecision.length; i++) {
 				fieldPrecision[i] = 0;
 			}
-			
-			//get rid of a line if the first line is going to be used as a header
+
+			// get rid of a line if the first line is going to be used as a
+			// header
 			if (firstLineUsedAsColumnHeader) {
 				lines--;
 			}
-			
+
 			data = readFileDataIn(csvFile);
-			
-			//read in file data, find column classes, get headers and return all info in a datatable
+
+			// read in file data, find column classes, get headers and return
+			// all info in a datatable
 			return new TableData(data, findColumnClasses(csvFile), getFileName(csvFile.getName()), getHeaders(csvFile), lines, fields, fieldLength, fieldPrecision);
 		} else {
-			//throw error if the file is not found or can't read it
+			// throw error if the file is not found or can't read it
 			throw new FileNotFoundException("Could not find file: " + csvFile.getAbsoluteFile());
 		}
 	}
-	
-	
-	private String getFileName(String fileName){
+
+	private String getFileName(String fileName) {
 		if (fileName == null) {
 			return fileName;
 		}
 		int extentionPosition = fileName.lastIndexOf(".");
-		
+
 		if (extentionPosition == -1) {
 			return fileName;
 		}
-		
-		 
-		
+
 		return fileName.substring(0, extentionPosition);
 	}
-	
+
 	private Class<?>[] findColumnClasses(File csvFile) throws IOException {
-		
-		//set up column classes to be defaulted to String
+
+		// set up column classes to be defaulted to String
 		Class<?>[] columnClasses = new Class[fields];
 		for (int i = 0; i < columnClasses.length; i++) {
 			columnClasses[i] = String.class;
 		}
-		
-		
-		//check to see what are booleans.
-		//easiest and no chance of being another type
+
+		// check to see what are booleans.
+		// easiest and no chance of being another type
 		checkBoolean(csvFile, columnClasses);
-		
-		//date should be an easy format as well so check that next
+
+		// date should be an easy format as well so check that next
 		checkDate(csvFile, columnClasses);
-		
-		//int or long wont be a decimal so check for decimal beforehand
+
+		// int or long wont be a decimal so check for decimal beforehand
 		checkDouble(csvFile, columnClasses);
-		
-		//check if other values are int or long
+
+		// check if other values are int or long
 		checkNumber(csvFile, columnClasses);
-		
-		//rest default to string
-		
+
+		// rest default to string
+
 		return columnClasses;
 	}
-	
+
 	private void checkBoolean(File csvFile, Class<?>[] columnClasses) throws IOException {
 
-		//create reader
+		// create reader
 		BufferedReader reader = null;
-		try{
-			
-			//iterate through each column
+		try {
+
+			// iterate through each column
 			for (int i = 0; i < columnClasses.length; i++) {
-				
-				//set up variables to use
+
+				// set up variables to use
 				boolean skippedFirstLine = false;
 				boolean isBoolean = true;
-				
-				//Initialize
+
+				// Initialize
 				reader = new BufferedReader(new FileReader(csvFile));
 				String line;
-				
-				//iterate through each line
+
+				// iterate through each line
 				while ((line = reader.readLine()) != null) {
-					
-					
+
 					if (!skippedFirstLine && firstLineUsedAsColumnHeader) {
-						line = reader.readLine();
 						skippedFirstLine = true;
+						continue;
 					}
 					String[] fields = line.split(columnDelimiter, -1);
-					
+
 					if (!fields[i].equalsIgnoreCase("true") && !fields[i].equalsIgnoreCase("false")) {
 						isBoolean = false;
 						break;
 					}
-					
-	
-				} 
+
+				}
 				if (isBoolean) {
 					columnClasses[i] = Boolean.class;
 				}
-				
+
 			}
-		} finally{
-			//close after use or on error
+		} finally {
+			// close after use or on error
 			reader.close();
 		}
-		
+
 	}
 
-	private void checkDate(File csvFile, Class<?>[] columnClasses) throws IOException{
-		//create reader
+	private void checkDate(File csvFile, Class<?>[] columnClasses) throws IOException {
+		// create reader
 		BufferedReader reader = null;
-		try{
-			
-			//iterate through each column
+		try {
+
+			// iterate through each column
 			for (int i = 0; i < columnClasses.length; i++) {
-				
-				//set up variables to use
+
+				// set up variables to use
 				boolean skippedFirstLine = false;
 				boolean isDate = true;
-				
-				//Initialize
+
+				// Initialize
 				reader = new BufferedReader(new FileReader(csvFile));
 				String line;
-				
-				//iterate through each line
+
+				// iterate through each line
 				while ((line = reader.readLine()) != null) {
-					
-					
+
 					if (!skippedFirstLine && firstLineUsedAsColumnHeader) {
-						line = reader.readLine();
 						skippedFirstLine = true;
+						continue;
 					}
+
 					String[] fields = line.split(columnDelimiter, -1);
-					
-					//create date format for testing
+
+					// create date format for testing
 					SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
 					try {
-						
-						//see if date
+
+						// see if date
 						simpleDateFormat.parse(fields[i]);
 					} catch (ParseException e) {
-						
+
 						isDate = false;
 						break;
 					}
-					
-	
-				} 
+
+				}
 				if (isDate) {
 					columnClasses[i] = Date.class;
 				}
-				
+
 			}
-		} finally{
-			//close after use or on error
+		} finally {
+			// close after use or on error
 			reader.close();
 		}
-		
+
 	}
-	
-	//NOTE: falls flat if doubles and ints mix, reverts to string
+
+	// NOTE: falls flat if doubles and ints mix, reverts to string
 	private void checkDouble(File csvFile, Class<?>[] columnClasses) throws IOException {
-		
-		//set up precision and reader
+
+		// set up precision and reader
 		BufferedReader reader = null;
-		try{
-			
-			//iterate through each column
+		try {
+
+			// iterate through each column
 			for (int i = 0; i < columnClasses.length; i++) {
-				
-				//set up variables to use
+
+				// set up variables to use
 				int maxLength = fieldPrecision[i] = 0;
 				int maxPercision = 0;
 				boolean skippedFirstLine = false;
 				boolean isDouble = true;
-				
-				//set up reader
+				boolean hasDecimals = false;
+
+				// set up reader
 				reader = new BufferedReader(new FileReader(csvFile));
-				String line;				
-				
-				//read each line
+				String line;
+
+				// read each line
 				while ((line = reader.readLine()) != null) {
-					
-					//if using first line as header
+
+					// if using first line as header
 					if (!skippedFirstLine && firstLineUsedAsColumnHeader) {
-						
-						//read second line
-						line = reader.readLine();
+
 						skippedFirstLine = true;
+						continue;
 					}
-					
-					//split lines into columns
+
+					// split lines into columns
 					String[] fields = line.split(columnDelimiter, -1);
-					
-					//split by decimal place
+
+					// split by decimal place
 					fields = fields[i].split("\\.", -1);
-					
-					//if there was only one decimal place
+
+					// if there was only one decimal place
 					if (fields.length == 2) {
 						try {
-							
-							//test if both values are integers on either side of the decimal place
+
+							// test if both values are integers on either side
+							// of the decimal place
 							Integer.parseInt(fields[0]);
-							Integer.parseInt(fields[1]);		
+							Integer.parseInt(fields[1]);
 						} catch (NumberFormatException e) {
-							
-							//if both are integers, its a double
+
+							// if both are integers, its a double
 							isDouble = false;
 							break;
 						}
-						
-						//Decimal length in SQL is before and after the decimal place.
-						//Source: http://www.w3schools.com/sql/sql_datatypes_general.asp
-						
-						//update max length
-						int tempLength =fields[0].length() + fields[1].length();
+
+						// Decimal length in SQL is before and after the decimal
+						// place.
+						// Source:
+						// http://www.w3schools.com/sql/sql_datatypes_general.asp
+
+						// update max length
+						int tempLength = fields[0].length() + fields[1].length();
 						if (tempLength > maxLength) {
-							maxLength = tempLength;							
+							maxLength = tempLength;
 						}
-						
-						//update max precision
+
+						// update max precision
 						if (fields[1].length() > maxPercision) {
-							maxPercision = fields[1].length();							
+							maxPercision = fields[1].length();
+						}
+
+						hasDecimals = true;
+					} else if (fields.length == 1) {
+						try {
+
+							//the value is an int
+							Integer.parseInt(fields[0]);
+						} catch (NumberFormatException e) {
+
+							// if is not integer, not a double at all
+							isDouble = false;
+							break;
 						}
 					} else {
-						//is not a double if no decimal or too many
+						// is not a double if no decimal or too many
 						isDouble = false;
 						break;
 					}
 
-				} 
-				if (isDouble){					
-					//set precision and length
+				}
+				if (isDouble && hasDecimals) {
+					// set precision and length
 					fieldPrecision[i] = maxPercision;
 					fieldLength[i] = maxLength;
 					columnClasses[i] = Double.class;
 				}
-				
+
 			}
-		} finally{
-			//close after use or on error
+		} finally {
+			// close after use or on error
 			reader.close();
 		}
 	}
 
 	private void checkNumber(File csvFile, Class<?>[] columnClasses) throws IOException {
-		
-		//create
-		//BufferedReader reader = null;
 
-		
-		//iterate through each column
+		// create
+		// BufferedReader reader = null;
+
+		// iterate through each column
 		for (int i = 0; i < columnClasses.length; i++) {
-			
-			//set up variables to use
+
+			// set up variables to use
 			boolean skippedFirstLine = false;
 			boolean isInt = true;
 			boolean isLong = true;
-			
-			//Initialize
-			//reader = new BufferedReader(new FileReader(csvFile));
-			//String line;
-			
-			//iterate through each line
-			for(int j = 0; j < data[0].length; j++) {
+
+			// Initialize
+			// reader = new BufferedReader(new FileReader(csvFile));
+			// String line;
+
+			// iterate through each line
+			for (int j = 0; j < data.length; j++) {
 				if (!skippedFirstLine && firstLineUsedAsColumnHeader) {
 					skippedFirstLine = true;
 					continue;
 				}
-				
+
 				try {
-					//test if both values are integers on either side of the decimal place
-					Integer.parseInt(data[j][i].toString(), -1);
+					// test if both values are integers on either side of the
+					// decimal place
+					Integer.parseInt(data[j][i].toString());
 				} catch (NumberFormatException e) {
 					isInt = false;
-					try { 
-						Long.parseLong(data[j][i].toString(), -1);
+					try {
+						Long.parseLong(data[j][i].toString());
 					} catch (NumberFormatException ex) {
 						isLong = false;
-						break;	
-					}						
-				} 
+						break;
+					}
+				}
 
-			} 
+			}
 			if (isInt) {
 				columnClasses[i] = Integer.class;
-			} else if(isLong) {
+			} else if (isLong) {
 				columnClasses[i] = Long.class;
 			}
-			
+
 		}
 	}
-		
 
-	private Object[][] readFileDataIn(File csvFile) throws IOException{
+	private Object[][] readFileDataIn(File csvFile) throws IOException {
 		Object[][] output = new Object[lines][fields];
-		
-		//open a file to read
+
+		// open a file to read
 		BufferedReader reader = new BufferedReader(new FileReader(csvFile));
-		try{
-			//loop through file adding 1 to lines each line
+		try {
+			// loop through file adding 1 to lines each line
 			int counter = 0;
 			boolean gotHeader = false;
 			String line;
-			while((line = reader.readLine()) != null) {
-				//split line up for processing
-				String[] fields = line.split(columnDelimiter,-1);
-				
-				//first line and using the headers and hasn't gotten headers already
-				if (counter == 0 && !gotHeader && firstLineUsedAsColumnHeader) { 
+			while ((line = reader.readLine()) != null) {
+				// split line up for processing
+				String[] fields = line.split(columnDelimiter, -1);
+
+				// first line and using the headers and hasn't gotten headers
+				// already
+				if (counter == 0 && !gotHeader && firstLineUsedAsColumnHeader) {
 					gotHeader = true;
 					continue;
 				}
-				
-				//loop through lines
+
+				// loop through lines
 				for (int i = 0; i < fields.length; i++) {
-					//neaten up fields and add them to the output array
+					// neaten up fields and add them to the output array
 					output[counter][i] = fields[i];
 				}
-				
+
 				counter++;
-			}			
-		} finally{
-			//close after use or on error
+			}
+		} finally {
+			// close after use or on error
 			reader.close();
 		}
 		return output;
 	}
-	
-	private String[] getHeaders(File csvFile) throws IOException{
+
+	private String[] getHeaders(File csvFile) throws IOException {
 		String[] columnHeader = new String[fields];
-		
+
 		if (firstLineUsedAsColumnHeader) {
-			//read first line of csv File
+			// read first line of csv File
 			BufferedReader reader = new BufferedReader(new FileReader(csvFile));
-			try{
-				//loop through file adding 1 to lines each line
+			try {
+				// loop through file adding 1 to lines each line
 				String line = reader.readLine();
 				String[] fields = line.split(columnDelimiter, -1);
-				
+
 				for (int i = 0; i < fields.length; i++) {
-					
-					//add fields to the columnHeader Array
+
+					// add fields to the columnHeader Array
 					columnHeader[i] = fields[i].trim();
 				}
-				
-			} finally{
-				//close after use or on error
+
+			} finally {
+				// close after use or on error
 				reader.close();
 			}
 
 		} else {
 			for (int i = 0; i < fields; i++) {
-				//create a column name
+				// create a column name
 				columnHeader[i] = DEFAULT_COLUMN_NAME + i;
 			}
 		}
-		
+
 		return columnHeader;
 	}
-	
-	private void countFileLines(File csvFile) throws IOException{
-		//set up for file reading
+
+	private void countFileLines(File csvFile) throws IOException {
+		// set up for file reading
 		BufferedReader reader = new BufferedReader(new FileReader(csvFile));
 		lines = 0;
-		
-		try{
-			//loop through file adding 1 to lines each line
-			while(reader.readLine() != null) {
+
+		try {
+			// loop through file adding 1 to lines each line
+			while (reader.readLine() != null) {
 				lines++;
-			}			
-		} finally{
-			//close after use or on error
+			}
+		} finally {
+			// close after use or on error
 			reader.close();
 		}
-		
+
 	}
-	
-	private void countFileColumns(File csvFile) throws IOException{
+
+	private void countFileColumns(File csvFile) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(csvFile));
 		fields = 0;
-		
+
 		try {
-			//read line and make sure its valid
+			// read line and make sure its valid
 			String line = reader.readLine();
 			if (line != null) {
-				//neaten up
+				// neaten up
 				line = line.trim();
-				
-				//split for counting
+
+				// split for counting
 				String[] columnNames = line.split(columnDelimiter, -1);
 				if (line != null && line.length() > 0) {
-					//get column amount
-					fields = columnNames.length;	
+					// get column amount
+					fields = columnNames.length;
 				} else {
 					return;
 				}
 			}
-		}finally{
+		} finally {
 			reader.close();
 		}
-		
+
 	}
-	
-	private void countFieldLengths(File csvFile) throws IOException{
-		//set up for file reading
+
+	private void countFieldLengths(File csvFile) throws IOException {
+		// set up for file reading
 		BufferedReader reader = new BufferedReader(new FileReader(csvFile));
-		
-		try{
+
+		try {
 			//
 			fieldLength = new int[fields];
 			String line;
 			boolean skippedFirstLine = false;
-			while((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null) {
 				if (!skippedFirstLine && firstLineUsedAsColumnHeader) {
-					line = reader.readLine();
 					skippedFirstLine = true;
+					continue;
 				}
-				//Split
+
+				// Split
 				String[] fields = line.split(columnDelimiter, -1);
-				
-				//Count
+
+				// Count
 				for (int i = 0; i < fields.length; i++) {
 					if (fieldLength[i] < fields[i].length()) {
 						fieldLength[i] = fields[i].length();
 					}
 				}
-				
-			}			
-		} finally{
-			//close after use or on error
+
+			}
+		} finally {
+			// close after use or on error
 			reader.close();
 		}
 	}
@@ -561,5 +581,5 @@ public class CSVHandler {
 	public void setColumnDelimiter(String columnDelimiter) {
 		this.columnDelimiter = columnDelimiter;
 	}
-	
+
 }

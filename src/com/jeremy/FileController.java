@@ -32,7 +32,7 @@ public class FileController {
 		this.logErrors = logErrors;
 	}
 	
-	public void readFile(String fileName) {
+	public void readFile(String fileName) throws IOException {
 		try {
 			
 			//read in the csv file
@@ -43,10 +43,11 @@ public class FileController {
 			if (logErrors){
 				Logging.getInstance().log(Level.SEVERE, "Error reading file: " + fileName, e);				
 			}
+			throw e;
 		}
 	}
 
-	public void readFile(String directory, String fileName) {
+	public void readFile(String directory, String fileName) throws IOException {
 		try {
 			
 			//read in the csv file
@@ -57,10 +58,11 @@ public class FileController {
 			if (logErrors) {
 				Logging.getInstance().log(Level.SEVERE, "Error reading file: " + directory + fileName, e);				
 			}
+			throw e;
 		}
 	}
 
-	public void readFile(File csvFile) {
+	public void readFile(File csvFile) throws IOException {
 		try {
 			
 			//read in the csv file
@@ -71,10 +73,11 @@ public class FileController {
 			if (logErrors) {
 				Logging.getInstance().log(Level.SEVERE, "Error reading file: " + csvFile, e);				
 			}
+			throw e;
 		}
 	}
 
-	public void outputData(String fileName, OutputType outputType) {
+	public void outputData(String fileName, OutputType outputType) throws IOException {
 		
 		//creates file object using details
 		File file = new File(fileName);
@@ -83,7 +86,7 @@ public class FileController {
 		outputData(file, outputType);
 	}
 
-	public void outputData(String directory, String fileName, OutputType outputType) {
+	public void outputData(String directory, String fileName, OutputType outputType) throws IOException {
 		
 		//creates file object using details
 		File file = new File(directory, fileName);
@@ -92,7 +95,7 @@ public class FileController {
 		outputData(file, outputType);
 	}
 
-	public void outputData(File file, OutputType outputType) {
+	public void outputData(File file, OutputType outputType) throws IOException {
 		String output = "";
 
 		switch (outputType) {
@@ -114,10 +117,11 @@ public class FileController {
 			if (logErrors) {
 				Logging.getInstance().log(Level.SEVERE, "Error writing output to file!", e);
 			}
+			throw e;
 		}
 	}
 	
-	public void outputToSQLFile(File file, String databaseName, SQLType sqlType) {
+	public void outputToSQLFile(File file, String databaseName, SQLType sqlType) throws IOException {
 		String output = new SQLHandler(tblData).createSQLFile(databaseName, sqlType);
 		
 		try {
@@ -126,31 +130,40 @@ public class FileController {
 			if (logErrors) {
 				Logging.getInstance().log(Level.SEVERE, "Error writing output to file!", e);
 			}
+			throw e;
 		}
 		
 	}
 	
-	public void outputToDatabase(String host, String databaseName, SQLType sqlType, String userName, String password) {
+	public void outputToDatabase(String host, String port, String databaseName, SQLType sqlType, String userName, String password) {
 		SQLHandler sql = new SQLHandler(tblData);
 		
-		sql.createDatabase(host, databaseName, sqlType, userName, password);
-		sql.createTable(host, databaseName, sqlType, userName, password);
-		sql.insertDatabase(host, databaseName, sqlType, userName, password, false);
+		sql.createDatabase(host + ":" + port, databaseName, sqlType, userName, password);
+		sql.createTable(host + ":" + port, databaseName, sqlType, userName, password);
+		sql.insertDatabase(host + ":" + port, databaseName, sqlType, userName, password, false);
 	}
 	
 	
 	/* Stream-lined methods */
 	
-	public void csvToXML(){
-		
+	public void csvToXML(File csvFile, File outputFile) throws IOException{
+		readFile(csvFile);
+		outputData(outputFile, OutputType.XML);
 	}
 	
-	public void csvToJSON() {
-		
+	public void csvToXMLSCHEMA(File csvFile, File outputFile) throws IOException{
+		readFile(csvFile);
+		outputData(outputFile, OutputType.XML_SCHEMA);
 	}
 	
-	public void csvToSQL(){
-		
+	public void csvToJSON(File csvFile, File outputFile) throws IOException {
+		readFile(csvFile);
+		outputData(outputFile, OutputType.XML);
+	}
+	
+	public void csvToSQLFile(File csvFile, File outputFile, String databaseName, SQLType sqlType) throws IOException{
+		readFile(csvFile);
+		outputToSQLFile(outputFile, databaseName, sqlType);
 	}
 	
 	/* Internal settings for fileController */
