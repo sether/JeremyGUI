@@ -158,7 +158,7 @@ public class FileController {
 	
 	public void csvToJSON(File csvFile, File outputFile) throws IOException {
 		readFile(csvFile);
-		outputData(outputFile, OutputType.XML);
+		outputData(outputFile, OutputType.JSON);
 	}
 	
 	public void csvToSQLFile(File csvFile, File outputFile, String databaseName, SQLType sqlType) throws IOException{
