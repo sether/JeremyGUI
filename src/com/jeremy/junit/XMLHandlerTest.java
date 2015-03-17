@@ -2,12 +2,9 @@ package com.jeremy.junit;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import com.jeremy.FileUtility;
 import com.jeremy.TableData;
 import com.jeremy.XMLHandler;
 
