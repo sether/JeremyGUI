@@ -18,6 +18,7 @@ public class FileController {
 	// TODO: Decide on name of class, JeremyController?
 	// TODO: javadoc
 	// TODO: decide access modifier for other classes, package maybe?
+	// TODO: add ability to change column classes by index
 
 	public enum OutputType {
 		XML, XML_SCHEMA, JSON, SERIALIZED

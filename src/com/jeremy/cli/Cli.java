@@ -90,7 +90,7 @@ public class Cli {
 				
 			} else if (userResponse == 3) {
 				while (true) {
-					System.out.println("Enter a new date format? (E.g - \"yyyy/MM/dd\"");
+					System.out.println("Enter a new date format? (E.g - \"yyyy/MM/dd\")");
 					userResponse = scan.nextInt();
 					if (userResponse == 1) {
 						String newDateFormat = scan.next();
