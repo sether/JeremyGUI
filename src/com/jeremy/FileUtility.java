@@ -11,7 +11,7 @@ import java.io.PrintWriter;
  */
 public class FileUtility {
 
-	//TODO: add ability to append
+	//TODO: add ability to append. Do i need this? we use a single string.
 	
 	/**
 	 * Writes given content to a specified file<br/>
