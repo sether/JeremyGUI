@@ -1,13 +1,20 @@
 package com.jeremy;
 
+import java.io.Serializable;
+
 /**
  * Used to store and edit data from a csv file.
  * 
  * @author AlexBrown
  * @version 1.0
  */
-public class TableData {
+public class TableData implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7537455187991745742L;
+	
 	private String[] columnHeader;
 	private int[] fieldLength;
 	private int[] fieldPrecision;

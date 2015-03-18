@@ -42,6 +42,7 @@ public class CSVHandler {
 	 * 
 	 *         <pre>
 	 * String fileName = &quot;TestData.csv&quot;;
+	 * CSVHandler csvHandler = new CSVHandler();
 	 * 
 	 * TableData csvFile = csvHandler.readCSV(fileName);
 	 * </pre>
@@ -68,6 +69,7 @@ public class CSVHandler {
 	 *         <pre>
 	 * String directory = &quot;TestDirectory&quot;;
 	 * String fileName = &quot;TestData.csv&quot;;
+	 * CSVHandler csvHandler = new CSVHandler();
 	 * 
 	 * TableData csvFile = csvHandler.readCSV(directory, fileName);
 	 * </pre>
@@ -92,6 +94,7 @@ public class CSVHandler {
 	 *         <pre>
 	 * String directory = &quot;TestDirectory&quot;;
 	 * String fileName = &quot;TestData.csv&quot;;
+	 * CSVHandler csvHandler = new CSVHandler();
 	 * 
 	 * File csvFile = new File(directory, fileName);
 	 * 
@@ -133,15 +136,21 @@ public class CSVHandler {
 	}
 
 	private String getFileName(String fileName) {
+		
+		//make sure file name is a thing
 		if (fileName == null) {
 			return fileName;
 		}
+		
+		//get the last place of the dot
 		int extentionPosition = fileName.lastIndexOf(".");
 
+		//make sure there is a dot
 		if (extentionPosition == -1) {
 			return fileName;
 		}
 
+		//return file name as the rest of the string past the dot
 		return fileName.substring(0, extentionPosition);
 	}
 
@@ -453,13 +462,14 @@ public class CSVHandler {
 
 	private String[] getHeaders(File csvFile) throws IOException {
 		String[] columnHeader = new String[fields];
-
-		if (firstLineUsedAsColumnHeader) {
+		BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+		String line;
+		if (firstLineUsedAsColumnHeader && (line = reader.readLine()) != null) {
 			// read first line of csv File
-			BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+			
 			try {
 				// loop through file adding 1 to lines each line
-				String line = reader.readLine();
+
 				String[] fields = line.split(columnDelimiter, -1);
 
 				for (int i = 0; i < fields.length; i++) {
