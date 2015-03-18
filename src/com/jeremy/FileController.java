@@ -137,10 +137,13 @@ public class FileController {
 	
 	public void outputToDatabase(String host, String port, String databaseName, SQLType sqlType, String userName, String password) {
 		SQLHandler sql = new SQLHandler(tblData);
-		
-		sql.createDatabase(host + ":" + port, databaseName, sqlType, userName, password);
-		sql.createTable(host + ":" + port, databaseName, sqlType, userName, password);
-		sql.insertDatabase(host + ":" + port, databaseName, sqlType, userName, password, false);
+		try{
+			sql.createDatabase(host + ":" + port, databaseName, sqlType, userName, password);
+			sql.createTable(host + ":" + port, databaseName, sqlType, userName, password);
+			sql.insertDatabase(host + ":" + port, databaseName, sqlType, userName, password, false);
+		}catch(SQLException se){
+			se.printStackTrace();
+		}
 	}
 	
 	

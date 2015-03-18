@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
+import com.mysql.jdbc.DatabaseMetaData;
+
 /**
  * Class to convert a TableData object into a SQL file
  * 
@@ -78,13 +80,13 @@ public class SQLHandler {
 	 * @see CSVHandler
 	 */
 	public void createDatabase(String host, String databaseName,
-			SQLType sqlType, String userName, String password) {
+			SQLType sqlType, String userName, String password) throws SQLException{
 		Connection connection = null;
 		Statement statement = null;
 		try {
 			if (host.equalsIgnoreCase("")) {
 				if (sqlType == SQLType.SQLSERVER) {
-					host = "localhost:1433/";
+					host = "localhost:1433";
 				} else if (sqlType == SQLType.MYSQL) {
 					host = "localhost:3306/";
 				} else if (sqlType == SQLType.POSTGRESQL) {
@@ -92,19 +94,14 @@ public class SQLHandler {
 				}
 			}
 			if (sqlType == SQLType.SQLSERVER) {
-				connectionURL = "jdbc:sqlserver://MYPC\\SQLEXPRESS;databaseName=MYDB;integratedSecurity=true";
-				try {
-					Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
-				//connection = DriverManager.getConnection(connectionURL);
+				connectionURL = "jdbc:sqlserver://" + host + ";";
 			} else if (sqlType == SQLType.MYSQL) {
 				connectionURL = "jdbc:mysql://" + host;
 			} else if (sqlType == SQLType.POSTGRESQL) {
 				connectionURL = "jdbc:postgresql://" + host;
 			}
 			connection = DriverManager.getConnection(connectionURL, userName, password);
+			//DatabaseMetaData metaData = (DatabaseMetaData) connection.getMetaData(); //Use to check for existing Database
 			statement = connection.createStatement();
 			String createDatabase = "CREATE DATABASE " + databaseName;
 			statement.executeUpdate(createDatabase);
@@ -160,30 +157,33 @@ public class SQLHandler {
 	 * @see CSVHandler
 	 */
 	public void createTable(String host, String databaseName, SQLType sqlType,
-			String userName, String password) {
+			String userName, String password)  throws SQLException{
 		Statement statement = null;
 		try {
 			if (host.equalsIgnoreCase("")) {
 				if (sqlType == SQLType.SQLSERVER) {
-					host = "localhost:1433/";
+					host = "localhost:1433;databaseName=";
 				} else if (sqlType == SQLType.MYSQL) {
 					host = "localhost:3306/";
 				} else if (sqlType == SQLType.POSTGRESQL) {
 					host = "localhost:5432/";
 				}
 			}
+			String idField = "";
 			if (sqlType == SQLType.SQLSERVER) {
-				connectionURL = "jdbc:microsoft:sqlserver://" + host
-						+ databaseName;
+				connectionURL = "jdbc:sqlserver://" + host + databaseName + ";";
+				idField = "ID int IDENTITY(1,1),";
 			} else if (sqlType == SQLType.MYSQL) {
 				connectionURL = "jdbc:mysql://" + host + databaseName;
+				idField = "id INT NOT NULL AUTO_INCREMENT,";
 			} else if (sqlType == SQLType.POSTGRESQL) {
 				connectionURL = "jdbc:postgresql://" + host + databaseName;
+				idField = "id SERIAL,";
 			}
 			connection = DriverManager.getConnection(connectionURL, userName, password);
 			statement = connection.createStatement();
 			String fields = "";
-			String dataType = " VARCHAR(255), ";
+			String dataType = "";
 			int cols = tblData.getFields();
 			Class<?>[] columnClasses = tblData.getColumnClasses();
 			Object[] headings = tblData.getColumnHeader();
@@ -192,19 +192,25 @@ public class SQLHandler {
 				if (columnClasses[i] == Integer.class) {
 					dataType = "INT, ";
 				} else if (columnClasses[i] == Double.class) {
-					dataType = "DECIMAL(" + tblData.getFieldLength()[i] + ","
-						+ tblData.getFieldPrecision()[i] + "), ";
+					if(sqlType != SQLType.POSTGRESQL){
+						dataType = "DECIMAL(" + tblData.getFieldLength()[i] + ","
+							+ tblData.getFieldPrecision()[i] + "), ";
+					}
 				} else if (columnClasses[i] == Date.class) {
 					dataType = "DATE, ";
 				} else if (columnClasses[i] == Long.class) {
 					dataType = "BIGINT, ";
 				} else {
-					dataType = "VARCHAR(" + tblData.getFieldLength()[i] + "), ";
+					if(sqlType == SQLType.POSTGRESQL){
+						dataType = "VARCHAR(255), ";
+					}else{
+						dataType = "VARCHAR(" + tblData.getFieldLength()[i] + "), ";
+					}
 				}
 				fields += headings[i] + " " + dataType + "\n";
 			}
 			String createTable = "CREATE TABLE " + tableName + "(\n"
-					+ "id INT NOT NULL AUTO_INCREMENT, \n" + fields + "PRIMARY KEY (id));";
+					+ idField + "\n" + fields + "PRIMARY KEY (id));";
 			statement.executeUpdate(createTable);
 		} catch (SQLException se) {
 			// Catches errors for JDBC
@@ -248,13 +254,14 @@ public class SQLHandler {
 	 *			fields += ", " + headings[i];
 	 *		}
 	 * }
-	 * String sqlInsertStatement = getInsertStatement(tableName, fields);
+	 * String sqlInsertStatement = getInsertStatement(tableName, fields, sqlType);
 	 * 
 	 * </pre>
 	 */
 	private String getInsertStatement(String tableName, String tableFields) {
 		int cols = tblData.getFields();
 		String valuesMarker = "";
+		String insertString = "";
 		for (int i = 0; i < cols; i++) {
 			if (i == 0) {
 				valuesMarker = "?";
@@ -262,9 +269,10 @@ public class SQLHandler {
 				valuesMarker += ", ?";
 			}
 		}
-		return "INSERT INTO " + tableName + "(" + tableFields + ") values ("
-				+ valuesMarker + ")";
-	}
+		insertString = "INSERT INTO " + tableName + "(" + tableFields + ") values ("
+			+ valuesMarker + ")";
+		return insertString;
+		}
 
 	/**
 	 * Directly inserts data from a .csv file into an existing Table for the designated SQL database type
@@ -299,7 +307,7 @@ public class SQLHandler {
 	 * @see CSVHandler
 	 */
 	public void insertDatabase(String host, String databaseName,
-			SQLType sqlType, String userName, String password, Boolean append){
+			SQLType sqlType, String userName, String password, Boolean append) throws SQLException{
 		final int batchSize = 1000;
 		int count = 0;
 		Object[][] data = tblData.getTableData();
@@ -321,7 +329,7 @@ public class SQLHandler {
 		try {
 			if (host.equalsIgnoreCase("")) {
 				if (sqlType == SQLType.SQLSERVER) {
-					host = "localhost:1433/";
+					host = "localhost:1433;databaseName=";
 				} else if (sqlType == SQLType.MYSQL) {
 					host = "localhost:3306/";
 				} else if (sqlType == SQLType.POSTGRESQL) {
@@ -329,7 +337,7 @@ public class SQLHandler {
 				}
 			}
 			if (sqlType == SQLType.SQLSERVER) {
-				connectionURL = "jdbc:microsoft:sqlserver://" + host
+				connectionURL = "jdbc:sqlserver://" + host
 						+ databaseName;
 			} else if (sqlType == SQLType.MYSQL) {
 				connectionURL = "jdbc:mysql://" + host + databaseName;
@@ -349,6 +357,10 @@ public class SQLHandler {
 				preparedStatement.executeBatch();
 			}
 		} catch (SQLException se) {
+			// Catches errors for JDBC
+			se.printStackTrace();
+			se.getNextException().printStackTrace();
+		} catch (Exception se) {
 			// Catches errors for JDBC
 			se.printStackTrace();
 		} finally {
@@ -400,9 +412,15 @@ public class SQLHandler {
 		String fields = "";
 		String dataType = "";
 		String useDatabase = "";
+		String idField = "";
 		int cols = tblData.getFields();
-		if (sqlType == SQLType.MYSQL) {
+		if (sqlType == SQLType.SQLSERVER) {
+			idField = "ID int IDENTITY(1,1),";
+		} else if (sqlType == SQLType.MYSQL) {
 			useDatabase = "USE " + databaseName;
+			idField = "id INT NOT NULL AUTO_INCREMENT,";
+		} else if (sqlType == SQLType.POSTGRESQL) {
+			idField = "id SERIAL,";
 		}
 		for (int i = 0; i < cols; i++) {
 			if (columnClasses[i] == Integer.class) {
@@ -420,7 +438,7 @@ public class SQLHandler {
 			fields += headings[i] + " " + dataType + "\n";
 		}
 		String createTable = "CREATE TABLE " + tableName + "(\n"
-				+ "id INTEGER not NULL, \n" + fields + " PRIMARY KEY (id))";
+				+ idField + "\n" + fields + "PRIMARY KEY (id))";
 		String SQLFileBuildString = "CREATE DATABASE "
 				+ databaseName
 				+ ";\n" + useDatabase + "\n"

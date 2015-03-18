@@ -2,6 +2,7 @@ package com.jeremy.junit;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import com.jeremy.CSVHandler;
 import com.jeremy.SQLHandler;
 import com.jeremy.TableData;
@@ -33,16 +34,28 @@ public class SQLHandlerTest {
 	
 	@Test
 	public void testDatabaseCreation(){
-		sql.createDatabase("", "test", SQLType.MYSQL, "root", "");
+		try{	
+			sql.createDatabase("", "test", SQLType.MYSQL, "root", "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Test
 	public void testTableCreation(){
-		sql.createTable("", "test", SQLType.MYSQL, "root", "");
+		try{
+			sql.createTable("", "test", SQLType.MYSQL, "root", "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
 	public void testInsert(){
-		sql.insertDatabase("", "test", SQLType.MYSQL, "root", "", false);
+		try{
+			sql.insertDatabase("", "test", SQLType.MYSQL, "root", "", false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
