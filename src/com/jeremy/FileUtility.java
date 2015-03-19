@@ -10,8 +10,6 @@ import java.io.PrintWriter;
  * @version 1.0
  */
 public class FileUtility {
-
-	//TODO: add ability to append. Do i need this? we use a single string.
 	
 	/**
 	 * Writes given content to a specified file<br/>

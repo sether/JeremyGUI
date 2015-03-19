@@ -528,7 +528,12 @@ public class FileController {
 	public void setColumnClasses(Class<?>[] columnClasses) {
 		tblData.setColumnClasses(columnClasses);
 	}
-
+	
+	public void setColumnClasses(Class<?> columnClass, int pos)	{
+		Class<?>[] columnClasses = tblData.getColumnClasses();
+		columnClasses[pos] = columnClass;
+		tblData.setColumnClasses(columnClasses);
+	}
 	public int getLines() {
 		return tblData.getLines();
 	}
