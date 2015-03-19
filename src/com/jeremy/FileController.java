@@ -432,7 +432,7 @@ public class FileController {
 			sql.createTable(host + ":" + port, databaseName, sqlType, userName, password);
 			
 			//insert the data
-			sql.insertDatabase(host + ":" + port, databaseName, sqlType, userName, password, false);	//TODO: Append?
+			sql.insertDatabase(host + ":" + port, databaseName, sqlType, userName, password);
 		} catch (SQLException e) {
 			if (logErrors) {
 				Logging.getInstance().log(Level.SEVERE, "Error outputing to database!", e);
