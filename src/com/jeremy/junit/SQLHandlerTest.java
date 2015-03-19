@@ -53,7 +53,7 @@ public class SQLHandlerTest {
 	@Test
 	public void testInsert(){
 		try{
-			sql.insertDatabase("", "test", SQLType.MYSQL, "root", "", false);
+			sql.insertDatabase("", "test", SQLType.MYSQL, "root", "");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
