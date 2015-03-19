@@ -1,3 +1,10 @@
+//For Create Table, change defualt ID field to boolean choice and change manual choice of field id to an int, 
+//if out of bounds of column headers throw error, and if both boolean = true and int field is > 1 throw error
+
+//Create a private method to get the host if none is specified , possibley the connectionURL aswell
+
+//Why do the connection .JAR files work
+
 package com.jeremy;
 
 import java.sql.Connection;
@@ -109,22 +116,21 @@ public class SQLHandler {
 			String createDatabase = "CREATE DATABASE " + databaseName;
 			statement.executeUpdate(createDatabase);
 		} catch (SQLException se) {
-			// Catches errors for JDBC
-			se.printStackTrace();
+			throw(se);
 		} finally {
 			try {
 				//Closes the statement if it was opened
 				if (statement != null)
 					statement.close();
-			} catch (SQLException se2) {
-				se2.printStackTrace();
+			} catch (SQLException se) {
+				throw(se);
 			}
 			try {
 				//Closes the connection if it was opened
 				if (connection != null)
 					connection.close();
 			} catch (SQLException se) {
-				se.printStackTrace();
+				throw(se);
 			}
 		}
 	}
@@ -222,22 +228,21 @@ public class SQLHandler {
 					+ idField + "\n" + fields + "PRIMARY KEY (id));";
 			statement.executeUpdate(createTable);
 		} catch (SQLException se) {
-			// Catches errors for JDBC
-			se.printStackTrace();
+			throw(se);
 		} finally {
 			try {
 				//Closes the statement if it was opened
 				if (statement != null)
 					statement.close();
-			} catch (SQLException se2) {
-				se2.printStackTrace();
+			} catch (SQLException se) {
+				throw(se);
 			}
 			try {
 				//Closes the connection if it was opened
 				if (connection != null)
 					connection.close();
 			} catch (SQLException se) {
-				se.printStackTrace();
+				throw(se);
 			}
 		}
 	}
@@ -386,28 +391,23 @@ public class SQLHandler {
 			//A final excution of any remaining INSERT INTO commands
 			preparedStatement.executeBatch();
 		} catch (SQLException se) {
-			// Catches errors for JDBC
-			se.printStackTrace();
-			se.getNextException().printStackTrace();
-		} catch (Exception se) {
-			// Catches errors for JDBC
-			se.printStackTrace();
+			throw(se);
 		} finally {
 			try {
 				//Closes the statement if it was opened
-				if (statement != null)
-					statement.close();
-			} catch (SQLException se2) {
-				se2.printStackTrace();
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} catch (SQLException se) {
+				throw(se);
 			}
 			try {
 				//Closes the connection if it was opened
 				if (connection != null)
 					connection.close();
 			} catch (SQLException se) {
-				se.printStackTrace();
+				throw(se);
 			}
-		}
+		}	
 	}
 
 	/**
