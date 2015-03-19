@@ -225,8 +225,8 @@
     <end type="TARGET" refId="5"/>  
   </dependency>  
   <dependency id="35">    
-    <bendpoint x="217" y="914"/>    
-    <bendpoint x="890" y="917"/>    
+    <bendpoint x="218" y="924"/>    
+    <bendpoint x="891" y="927"/>    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="14"/>  
   </dependency>  
@@ -257,8 +257,8 @@
     <display labels="false" multiplicity="false"/>  
   </association>  
   <dependency id="43">    
-    <bendpoint x="192" y="922"/>    
-    <bendpoint x="549" y="923"/>    
+    <bendpoint x="194" y="930"/>    
+    <bendpoint x="548" y="930"/>    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="9"/>  
   </dependency>  
