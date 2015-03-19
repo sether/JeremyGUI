@@ -3,12 +3,12 @@ package com.jeremy;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
-
-import com.mysql.jdbc.DatabaseMetaData;
-
+//import com.mysql.jdbc.DatabaseMetaData;
+import java.sql.DatabaseMetaData;
 /**
  * Class to convert a TableData object into a SQL file
  * 
@@ -307,7 +307,7 @@ public class SQLHandler {
 	 * @see CSVHandler
 	 */
 	public void insertDatabase(String host, String databaseName,
-			SQLType sqlType, String userName, String password, Boolean append) throws SQLException{
+			SQLType sqlType, String userName, String password) throws SQLException{
 		final int batchSize = 1000;
 		int count = 0;
 		Object[][] data = tblData.getTableData();
@@ -345,6 +345,13 @@ public class SQLHandler {
 				connectionURL = "jdbc:postgresql://" + host + databaseName;
 			}
 			connection = DriverManager.getConnection(connectionURL, userName, password);
+
+			DatabaseMetaData metaData = connection.getMetaData();
+			ResultSet resultSet = metaData.getTables(null, null, tableName, null);
+			if(!resultSet.next()){
+				createTable(host, databaseName, sqlType, userName, password);
+				connection = DriverManager.getConnection(connectionURL, userName, password);
+			}
 			preparedStatement = connection.prepareStatement(sqlInsertStatement);
 			for (int i = line; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
