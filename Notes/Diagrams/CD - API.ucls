@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.1.8" icons="true" always-add-relationships="false" generalizations="false" 
-  realizations="false" associations="true" dependencies="true" nesting-relationships="false">  
+<class-diagram version="1.1.8" icons="true" automaticImage="PNG" always-add-relationships="false" 
+  generalizations="false" realizations="false" associations="true" dependencies="true" nesting-relationships="false">  
   <class id="1" language="java" name="com.jeremy.FileController" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/FileController.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="180" y="432"/>    
@@ -28,16 +28,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.jeremy.TableData" project="Jeremy" 
-    file="/Jeremy/src/com/jeremy/TableData.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="885" y="306"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="5" language="java" name="com.jeremy.JSONHandler.JSONObject" project="Jeremy" 
+  <class id="4" language="java" name="com.jeremy.JSONHandler.JSONObject" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/JSONHandler.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="181" y="1314"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -46,7 +37,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="com.jeremy.Logging" project="Jeremy" file="/Jeremy/src/com/jeremy/Logging.java" 
+  <class id="5" language="java" name="com.jeremy.Logging" project="Jeremy" file="/Jeremy/src/com/jeremy/Logging.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="945" y="723"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -55,7 +46,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="7" language="java" name="com.jeremy.SQLHandler.SQLType" project="Jeremy" 
+  <enumeration id="6" language="java" name="com.jeremy.SQLHandler.SQLType" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/SQLHandler.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="549" y="1235"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -64,7 +55,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </enumeration>  
-  <class id="8" language="java" name="com.jeremy.XMLHandler.XMLAttribute" project="Jeremy" 
+  <class id="7" language="java" name="com.jeremy.XMLHandler.XMLAttribute" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/XMLHandler.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="901" y="1576"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -73,7 +64,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="com.jeremy.JSONHandler.JSONMember" project="Jeremy" 
+  <class id="8" language="java" name="com.jeremy.JSONHandler.JSONMember" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/JSONHandler.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="175" y="1524"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -82,7 +73,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="com.jeremy.SQLHandler" project="Jeremy" 
+  <class id="9" language="java" name="com.jeremy.SQLHandler" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/SQLHandler.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="550" y="1052"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -91,7 +82,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="11" language="java" name="com.jeremy.CSVHandler" project="Jeremy" 
+  <class id="10" language="java" name="com.jeremy.CSVHandler" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/CSVHandler.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="550" y="361"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -100,7 +91,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="12" language="java" name="com.jeremy.Serialized" project="Jeremy" 
+  <class id="11" language="java" name="com.jeremy.Serialized" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/Serialized.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="549" y="1486"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -109,7 +100,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="13" language="java" name="com.jeremy.XMLHandler.XMLTag" project="Jeremy" 
+  <class id="12" language="java" name="com.jeremy.XMLHandler.XMLTag" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/XMLHandler.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="897" y="1310"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -118,7 +109,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="14" language="java" name="com.jeremy.XMLHandler.XMLElement" project="Jeremy" 
+  <class id="13" language="java" name="com.jeremy.XMLHandler.XMLElement" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/XMLHandler.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="900" y="1442"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -127,7 +118,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="15" language="java" name="com.jeremy.XMLHandler" project="Jeremy" 
+  <class id="14" language="java" name="com.jeremy.XMLHandler" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/XMLHandler.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="893" y="1089"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -136,7 +127,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="16" language="java" name="com.jeremy.FileController.OutputType" project="Jeremy" 
+  <enumeration id="15" language="java" name="com.jeremy.FileController.OutputType" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/FileController.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="499" y="788"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -145,7 +136,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </enumeration>  
-  <class id="17" language="java" name="com.jeremy.JSONHandler.JSONProperty" project="Jeremy" 
+  <class id="16" language="java" name="com.jeremy.JSONHandler.JSONProperty" project="Jeremy" 
     file="/Jeremy/src/com/jeremy/JSONHandler.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="171" y="1664"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -154,184 +145,203 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="18">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="19" name="members">        
+  <class id="17" language="java" name="com.jeremy.TableData" project="Jeremy" 
+    file="/Jeremy/src/com/jeremy/TableData.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="888" y="315"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="18">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <association id="19">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="20" name="subObjects">        
         <position height="0" width="0" x="2" y="-124"/>      
       </attribute>      
-      <multiplicity id="20" minimum="0" maximum="2147483647">        
+      <multiplicity id="21" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="2" y="-124"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
+    <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="false" multiplicity="false"/>  
   </association>  
-  <dependency id="21">    
-    <bendpoint x="194" y="892"/>    
-    <bendpoint x="541" y="893"/>    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="10"/>  
-  </dependency>  
   <association id="22">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="23" name="csvHandler">        
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="23" name="attribs">        
         <position height="0" width="0" x="2" y="-124"/>      
       </attribute>      
-      <multiplicity id="24" minimum="0" maximum="1">        
+      <multiplicity id="24" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="2" y="-124"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
+    <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="false" multiplicity="false"/>  
   </association>  
   <association id="25">    
-    <bendpoint x="996" y="1332"/>    
-    <bendpoint x="996" y="1493"/>    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="26" name="attribs">        
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="26" name="properties">        
         <position height="0" width="0" x="2" y="-124"/>      
       </attribute>      
       <multiplicity id="27" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="2" y="-124"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
+    <end type="TARGET" refId="16" navigable="true"/>    
     <display labels="false" multiplicity="false"/>  
   </association>  
-  <dependency id="28">    
+  <association id="28">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="29" name="root">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </attribute>      
+      <multiplicity id="30" minimum="0" maximum="1">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="31">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="32" name="topLevelObject">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </attribute>      
+      <multiplicity id="33" minimum="0" maximum="1">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <dependency id="34">    
     <bendpoint x="386" y="685"/>    
     <bendpoint x="808" y="697"/>    
     <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="TARGET" refId="5"/>  
   </dependency>  
-  <association id="29">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="30" name="topLevelObject">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </attribute>      
-      <multiplicity id="31" minimum="0" maximum="1">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="32">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="33" name="attribs">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </attribute>      
-      <multiplicity id="34" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="35">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="36" name="properties">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </attribute>      
-      <multiplicity id="37" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <dependency id="38">    
-    <bendpoint x="375" y="709"/>    
-    <bendpoint x="501" y="709"/>    
+  <dependency id="35">    
+    <bendpoint x="217" y="914"/>    
+    <bendpoint x="890" y="917"/>    
     <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="16"/>  
+    <end type="TARGET" refId="14"/>  
   </dependency>  
+  <association id="36">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="37" name="tags">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </attribute>      
+      <multiplicity id="38" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
   <dependency id="39">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="3"/>  
   </dependency>  
   <association id="40">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="41" name="subObjects">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </attribute>      
-      <multiplicity id="42" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </multiplicity>    
+    <bendpoint x="402" y="17"/>    
+    <bendpoint x="884" y="18"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="41" name="tblData"/>      
+      <multiplicity id="42" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
+    <end type="TARGET" refId="17" navigable="true"/>    
     <display labels="false" multiplicity="false"/>  
   </association>  
   <dependency id="43">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <association id="44">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="45" name="elements">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </attribute>      
-      <multiplicity id="46" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="47">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="48" name="tags">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </attribute>      
-      <multiplicity id="49" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="50">    
-    <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="51" name="root">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </attribute>      
-      <multiplicity id="52" minimum="0" maximum="1">        
-        <position height="0" width="0" x="2" y="-124"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <dependency id="53">    
-    <bendpoint x="212" y="878"/>    
-    <bendpoint x="886" y="880"/>    
+    <bendpoint x="192" y="922"/>    
+    <bendpoint x="549" y="923"/>    
     <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="15"/>  
+    <end type="TARGET" refId="9"/>  
   </dependency>  
-  <dependency id="54">    
+  <dependency id="44">    
     <bendpoint x="380" y="697"/>    
     <bendpoint x="709" y="703"/>    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="2"/>  
   </dependency>  
-  <dependency id="55">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="4"/>  
-  </dependency>  
-  <association id="56">    
-    <bendpoint x="315" y="1380"/>    
-    <bendpoint x="316" y="1636"/>    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="57" name="properties">        
+  <association id="45">    
+    <bendpoint x="996" y="1332"/>    
+    <bendpoint x="996" y="1493"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="46" name="attribs">        
         <position height="0" width="0" x="2" y="-124"/>      
       </attribute>      
-      <multiplicity id="58" minimum="0" maximum="2147483647">        
+      <multiplicity id="47" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="2" y="-124"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
+    <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="false" multiplicity="false"/>  
   </association>  
+  <association id="48">    
+    <bendpoint x="315" y="1380"/>    
+    <bendpoint x="316" y="1636"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="49" name="properties">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </attribute>      
+      <multiplicity id="50" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="51">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="52" name="csvHandler">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </attribute>      
+      <multiplicity id="53" minimum="0" maximum="1">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="54">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="55" name="elements">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </attribute>      
+      <multiplicity id="56" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <dependency id="57">    
+    <bendpoint x="375" y="709"/>    
+    <bendpoint x="501" y="709"/>    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="15"/>  
+  </dependency>  
+  <association id="58">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="59" name="members">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </attribute>      
+      <multiplicity id="60" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="2" y="-124"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <dependency id="61">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
   <classifier-display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
