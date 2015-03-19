@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import java.sql.DatabaseMetaData;
+
 /**
  * Class to convert a TableData object into a SQL file
  * 
@@ -18,6 +19,7 @@ public class SQLHandler {
 	private TableData tblData;
 	private Connection connection = null;
 	
+	//Enum for choosing the SQL database
 	public enum SQLType {
 		SQLSERVER, MYSQL, POSTGRESQL
 	};
@@ -83,6 +85,7 @@ public class SQLHandler {
 		Connection connection = null;
 		Statement statement = null;
 		try {
+			//If no host has been declared default to local host
 			if (host.equalsIgnoreCase("")) {
 				if (sqlType == SQLType.SQLSERVER) {
 					host = "localhost:1433";
@@ -92,6 +95,7 @@ public class SQLHandler {
 					host = "localhost:5432/";
 				}
 			}
+			//Creating the connection String used to connect to the database
 			if (sqlType == SQLType.SQLSERVER) {
 				connectionURL = "jdbc:sqlserver://" + host + ";";
 			} else if (sqlType == SQLType.MYSQL) {
@@ -100,7 +104,7 @@ public class SQLHandler {
 				connectionURL = "jdbc:postgresql://" + host;
 			}
 			connection = DriverManager.getConnection(connectionURL, userName, password);
-			//DatabaseMetaData metaData = (DatabaseMetaData) connection.getMetaData(); //Use to check for existing Database
+			//Statement used to write and execute SQL commands
 			statement = connection.createStatement();
 			String createDatabase = "CREATE DATABASE " + databaseName;
 			statement.executeUpdate(createDatabase);
@@ -109,12 +113,14 @@ public class SQLHandler {
 			se.printStackTrace();
 		} finally {
 			try {
+				//Closes the statement if it was opened
 				if (statement != null)
 					statement.close();
 			} catch (SQLException se2) {
 				se2.printStackTrace();
 			}
 			try {
+				//Closes the connection if it was opened
 				if (connection != null)
 					connection.close();
 			} catch (SQLException se) {
@@ -159,6 +165,7 @@ public class SQLHandler {
 			String userName, String password)  throws SQLException{
 		Statement statement = null;
 		try {
+			//If no host has been declared default to local host
 			if (host.equalsIgnoreCase("")) {
 				if (sqlType == SQLType.SQLSERVER) {
 					host = "localhost:1433;databaseName=";
@@ -169,6 +176,8 @@ public class SQLHandler {
 				}
 			}
 			String idField = "";
+			//Creating the connection String used to connect to the database
+			//Gets the unique identification field for the desired SQL database
 			if (sqlType == SQLType.SQLSERVER) {
 				connectionURL = "jdbc:sqlserver://" + host + databaseName + ";";
 				idField = "ID int IDENTITY(1,1),";
@@ -180,6 +189,7 @@ public class SQLHandler {
 				idField = "id SERIAL,";
 			}
 			connection = DriverManager.getConnection(connectionURL, userName, password);
+			//Statement used to write and execute SQL commands
 			statement = connection.createStatement();
 			String fields = "";
 			String dataType = "";
@@ -216,12 +226,14 @@ public class SQLHandler {
 			se.printStackTrace();
 		} finally {
 			try {
+				//Closes the statement if it was opened
 				if (statement != null)
 					statement.close();
 			} catch (SQLException se2) {
 				se2.printStackTrace();
 			}
 			try {
+				//Closes the connection if it was opened
 				if (connection != null)
 					connection.close();
 			} catch (SQLException se) {
@@ -261,6 +273,7 @@ public class SQLHandler {
 		int cols = tblData.getFields();
 		String valuesMarker = "";
 		String insertString = "";
+		//Iterates through the columns to get the value placeholders
 		for (int i = 0; i < cols; i++) {
 			if (i == 0) {
 				valuesMarker = "?";
@@ -326,6 +339,7 @@ public class SQLHandler {
 		String sqlInsertStatement = getInsertStatement(tableName, fields);
 		PreparedStatement preparedStatement = null;
 		try {
+			//If no host has been declared default to local host
 			if (host.equalsIgnoreCase("")) {
 				if (sqlType == SQLType.SQLSERVER) {
 					host = "localhost:1433;databaseName=";
@@ -335,6 +349,7 @@ public class SQLHandler {
 					host = "localhost:5432/";
 				}
 			}
+			//Creating the connection String used to connect to the database
 			if (sqlType == SQLType.SQLSERVER) {
 				connectionURL = "jdbc:sqlserver://" + host
 						+ databaseName;
@@ -351,17 +366,25 @@ public class SQLHandler {
 				createTable(host, databaseName, sqlType, userName, password);
 				connection = DriverManager.getConnection(connectionURL, userName, password);
 			}
+			//Prepared Statement used to write and execute SQL commands
 			preparedStatement = connection.prepareStatement(sqlInsertStatement);
 			for (int i = line; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
+					//Writes the INSERT INTO command
 					preparedStatement.setString(j + 1, data[i][j].toString());
 				}
+				//Adds the INSERT INTO command to a batch awaiting execution
 				preparedStatement.addBatch();
+				//If the batchSize exceeds 1000 the batch will execute all the INSERT INTO commands
+				//that have been added to it. It will then continue to add more INSERT INTO
+				//commands until the file has been read, using this 'if' statement should the
+				//batchSize exceed 1000 again
 				if (count++ % batchSize == 0) {
 					preparedStatement.executeBatch();
 				}
-				preparedStatement.executeBatch();
 			}
+			//A final excution of any remaining INSERT INTO commands
+			preparedStatement.executeBatch();
 		} catch (SQLException se) {
 			// Catches errors for JDBC
 			se.printStackTrace();
@@ -371,12 +394,14 @@ public class SQLHandler {
 			se.printStackTrace();
 		} finally {
 			try {
-				if (preparedStatement != null)
-					preparedStatement.close();
+				//Closes the statement if it was opened
+				if (statement != null)
+					statement.close();
 			} catch (SQLException se2) {
 				se2.printStackTrace();
 			}
 			try {
+				//Closes the connection if it was opened
 				if (connection != null)
 					connection.close();
 			} catch (SQLException se) {
@@ -420,6 +445,7 @@ public class SQLHandler {
 		String useDatabase = "";
 		String idField = "";
 		int cols = tblData.getFields();
+		//Gets the unique identification field for the desired SQL database
 		if (sqlType == SQLType.SQLSERVER) {
 			idField = "ID int IDENTITY(1,1),";
 		} else if (sqlType == SQLType.MYSQL) {
@@ -443,6 +469,7 @@ public class SQLHandler {
 			}
 			fields += headings[i] + " " + dataType + "\n";
 		}
+		//Creates a String that can be sent to a file writer to be outputed as a SQL File
 		String createTable = "CREATE TABLE " + tableName + "(\n"
 				+ idField + "\n" + fields + "PRIMARY KEY (id))";
 		String SQLFileBuildString = "CREATE DATABASE "
