@@ -1,29 +1,26 @@
 package com.jeremy.cli;
 
 import com.jeremy.*;
+import com.jeremy.FileController.OutputType;
+import com.jeremy.SQLHandler.SQLType;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Cli {
-	private CSVHandler csv = null;
 	private FileController fc = null;
-	private TableData data = null;
-	private Scanner scan;
 	private File csvFile = null;
-	private String filePath = "";
 	private int userResponse = 0;
+	private Scanner scan;
+	private String filePath = "";
+	private String userString = "";
 	
-	//private String[] headings = null;
 	private String[] columnClasses = null;
 	
 	public Cli() {
 		scan = new Scanner(System.in);
-		csv = new CSVHandler();
+		fc = new FileController();	
 	}
 	 
 	public void begin() {
@@ -37,32 +34,37 @@ public class Cli {
 		System.out.println("Welcome to the Jeremy CSV API command line interface.\nFirst, we'll need you to enter the filepath of your .csv file.\nExample: C:\\folder\\data.csv");
 		filePath = scan.next();
 		while (!checkCsv(filePath)) {
-			// error check, allow user to exit loop
-			System.out.println("Enter a valid path to your csv file.");
+			System.out.println("Enter a valid path to your csv file. (Type \"exit\" to quit");
 			filePath = scan.next();
-		}
+			if (filePath.equalsIgnoreCase("exit")) {
+				System.exit(0);
+			}
+		}		
 	}
-
+	
 	private void csvHandling() {
 		while (true) {
 			System.out.println("Please pick the relevant setup options to your file:");
-			System.out.println("1: First row as headings? (Default = False)");
+			System.out.println("1: First row as headings? Currently:" + fc.isFirstLineUsedAsColumnHeader());
 			System.out.println("2: Does your CSV file use a different delimiter character for columns? (Default = \",\")");
 			System.out.println("3: Do you require a specific date format? (Default = \"dd/MM/yyyy\")");
-			System.out.println("4: Continue");
+			System.out.println("4: Move on to Table Data configuration");
 
 			userResponse = scan.nextInt();
 			
 			if (userResponse == 1) {
 				while (true) {	
-					System.out.println("Set first row as headings to True? (-1 to exit)");
-					userResponse = scan.nextInt();
+					System.out.println("Set first row as headings - (Enter: True/False)");
+					userString = scan.next();
+					userResponse = parseInput(userString);
 					
 					if (userResponse == 1) {
-						csv.setFirstLineUsedAsColumnHeader(true);
+						fc.setFirstLineUsedAsColumnHeader(true);
 						System.out.println("First row set as column headings.");
 						break;
-					} else if (userResponse == -1){
+					} else if (userResponse == 0){
+						fc.setFirstLineUsedAsColumnHeader(false);
+						System.out.println("First row NOT set as column headings.");
 						break;
 					} else {
 						System.out.println("Enter a valid option.");
@@ -72,15 +74,16 @@ public class Cli {
 
 			} else if (userResponse == 2) {
 				while (true) {
-					System.out.println("Change delimiter?");
-					userResponse = scan.nextInt();
+					System.out.println("Change column delimiter? (Enter: Yes/No)");
+					userString = scan.next();
+					userResponse = parseInput(userString);
 					
 					if (userResponse == 1) {
-						System.out.println("Enter a new delimter: E.g - \".\", \"|\", etc. (-1 to exit)");
+						System.out.println("Enter a new delimiter: E.g - \".\", \"|\", etc.");
 						String newDelimiter = scan.next();
-						csv.setColumnDelimiter(newDelimiter);
+						fc.setColumnDelimiter(newDelimiter);
 						break;
-					} else if (userResponse == -1){
+					} else if (userResponse == 0){
 						break;
 					} else {
 						System.out.println("Enter a valid option.");
@@ -90,14 +93,16 @@ public class Cli {
 				
 			} else if (userResponse == 3) {
 				while (true) {
-					System.out.println("Enter a new date format? (E.g - \"yyyy/MM/dd\")");
-					userResponse = scan.nextInt();
+					System.out.println("Enter a new date format? (Enter: Yes/No)");
+					userString = scan.next();
+					userResponse = parseInput(userString);
+					
 					if (userResponse == 1) {
+						System.out.println("Enter your new date format. E.g - \"yyyy/MM/dd\"");
 						String newDateFormat = scan.next();
-						// TODO: Parse date before applying it
-						csv.setDateFormat(newDateFormat);
+						fc.setDateFormat(newDateFormat);
 						break;
-					} else if (userResponse == -1){
+					} else if (userResponse == 0){
 						break;
 					} else {
 						System.out.println("Enter a valid option.");
@@ -105,11 +110,11 @@ public class Cli {
 					}
 				}
 				
-			} else if (userResponse == 4) { // Create table data / catch exceptions.
+			} else if (userResponse == 4) { 
 				try {
-					data = csv.readCSV(filePath);
+					fc.readFile(filePath);
 				} catch (IOException e) {
-					System.out.println("There was an error reading the disk. The program will now exit.");
+					System.out.println("A file error has occurred");
 					System.exit(0);
 				}
 				// Move on to next method call.
@@ -117,7 +122,7 @@ public class Cli {
 			}
 		}
 	}
-	
+
 	private void tableDataHandling() {
 		createColumnClasses();
 
@@ -125,19 +130,22 @@ public class Cli {
 			System.out.println("Please pick the relevant table data options for your file:");
 			System.out.println("NOTE: Please check the column class data types are correct if you require them later.");
 			System.out.println("1: Check column class data type information.");
-			System.out.println("2: Check table name.");
+			System.out.println("2: Edit table name. Currently: " + fc.getTableName());
 			System.out.println("3: Continue");
 			
 			userResponse = scan.nextInt();
 			if (userResponse == 1) {
 				while (true) {	
 					System.out.println("Current column classes are as follows:");
+					
 					printColumnsClasses();
+					
 					System.out.println("Is this correct?");
-					userResponse = scan.nextInt();				
+					userString = scan.next();
+					userResponse = parseInput(userString);
 					if (userResponse == 1) {
 						break;
-					} else if (userResponse == 2) {
+					} else if (userResponse == 0) {
 						System.out.println("OK, which index is incorrect?");
 						int index = scan.nextInt();
 						System.out.println("OK, what data type do you wish to change to? (String, Integer, Date, Boolean, etc)");
@@ -149,8 +157,10 @@ public class Cli {
 						continue;
 					}
 				}
-			} else if (userResponse ==2) {
-				
+			} else if (userResponse == 2) {
+				System.out.println("Enter new table name");
+				userString = scan.next();
+				fc.setTableName(userString);
 			} else if (userResponse == 3) {
 				break;
 			}
@@ -158,7 +168,6 @@ public class Cli {
 	}
 	
 	private void fileExporting() {
-		fc = new FileController();
 		
 		while (true) {
 			System.out.println("Please pick the relevant exporting options for your file:");
@@ -168,34 +177,70 @@ public class Cli {
 			System.out.println("4: Exit Program");
 			
 			userResponse = scan.nextInt();
-			if (userResponse == 1) {
-				while (true) {	
-
-					userResponse = scan.nextInt();				
+			if (userResponse == 1) {				
+				System.out.println("Enter the destination directory of the file.");
+				System.out.println("Example: \"C:\\test\\");
+				String destination = scan.next();
+				try {
+					fc.outputData(destination, fc.getTableName() + ".json", OutputType.JSON);
+					System.out.println(destination + "\\" + fc.getTableName() + ".JSON written to disk.");
+					continue;
+				} catch (IOException e) {
+					System.out.println("A disk read error has occurred. Exiting...");
+				}
+									
+			} else if (userResponse == 2) {
+				System.out.println("Enter the destination directory of the file.");
+				System.out.println("Example: \"C:\\test\\");
+				String destination = scan.next();
+				try {
+					fc.outputData(destination, fc.getTableName() + ".xml", OutputType.XML);
+					fc.outputData(destination, fc.getTableName() + ".xsd", OutputType.XML_SCHEMA);
+					System.out.println(destination + "\"" + fc.getTableName() + ".XML written to disk.");
+					System.out.println(destination + "\"" + fc.getTableName() + ".XSD written to disk.");
+					continue;
+				} catch (IOException e) {
+					System.out.println("A disk error has occurred. Exiting...");
+					System.exit(0);
+				}
+			} else if (userResponse == 3) {
+				System.out.println("First, Which DBMS will you be exporting to?");
+				System.out.println("1. MySQL");
+				System.out.println("2. MSSQL");
+				System.out.println("3. Postgre");
+				
+				userResponse = scan.nextInt();
+				while(true) {
+					System.out.println("Enter the destination directory of the file.");
+					System.out.println("Example: \"C:\\test\\");
+					String destination = scan.next();
 					if (userResponse == 1) {
-						System.out.println("First, enter the destination of the file.");
-						//error check
-						String destination = scan.next();
-						
-						break;
-					} else if (userResponse == 2) {
-
-						break;
-					} else {
-						System.out.println("Enter a valid option.");
-						continue;
+						try {
+							fc.outputToSQLFile(new File(destination, fc.getTableName() + ".sql"), fc.getTableName(), SQLType.MYSQL);
+							System.out.println(destination + "\\" + fc.getTableName() + ".SQL written to disk.");
+							continue;
+						} catch (IOException e) {
+							System.out.println("A disk error has occurred. Exiting...");
+							System.exit(0);
+						}
 					}
 				}
-			} else if (userResponse ==2) {
-				
-			} else if (userResponse == 3) {
-				
 			} else if (userResponse == 4) {
 				System.exit(0);
 			} else {
 				System.out.println("Enter a valid option.");
+				continue;
 			}
 		}
+	}
+	
+	private int parseInput(String response) {
+		if (response.equalsIgnoreCase("true") || (response.equalsIgnoreCase("yes"))) {
+			return 1;
+		} else if (response.equalsIgnoreCase("false") || (response.equalsIgnoreCase("no"))) {
+			return 0;
+		} else
+			return -1;	
 	}
 	
 	private void setColumnClass(int index, String dataType) {
@@ -203,15 +248,15 @@ public class Cli {
 	}
 
 	private void createColumnClasses() {
-		columnClasses = new String[data.getFields()];
-		for (int i = 0; i < data.getFields(); i++) {
-			columnClasses[i] = data.getColumnClasses()[i].getSimpleName();
+		columnClasses = new String[fc.getFields()];
+		for (int i = 0; i < fc.getFields(); i++) {
+			columnClasses[i] = fc.getColumnClasses()[i].getSimpleName();
 		}
 	}
 	
 	private void printColumnsClasses() {
-		for (int i = 0; i < data.getFields(); i++) {
-				System.out.println("Index " + i + ": " + columnClasses[i]);
+		for (int i = 0; i < fc.getFields(); i++) {
+				System.out.println("Column " + i + ": " + columnClasses[i]);
 		}
 	}
 	
