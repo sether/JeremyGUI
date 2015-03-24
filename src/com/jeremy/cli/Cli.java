@@ -216,6 +216,7 @@ public class Cli {
 					String destination = scan.next();
 					if (userResponse == 1) {
 						try {
+							// what does it mean?
 							fc.outputToSQLFile(new File(destination, fc.getTableName() + ".sql"), fc.getTableName(), SQLType.MYSQL);
 							System.out.println(destination + "\\" + fc.getTableName() + ".SQL written to disk.");
 							continue;
