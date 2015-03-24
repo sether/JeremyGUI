@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.jeremy.Serialized;
 
 /**
- * A JUnit test class for the Serialized class. Contains an Enum and non serializable inner class for testing.
+ * A JUnit test class for the Serialized class. Contains an Enum for testing.
  * @author Scott Micklethwaite
  * @version 1.0
  */
