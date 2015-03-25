@@ -1,6 +1,3 @@
-//For Create Table, change default ID field to boolean choice and change manual choice of field id to an int, 
-//if out of bounds of column headers throw error, and if both boolean = true and int field is > 1 throw error
-
 package com.jeremy;
 
 import java.sql.Connection;
@@ -249,7 +246,7 @@ public class SQLHandler {
 			int cols = tblData.getFields();
 			Object[] headings = tblData.getColumnHeader();
 			if(identity & idColumn != -1){
-				throw new Error("Conflict with 'identity' and 'idColumn' paramaters. Both cant be valid, change 'identity' to false or 'idColumn' to -1");
+				throw new Error("Conflict with 'identity' and 'idColumn' paramaters. Both cannot be valid, change 'identity' to false or 'idColumn' to -1");
 			}else if(identity){
 				idField = getIDField(sqlType) + "\n";
 				primaryKey = "id";
@@ -500,7 +497,7 @@ public class SQLHandler {
 		String idField = "";
 		String primaryKey = "";
 		if(identity & idColumn != -1){
-			throw new Error("Conflict with 'identity' and 'idColumn' paramaters. Both cant be valid, change 'identity' to false or 'idColumn' to -1");
+			throw new Error("Conflict with 'identity' and 'idColumn' paramaters. Both cannot be valid, change 'identity' to false or 'idColumn' to -1");
 		}else if(identity){
 			idField = getIDField(sqlType) + "\n";
 			primaryKey = "id";

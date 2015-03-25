@@ -19,7 +19,7 @@ public class MYSQLDriver {
 			String s = sql.createSQLFile("name", SQLType.MYSQL, true, -1);
 			FileUtility.writeFile("TestData/test.sql", s);
 		//	sql.createDatabase("", "test2", SQLType.MYSQL, "root", "");
-			sql.createTable("", "test0000", SQLType.MYSQL, "root", "", true, -1);
+			sql.createTable("", "test00000", SQLType.MYSQL, "root", "", true, -1);
 		//	sql.insertDatabase("", "test8000", SQLType.MYSQL, "root", "");
 
 		} catch (Exception e) {
