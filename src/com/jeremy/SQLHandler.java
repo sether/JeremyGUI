@@ -63,11 +63,11 @@ public class SQLHandler {
 	private String getConnectionURL(SQLType sqlType, String host, String databaseName){
 		String connectionURL = "";
 		if (sqlType == SQLType.SQLSERVER) {
-			connectionURL = "jdbc:sqlserver://" + host + databaseName + ";";
+			connectionURL = "jdbc:sqlserver://" + host + "/" + databaseName + ";";
 		} else if (sqlType == SQLType.MYSQL) {
-			connectionURL = "jdbc:mysql://" + host + databaseName;
+			connectionURL = "jdbc:mysql://" + host  + "/" + databaseName;
 		} else if (sqlType == SQLType.POSTGRESQL) {
-			connectionURL = "jdbc:postgresql://" + host + databaseName;
+			connectionURL = "jdbc:postgresql://" + host  + "/" + databaseName;
 		}
 		return connectionURL;
 	}
@@ -220,7 +220,7 @@ public class SQLHandler {
 			if (host.equalsIgnoreCase("")) {
 				host = getHost(sqlType);
 				if(sqlType == SQLType.SQLSERVER){
-					host += "databaseName=";
+					host += "databaseName=" + databaseName + ";";
 				}
 			}
 			//Creating the connection String used to connect to the database
@@ -380,7 +380,7 @@ public class SQLHandler {
 			if (host.equalsIgnoreCase("")) {
 				host = getHost(sqlType);
 				if(sqlType == SQLType.SQLSERVER){
-					host += "databaseName=";
+					host += "databaseName=" + databaseName + ";";
 				}
 			}
 			//Creating the connection String used to connect to the database
