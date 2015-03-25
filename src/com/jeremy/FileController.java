@@ -8,7 +8,8 @@ import java.util.logging.Level;
 import com.jeremy.SQLHandler.SQLType;
 
 /**
- * Used as a wrapper around the whole API to streamline and ultimately make using the API easier.
+ * Used as a wrapper around the whole API to streamline and ultimately make
+ * using the API easier.
  * 
  * @author AlexBrown
  * @version 1.0
@@ -39,16 +40,14 @@ public class FileController {
 		this.logErrors = logErrors;
 	}
 
-	
 	/**
 	 * Reads a CSV file into the tblData TableData object
 	 * 
 	 * @param fileName
-	 *            - The name of the file that you wish to read into the program
-	 * <br/>
-	 *         <b>USAGE:</b><br/>
+	 *            - The name of the file that you wish to read into the program <br/>
+	 *            <b>USAGE:</b><br/>
 	 * 
-	 *         <pre>
+	 *            <pre>
 	 * String fileName = &quot;TestData.csv&quot;;
 	 * FileController fc = new FileController();
 	 * 
@@ -65,7 +64,8 @@ public class FileController {
 
 			// log the error that occurs
 			if (logErrors) {
-				Logging.getInstance().log(Level.SEVERE, "Error reading file: " + fileName, e);
+				Logging.getInstance().log(Level.SEVERE,
+						"Error reading file: " + fileName, e);
 			}
 			throw e;
 		}
@@ -77,11 +77,10 @@ public class FileController {
 	 * @param directory
 	 *            - The name of the path with the file in it
 	 * @param fileName
-	 *            - The name of the file that you wish to read into the program
-	 * <br/>
-	 *         <b>USAGE:</b><br/>
+	 *            - The name of the file that you wish to read into the program <br/>
+	 *            <b>USAGE:</b><br/>
 	 * 
-	 *         <pre>
+	 *            <pre>
 	 * String fileName = &quot;TestData.csv&quot;;
 	 * String directory = &quot;output/&quot;;
 	 * FileController fc = new FileController();
@@ -99,7 +98,8 @@ public class FileController {
 
 			// log the error that occurs
 			if (logErrors) {
-				Logging.getInstance().log(Level.SEVERE, "Error reading file: " + directory + fileName, e);
+				Logging.getInstance().log(Level.SEVERE,
+						"Error reading file: " + directory + fileName, e);
 			}
 			throw e;
 		}
@@ -109,11 +109,10 @@ public class FileController {
 	 * Reads a CSV file into the tblData TableData object
 	 * 
 	 * @param csvFile
-	 *            - The file object that you wish to read in
-	 * <br/>
-	 *         <b>USAGE:</b><br/>
+	 *            - The file object that you wish to read in <br/>
+	 *            <b>USAGE:</b><br/>
 	 * 
-	 *         <pre>
+	 *            <pre>
 	 * String fileName = &quot;TestData.csv&quot;;
 	 * String directory = &quot;output/&quot;;
 	 * File file = new File(directory, fileName);
@@ -133,21 +132,21 @@ public class FileController {
 
 			// log the error that occurs
 			if (logErrors) {
-				Logging.getInstance().log(Level.SEVERE, "Error reading file: " + csvFile, e);
+				Logging.getInstance().log(Level.SEVERE,
+						"Error reading file: " + csvFile, e);
 			}
 			throw e;
 		}
 	}
-	
+
 	/**
 	 * Reads a Serialized file into the tblData TableData object
 	 * 
 	 * @param fileName
-	 *            - The name of the file that you wish to read into the program
-	 * <br/>
-	 *         <b>USAGE:</b><br/>
+	 *            - The name of the file that you wish to read into the program <br/>
+	 *            <b>USAGE:</b><br/>
 	 * 
-	 *         <pre>
+	 *            <pre>
 	 * String fileName = &quot;TestData.ser&quot;;
 	 * FileController fc = new FileController();
 	 * 
@@ -164,23 +163,23 @@ public class FileController {
 
 			// log the error that occurs
 			if (logErrors) {
-				Logging.getInstance().log(Level.SEVERE, "Error reading file: " + fileName, e);
+				Logging.getInstance().log(Level.SEVERE,
+						"Error reading file: " + fileName, e);
 			}
 			throw e;
 		}
 	}
-	
+
 	/**
 	 * Reads a Serialized file into the tblData TableData object
 	 * 
 	 * @param directory
 	 *            - The name of the path with the file in it
 	 * @param fileName
-	 *            - The name of the file that you wish to read into the program
-	 * <br/>
-	 *         <b>USAGE:</b><br/>
+	 *            - The name of the file that you wish to read into the program <br/>
+	 *            <b>USAGE:</b><br/>
 	 * 
-	 *         <pre>
+	 *            <pre>
 	 * String fileName = &quot;TestData.csv&quot;;
 	 * String directory = &quot;output/&quot;;
 	 * FileController fc = new FileController();
@@ -189,30 +188,32 @@ public class FileController {
 	 * </pre>
 	 * @throws IOException
 	 */
-	public void readSerialized(String directory, String fileName) throws Exception {
+	public void readSerialized(String directory, String fileName)
+			throws Exception {
 		try {
 
 			// read in the csv file
-			tblData = new Serialized<TableData>().load(new File(directory, fileName));
+			tblData = new Serialized<TableData>().load(new File(directory,
+					fileName));
 		} catch (Exception e) {
 
 			// log the error that occurs
 			if (logErrors) {
-				Logging.getInstance().log(Level.SEVERE, "Error reading file: " + directory + fileName, e);
+				Logging.getInstance().log(Level.SEVERE,
+						"Error reading file: " + directory + fileName, e);
 			}
 			throw e;
 		}
 	}
-	
+
 	/**
 	 * Reads a Serialized file into the tblData TableData object
 	 * 
 	 * @param csvFile
-	 *            - The file object that you wish to read in
-	 * <br/>
-	 *         <b>USAGE:</b><br/>
+	 *            - The file object that you wish to read in <br/>
+	 *            <b>USAGE:</b><br/>
 	 * 
-	 *         <pre>
+	 *            <pre>
 	 * String fileName = &quot;TestData.csv&quot;;
 	 * String directory = &quot;output/&quot;;
 	 * File file = new File(directory, fileName);
@@ -223,14 +224,15 @@ public class FileController {
 	 * </pre>
 	 * @throws Exception
 	 */
-	public void readSerialized(File serFile) throws Exception{
+	public void readSerialized(File serFile) throws Exception {
 		try {
-		tblData = new Serialized<TableData>().load(serFile);
+			tblData = new Serialized<TableData>().load(serFile);
 		} catch (IOException e) {
 
 			// log the error that occurs
 			if (logErrors) {
-				Logging.getInstance().log(Level.SEVERE, "Error reading file: " + serFile, e);
+				Logging.getInstance().log(Level.SEVERE,
+						"Error reading file: " + serFile, e);
 			}
 			throw e;
 		}
@@ -242,11 +244,10 @@ public class FileController {
 	 * @param fileName
 	 *            - The name of the file you wish to write to
 	 * @param outputType
-	 *            - The format type that you wish to output as
-	 * <br/>
-	 *         <b>USAGE:</b><br/>
+	 *            - The format type that you wish to output as <br/>
+	 *            <b>USAGE:</b><br/>
 	 * 
-	 *         <pre>
+	 *            <pre>
 	 * String fileName = &quot;TestData.csv&quot;;
 	 * 
 	 * FileController fc = new FileController();
@@ -255,7 +256,8 @@ public class FileController {
 	 * </pre>
 	 * @throws IOException
 	 */
-	public void outputData(String fileName, OutputType outputType) throws IOException {
+	public void outputData(String fileName, OutputType outputType)
+			throws IOException {
 
 		// creates file object using details
 		File file = new File(fileName);
@@ -272,11 +274,10 @@ public class FileController {
 	 * @param fileName
 	 *            - The name of the file you wish to write to
 	 * @param outputType
-	 *            - The format type that you wish to output as
-	 * <br/>
-	 *         <b>USAGE:</b><br/>
+	 *            - The format type that you wish to output as <br/>
+	 *            <b>USAGE:</b><br/>
 	 * 
-	 *         <pre>
+	 *            <pre>
 	 * String directory = &quot;output/&quot;;
 	 * String fileName = &quot;TestData.csv&quot;;
 	 * 
@@ -286,7 +287,8 @@ public class FileController {
 	 * </pre>
 	 * @throws IOException
 	 */
-	public void outputData(String directory, String fileName, OutputType outputType) throws IOException {
+	public void outputData(String directory, String fileName,
+			OutputType outputType) throws IOException {
 
 		// creates file object using details
 		File file = new File(directory, fileName);
@@ -295,18 +297,16 @@ public class FileController {
 		outputData(file, outputType);
 	}
 
-	
 	/**
 	 * Outputs data in the specified format to the file specified
 	 * 
 	 * @param csvFile
 	 *            - The file object that you wish to write to
 	 * @param outputType
-	 *            - The format type that you wish to output as
-	 * <br/>
-	 *         <b>USAGE:</b><br/>
+	 *            - The format type that you wish to output as <br/>
+	 *            <b>USAGE:</b><br/>
 	 * 
-	 *         <pre>
+	 *            <pre>
 	 * String directory = &quot;output/&quot;;
 	 * String fileName = &quot;TestData.csv&quot;;
 	 * File file = new File(directory, fileName);
@@ -320,22 +320,22 @@ public class FileController {
 	public void outputData(File file, OutputType outputType) throws IOException {
 		String output = "";
 
-		//get specific output string per output type
+		// get specific output string per output type
 		switch (outputType) {
-			case XML:
-				output = new XMLHandler(tblData, true).getXMLString();
-				break;
-			case XML_SCHEMA:
-				output = new XMLHandler(tblData, true).getSchemaString();
-				break;
-			case JSON:
-				output = new JSONHandler(tblData).stringifyJSON();
-				break;
-			case SERIALIZED:
-				
-				//write straight to file, no need to return a string
-				new Serialized<TableData>().save(tblData, file);
-				return;
+		case XML:
+			output = new XMLHandler(tblData, true).getXMLString();
+			break;
+		case XML_SCHEMA:
+			output = new XMLHandler(tblData, true).getSchemaString();
+			break;
+		case JSON:
+			output = new JSONHandler(tblData).stringifyJSON();
+			break;
+		case SERIALIZED:
+
+			// write straight to file, no need to return a string
+			new Serialized<TableData>().save(tblData, file);
+			return;
 		}
 
 		try {
@@ -343,7 +343,8 @@ public class FileController {
 		} catch (IOException e) {
 
 			if (logErrors) {
-				Logging.getInstance().log(Level.SEVERE, "Error writing output to file!", e);
+				Logging.getInstance().log(Level.SEVERE,
+						"Error writing output to file!", e);
 			}
 			throw e;
 		}
@@ -357,29 +358,31 @@ public class FileController {
 	 * @param databaseName
 	 *            - The name of the database
 	 * @param sqlType
-	 *            - The SQL format type that you wish to output as
-	 * <br/>
-	 *         <b>USAGE:</b><br/>
+	 *            - The SQL format type that you wish to output as <br/>
+	 *            <b>USAGE:</b><br/>
 	 * 
-	 *         <pre>
+	 *            <pre>
 	 * String directory = &quot;output/&quot;;
 	 * String fileName = &quot;TestData.csv&quot;;
 	 * File file = new File(directory, fileName);
 	 * 
 	 * FileController fc = new FileController();
 	 * 
-	 * fc.outputData(file, "Apples", SQLType.MYSQL);
+	 * fc.outputData(file, &quot;Apples&quot;, SQLType.MYSQL);
 	 * </pre>
 	 * @throws IOException
 	 */
-	public void outputToSQLFile(File file, String databaseName, SQLType sqlType) throws IOException {
-		String output = new SQLHandler(tblData).createSQLFile(databaseName, sqlType, true, -1);
+	public void outputToSQLFile(File file, String databaseName, SQLType sqlType, boolean identity, int idColumn)
+			throws IOException {
+		String output = new SQLHandler(tblData).createSQLFile(databaseName,
+				sqlType, identity, idColumn);
 
 		try {
 			FileUtility.writeFile(file, output);
 		} catch (IOException e) {
 			if (logErrors) {
-				Logging.getInstance().log(Level.SEVERE, "Error writing output to file!", e);
+				Logging.getInstance().log(Level.SEVERE,
+						"Error writing output to file!", e);
 			}
 			throw e;
 		}
@@ -400,11 +403,10 @@ public class FileController {
 	 * @param userName
 	 *            - The User Name to connect with
 	 * @param password
-	 *            - The Password to connect with
-	 * <br/>
-	 *         <b>USAGE:</b><br/>
+	 *            - The Password to connect with <br/>
+	 *            <b>USAGE:</b><br/>
 	 * 
-	 *         <pre>
+	 *            <pre>
 	 *         localhost:3306/
 	 * String host = &quot;localhost&quot;;
 	 * String port = &quot;3306&quot;;
@@ -418,71 +420,331 @@ public class FileController {
 	 * </pre>
 	 * @throws SQLException
 	 */
-	public void outputToDatabase(String host, String port, String databaseName, SQLType sqlType, String userName, String password) throws SQLException {
-	
-		//set up the SQL handler with the table data
+	public void outputToDatabase(String host, String port, String databaseName,
+			SQLType sqlType, String userName, String password, boolean identity, int idColumn)
+			throws SQLException {
+
+		// set up the SQL handler with the table data
 		SQLHandler sql = new SQLHandler(tblData);
-	
+
 		try {
-			
-			//create the database
-			sql.createDatabase(host + ":" + port, databaseName, sqlType, userName, password);
-			
-			//create the table
-			sql.createTable(host + ":" + port, databaseName, sqlType, userName, password, true, -1);
-			
-			//insert the data
-			sql.insertDatabase(host + ":" + port, databaseName, sqlType, userName, password);
+
+			// create the database
+			sql.createDatabase(host + ":" + port, databaseName, sqlType,
+					userName, password);
+
+			// create the table
+			sql.createTable(host + ":" + port, databaseName, sqlType, userName,
+					password, identity, idColumn);
+
+			// insert the data
+			sql.insertDatabase(host + ":" + port, databaseName, sqlType,
+					userName, password);
 		} catch (SQLException e) {
 			if (logErrors) {
-				Logging.getInstance().log(Level.SEVERE, "Error outputing to database!", e);
+				Logging.getInstance().log(Level.SEVERE,
+						"Error outputing to database!", e);
 			}
 			throw e;
 		}
 
 	}
-	
+
 	/* Stream-lined methods */
-	
-	
+
+	/**
+	 * Reads a csv file into the tblData TableData object and exports it as an
+	 * XML File
+	 * 
+	 * @param csvFile
+	 *            - The file object that you wish to read in
+	 * @param outputFile
+	 *            - The file object that you wish to write to <br/>
+	 *            <b>USAGE:</b><br/>
+	 * 
+	 *            <pre>
+	 * String outputFile = &quot;TestData.xml&quot;;
+	 * String fileName = &quot;TestData.csv&quot;;
+	 * String directory = &quot;output/&quot;;
+	 * File file = new File(directory, fileName);
+	 * 
+	 * FileController fc = new FileController();
+	 * 
+	 * fc.csvToXML(file, outputFile);
+	 * </pre>
+	 * @throws IOException
+	 */
 	public void csvToXML(File csvFile, File outputFile) throws IOException {
 		readFile(csvFile);
 		outputData(outputFile, OutputType.XML);
 	}
-
-	public void csvToXMLSCHEMA(File csvFile, File outputFile) throws IOException {
+	
+	/**
+	 * Reads a csv file into the tblData TableData object and exports it as an
+	 * XML Schema File
+	 * 
+	 * @param csvFile
+	 *            - The file object that you wish to read in
+	 * @param outputFile
+	 *            - The file object that you wish to write to <br/>
+	 *            <b>USAGE:</b><br/>
+	 * 
+	 *            <pre>
+	 * String outputFile = &quot;TestData.xml&quot;;
+	 * String fileName = &quot;TestData.csv&quot;;
+	 * String directory = &quot;output/&quot;;
+	 * File file = new File(directory, fileName);
+	 * 
+	 * FileController fc = new FileController();
+	 * 
+	 * fc.csvToXML(file, outputFile);
+	 * </pre>
+	 * @throws IOException
+	 */
+	public void csvToXMLSCHEMA(File csvFile, File outputFile)
+			throws IOException {
 		readFile(csvFile);
 		outputData(outputFile, OutputType.XML_SCHEMA);
 	}
 
+	/**
+	 * Reads a csv file into the tblData TableData object and exports it as an
+	 * JSON File
+	 * 
+	 * @param csvFile
+	 *            - The file object that you wish to read in
+	 * @param outputFile
+	 *            - The file object that you wish to write to <br/>
+	 *            <b>USAGE:</b><br/>
+	 * 
+	 *            <pre>
+	 * String outputFile = &quot;TestData.jsn&quot;;
+	 * String fileName = &quot;TestData.csv&quot;;
+	 * String directory = &quot;output/&quot;;
+	 * File file = new File(directory, fileName);
+	 * 
+	 * FileController fc = new FileController();
+	 * 
+	 * fc.csvToJSON(file, outputFile);
+	 * </pre>
+	 * @throws IOException
+	 */
 	public void csvToJSON(File csvFile, File outputFile) throws IOException {
 		readFile(csvFile);
 		outputData(outputFile, OutputType.JSON);
 	}
 
-	public void csvToSQLFile(File csvFile, File outputFile, String databaseName, SQLType sqlType) throws IOException {
+	/**
+	 * Reads a csv file into the tblData TableData object and exports it as an
+	 * SQL File
+	 * 
+	 * @param csvFile
+	 *            - The file object that you wish to read in
+	 * @param outputFile
+	 *            - The file object that you wish to write to <br/>
+	 * @param databaseName
+	 *            - The name of the database that you wish to use <br/>
+	 * @param sqlType
+	 *            - The type of sql File you wish to write <br/>
+	 *            <b>USAGE:</b><br/>
+	 * 
+	 *            <pre>
+	 * String databaseName = &quot;TestData&quot;;
+	 * String outputFile = &quot;TestData.sql&quot;;
+	 * String fileName = &quot;TestData.csv&quot;;
+	 * String directory = &quot;output/&quot;;
+	 * File file = new File(directory, fileName);
+	 * 
+	 * FileController fc = new FileController();
+	 * 
+	 * fc.csvToSQLFile(file, outputFile, databaseName, SQLType.mysql);
+	 * </pre>
+	 * @throws IOException
+	 * @see SQLType
+	 */
+	public void csvToSQLFile(File csvFile, File outputFile,
+			String databaseName, SQLType sqlType, boolean identity, int idColumn) throws IOException {
 		readFile(csvFile);
-		outputToSQLFile(outputFile, databaseName, sqlType);
+		outputToSQLFile(outputFile, databaseName, sqlType, identity, idColumn);
 	}
-	
+
+	/**
+	 * Reads a Serialized file into the tblData TableData object and exports it as an XML File
+	 * 
+	 * @param csvFile
+	 *            - The file object that you wish to read in
+	 * @param outputFile
+	 *            - The file object that you wish to write to <br/>
+	 *            <b>USAGE:</b><br/>
+	 * 
+	 *            <pre>
+	 * String outputFilePath = &quot;TestData.xml&quot;;
+	 * File outputFile = new File(outputFilePath);
+	 * String fileName = &quot;TestData.csv&quot;;
+	 * String directory = &quot;output/&quot;;
+	 * File file = new File(directory, fileName);
+	 * 
+	 * FileController fc = new FileController();
+	 * 
+	 * fc.serializedToXML(file, outputFile);
+	 * </pre>
+	 * @throws Exception
+	 */
 	public void serializedToXML(File csvFile, File outputFile) throws Exception {
 		readSerialized(csvFile);
 		outputData(outputFile, OutputType.XML);
 	}
-	
-	public void serializedToXMLSCHEMA(File csvFile, File outputFile) throws Exception {
+
+	/**
+	 * Reads a Serialized file into the tblData TableData object and exports it as an XML Schema File
+	 * 
+	 * @param csvFile
+	 *            - The file object that you wish to read in
+	 * @param outputFile
+	 *            - The file object that you wish to write to <br/>
+	 *            <b>USAGE:</b><br/>
+	 * 
+	 *            <pre>
+	 * String outputFilePath = &quot;TestData.xml&quot;;
+	 * File outputFile = new File(outputFilePath);
+	 * String fileName = &quot;TestData.csv&quot;;
+	 * String directory = &quot;output/&quot;;
+	 * File file = new File(directory, fileName);
+	 * 
+	 * FileController fc = new FileController();
+	 * 
+	 * fc.serializedToXMLSCHEMA(file, outputFile);
+	 * </pre>
+	 * @throws Exception
+	 */
+	public void serializedToXMLSCHEMA(File csvFile, File outputFile)
+			throws Exception {
 		readSerialized(csvFile);
 		outputData(outputFile, OutputType.XML_SCHEMA);
 	}
-	
-	public void serializedToJSON(File csvFile, File outputFile) throws Exception {
+
+	/**
+	 * Reads a Serialized file into the tblData TableData object and exports it as an JSON File
+	 * 
+	 * @param csvFile
+	 *            - The file object that you wish to read in
+	 * @param outputFile
+	 *            - The file object that you wish to write to <br/>
+	 *            <b>USAGE:</b><br/>
+	 * 
+	 *            <pre>
+	 * String outputFilePath = &quot;TestData.jsn&quot;;
+	 * File outputFile = new File(outputFilePath);
+	 * String fileName = &quot;TestData.csv&quot;;
+	 * String directory = &quot;output/&quot;;
+	 * File file = new File(directory, fileName);
+	 * 
+	 * FileController fc = new FileController();
+	 * 
+	 * fc.serializedToJSON(file, outputFile);
+	 * </pre>
+	 * @throws Exception
+	 */
+	public void serializedToJSON(File csvFile, File outputFile)
+			throws Exception {
 		readSerialized(csvFile);
 		outputData(outputFile, OutputType.JSON);
 	}
-	
-	public void serializedToSQLFile(File csvFile, File outputFile, String databaseName, SQLType sqlType) throws Exception {
+
+	/**
+	 * Reads a Serialized file into the tblData TableData object and exports it as an SQL File
+	 * 
+	 * @param csvFile
+	 *            - The file object that you wish to read in
+	 * @param outputFile
+	 *            - The file object that you wish to write to <br/>
+	 *            <b>USAGE:</b><br/>
+	 * 
+	 *            <pre>
+	 * String outputFilePath = &quot;TestData.sql&quot;;
+	 * File outputFile = new File(outputFilePath);
+	 * String fileName = &quot;TestData.csv&quot;;
+	 * String directory = &quot;output/&quot;;
+	 * File file = new File(directory, fileName);
+	 * 
+	 * FileController fc = new FileController();
+	 * 
+	 * fc.serializedToSQLFile(file, outputFile);
+	 * </pre>
+	 * @throws Exception
+	 */
+	public void serializedToSQLFile(File csvFile, File outputFile,
+			String databaseName, SQLType sqlType, boolean identity, int idColumn) throws Exception {
 		readSerialized(csvFile);
-		outputToSQLFile(outputFile, databaseName, sqlType);
+		outputToSQLFile(outputFile, databaseName, sqlType, identity, idColumn);
+	}
+
+	/**
+	 * Writes an encrypted serialized file with the loaded TableData Object
+	 * 
+	 * @param file
+	 *            - The file object that you wish to read in
+	 * @param password
+	 *            - the password you wish to use to encrypt the file <br/>
+	 *            <b>USAGE:</b><br/>
+	 * 
+	 *            <pre>
+	 * String password = &quot;abcd1234&quot;;
+	 * String fileName = &quot;TestData.csv&quot;;
+	 * String directory = &quot;output/&quot;;
+	 * File file = new File(directory, fileName);
+	 * 
+	 * FileController fc = new FileController();
+	 * 
+	 * fc.encryptFile(file, password);
+	 * </pre>
+	 * @throws Exception
+	 */
+	public void encryptFile(File file, String password) throws Exception {
+		try {
+			Encrypted<TableData> enc = new Encrypted<TableData>(tblData,
+					password);
+			 new Serialized<Encrypted<TableData>>().save(enc, file);
+		} catch (Exception e) {
+			if (logErrors) {
+				Logging.getInstance().log(Level.SEVERE,
+						"Error Encrypting file!", e);
+			}
+			throw e;
+		}
+	}
+
+	/**
+	 * Reads an encrypted serialized file and loads it into the Table Data Object
+	 * 
+	 * @param file
+	 *            - The file object that you wish to read in
+	 * @param password
+	 *            - The password you wish to use to decrypt the file <br/>
+	 *            <b>USAGE:</b><br/>
+	 * 
+	 *            <pre>
+	 * String password = &quot;abcd1234&quot;;
+	 * String fileName = &quot;TestData.csv&quot;;
+	 * String directory = &quot;output/&quot;;
+	 * File file = new File(directory, fileName);
+	 * 
+	 * FileController fc = new FileController();
+	 * 
+	 * fc.decryptFile(file, password);
+	 * </pre>
+	 * @throws Exception
+	 */
+	public void decryptFile(File file, String password) throws Exception {
+		try {
+			 tblData = new Serialized<Encrypted<TableData>>().load(file).decrypt(password);
+		} catch (Exception e) {
+			if (logErrors) {
+				Logging.getInstance().log(Level.SEVERE,
+						"Error Encrypting file!", e);
+			}
+			throw e;
+		}
 	}
 
 	/* Internal settings for fileController */
@@ -528,12 +790,13 @@ public class FileController {
 	public void setColumnClasses(Class<?>[] columnClasses) {
 		tblData.setColumnClasses(columnClasses);
 	}
-	
-	public void setColumnClasses(Class<?> columnClass, int pos)	{
+
+	public void setColumnClasses(Class<?> columnClass, int pos) {
 		Class<?>[] columnClasses = tblData.getColumnClasses();
 		columnClasses[pos] = columnClass;
 		tblData.setColumnClasses(columnClasses);
 	}
+
 	public int getLines() {
 		return tblData.getLines();
 	}
@@ -589,7 +852,8 @@ public class FileController {
 		return csvHandler.isFirstLineUsedAsColumnHeader();
 	}
 
-	public void setFirstLineUsedAsColumnHeader(boolean firstLineUsedAsColumnHeader) {
+	public void setFirstLineUsedAsColumnHeader(
+			boolean firstLineUsedAsColumnHeader) {
 		csvHandler.setFirstLineUsedAsColumnHeader(firstLineUsedAsColumnHeader);
 	}
 
