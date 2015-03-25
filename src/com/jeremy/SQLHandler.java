@@ -1,15 +1,6 @@
 //For Create Table, change default ID field to boolean choice and change manual choice of field id to an int, 
 //if out of bounds of column headers throw error, and if both boolean = true and int field is > 1 throw error
 
-//Create a private method to get the host if none is specified , possibly the connectionURL as well
-
-//Why do the connection .JAR files work?
-
-//createSQLFile needs to have the insert working on it as well
-
-//When creating a table should see if a database is needed same for when the insert data is called 
-//-- COULDN'T FIND A METHOD TO CHECK FOR AN EXISTING DATABASE
-
 package com.jeremy;
 
 import java.sql.Connection;
@@ -355,7 +346,7 @@ public class SQLHandler {
 		final int batchSize = 1000;
 		int count = 0;
 		Object[][] data = tblData.getTableData();
-		int line = 1;
+		int line = 0;
 		int rows = tblData.getLines();
 		int cols = tblData.getFields();
 		Object[] headings = tblData.getColumnHeader();
@@ -414,7 +405,7 @@ public class SQLHandler {
 					preparedStatement.executeBatch();
 				}
 			}
-			//A final excution of any remaining INSERT INTO commands
+			//A final execution of any remaining INSERT INTO commands
 			preparedStatement.executeBatch();
 		} catch (SQLException se) {
 			throw(se);
@@ -466,17 +457,48 @@ public class SQLHandler {
 		String tableName = tblData.getTableName();
 		String fields = getFields();
 		String useDatabase = "";
+		String insertFields = "";
+		String values = "";
+		String insertString = "";
+		int line = 0;
+		int rows = tblData.getLines();
+		int cols = tblData.getFields();
+		Object[] headings = tblData.getColumnHeader();
+		Object[][] data = tblData.getTableData();
 		if (sqlType == SQLType.MYSQL) {
 			useDatabase = "USE " + databaseName;
 		}
+		for (int i = 0; i < cols; i++) {
+			if (i == 0) {
+				insertFields += headings[i];
+			} else {
+				insertFields += ", " + headings[i];
+			}
+		}
 		String idField = getIDField(sqlType);
-		//Creates a String that can be sent to a file writer to be output as a SQL File
 		String createTable = "CREATE TABLE " + tableName + "(\n"
 				+ idField + "\n" + fields + "PRIMARY KEY (id))";
+		rows = tblData.getLines();
+		cols = tblData.getFields();
+		for (int i = line; i < rows; i++) {
+			values = "";
+			for (int j = 0; j < cols; j++) {
+				if(j == 0){
+					values += ("'" + data[i][j].toString() + "'");
+				}else{
+					values += (", '" + data[i][j].toString() + "'");
+				}
+			}
+			insertString += "INSERT INTO " + tableName + "(" + insertFields + ") values ("
+					+ values + ");\n";
+		}
+		//Creates a String that can be sent to a file writer to be output as a SQL File
 		String SQLFileBuildString = "CREATE DATABASE "
 				+ databaseName
 				+ ";\n" + useDatabase + "\n"
-				+ createTable + ";";
+				+ createTable + ";\n"
+				+ insertString + ";";
+		System.out.println(SQLFileBuildString);
 		return SQLFileBuildString;
 	}
 }
