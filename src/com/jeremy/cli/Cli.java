@@ -6,15 +6,18 @@ import com.jeremy.SQLHandler.SQLType;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Cli {
 	private FileController fc = null;
+	private SQLHandler sql;
 	private File csvFile = null;
 	private int userResponse = 0;
 	private Scanner scan;
 	private String filePath = "";
 	private String userString = "";
+	
 	
 	private String[] columnClasses = null;
 	
@@ -207,23 +210,25 @@ public class Cli {
 				System.out.println("First, Which DBMS will you be exporting to?");
 				System.out.println("1. MySQL");
 				System.out.println("2. MSSQL");
-				System.out.println("3. Postgre");
+				System.out.println("3. Postgre");						
 				
 				userResponse = scan.nextInt();
 				while(true) {
-					System.out.println("Enter the destination directory of the file.");
-					System.out.println("Example: \"C:\\test\\");
-					String destination = scan.next();
 					if (userResponse == 1) {
-						try {
-							// what does it mean?
-							fc.outputToSQLFile(new File(destination, fc.getTableName() + ".sql"), fc.getTableName(), SQLType.MYSQL);
-							System.out.println(destination + "\\" + fc.getTableName() + ".SQL written to disk.");
-							continue;
-						} catch (IOException e) {
-							System.out.println("A disk error has occurred. Exiting...");
-							System.exit(0);
-						}
+						gatherDatabaseInfo(SQLType.MYSQL);
+						writeDatabaseFile(SQLType.MYSQL);
+
+					} else if (userResponse == 2) {
+						gatherDatabaseInfo(SQLType.SQLSERVER);
+						writeDatabaseFile(SQLType.SQLSERVER);
+						break;
+					} else if (userResponse == 3) {
+						gatherDatabaseInfo(SQLType.POSTGRESQL);
+						writeDatabaseFile(SQLType.POSTGRESQL);
+						break;
+					} else {
+						System.out.println("Enter a valid value");
+						continue;
 					}
 				}
 			} else if (userResponse == 4) {
@@ -235,7 +240,49 @@ public class Cli {
 		}
 	}
 	
-	private int parseInput(String response) {
+	private void gatherDatabaseInfo(SQLType type) {
+		System.out.println("Enter the database hostname.");
+		System.out.println("Example: localhost");
+		String host = scan.next();
+		
+		System.out.println("Enter the database port number.");
+		String port = scan.next();
+		
+		System.out.println("Enter the database username.");
+		String userName = scan.next();
+		
+		System.out.println("Enter the database password.");
+		
+		String password = scan.nextLine();
+		if (scan.nextLine().isEmpty()) {
+			// You should really use a password
+			password = "";
+		}
+		
+		try {
+			fc.outputToDatabase(host, port, fc.getTableName(), type, userName, password);
+			System.out.println("Database created successfully.");
+			
+		} catch (SQLException e) {
+			System.out.println("A database error occured, have you checked the hostname/password/username/password has been correctly entered?");
+		}
+	}
+	
+	private void writeDatabaseFile(SQLType type) {
+		System.out.println("Enter the destination directory of the sql file.");
+		System.out.println("Example: \"C:\\test\\");
+		String destination = scan.next();
+		
+		try {
+			fc.outputToSQLFile(new File(destination, fc.getTableName() + ".sql"), fc.getTableName(), type);
+			System.out.println(destination + "\\" + fc.getTableName() + ".SQL written to disk.");
+		} catch (IOException e) {
+			System.out.println("A disk error has occurred. Exiting...");
+			System.exit(0);
+		}
+	}
+	
+ 	private int parseInput(String response) {
 		if (response.equalsIgnoreCase("true") || (response.equalsIgnoreCase("yes"))) {
 			return 1;
 		} else if (response.equalsIgnoreCase("false") || (response.equalsIgnoreCase("no"))) {
