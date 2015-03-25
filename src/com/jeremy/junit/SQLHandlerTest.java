@@ -44,7 +44,7 @@ public class SQLHandlerTest {
 	@Test
 	public void testTableCreation(){
 		try{
-			sql.createTable("", "test", SQLType.MYSQL, "root", "");
+			sql.createTable("", "test", SQLType.MYSQL, "root", "", true, -1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

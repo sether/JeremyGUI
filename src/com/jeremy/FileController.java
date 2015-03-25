@@ -429,7 +429,7 @@ public class FileController {
 			sql.createDatabase(host + ":" + port, databaseName, sqlType, userName, password);
 			
 			//create the table
-			sql.createTable(host + ":" + port, databaseName, sqlType, userName, password);
+			sql.createTable(host + ":" + port, databaseName, sqlType, userName, password, true, -1);
 			
 			//insert the data
 			sql.insertDatabase(host + ":" + port, databaseName, sqlType, userName, password);

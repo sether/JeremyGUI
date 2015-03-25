@@ -213,7 +213,7 @@ public class SQLHandler {
 	 * @see CSVHandler
 	 */
 	public void createTable(String host, String databaseName, SQLType sqlType,
-			String userName, String password)  throws SQLException{ //TODO: identity boolean, idColumn int
+			String userName, String password, boolean identity, int idColumn)  throws SQLException, Error{
 		Statement statement = null;
 		try {
 			//If no host has been declared default to local host
@@ -241,9 +241,22 @@ public class SQLHandler {
 			statement = connection.createStatement();
 			String tableName = tblData.getTableName();
 			String fields = getFields();
-			String idField = getIDField(sqlType);
+			String idField = "";
+			String primaryKey = "";
+			int cols = tblData.getFields();
+			Object[] headings = tblData.getColumnHeader();
+			if(identity & idColumn != -1){
+				throw new Error("Conflict with 'identity' and 'idColumn' paramaters. Both cant be valid, change 'identity' to false or 'idColumn' to -1");
+			}else if(identity){
+				idField = getIDField(sqlType) + "\n";
+				primaryKey = "id";
+			}else if(idColumn > cols || idColumn < 0){
+				throw new Error("Conflict with 'idColumn' paramater. 'idColumn' cannot be less than 0 or greater than the columns in the table");
+			}else{
+				primaryKey += headings[idColumn];
+			}
 			String createTable = "CREATE TABLE " + tableName + "(\n"
-					+ idField + "\n" + fields + "PRIMARY KEY (id));";
+					+ idField + fields + "PRIMARY KEY (" + primaryKey + "));";
 			statement.executeUpdate(createTable);
 		} catch (SQLException se) {
 			throw(se);
@@ -385,7 +398,7 @@ public class SQLHandler {
 			DatabaseMetaData metaData = connection.getMetaData();
 			ResultSet resultSet = metaData.getTables(null, null, tableName, null);
 			if(!resultSet.next()){
-				createTable(host, databaseName, sqlType, userName, password);
+				createTable(host, databaseName, sqlType, userName, password, true, -1);
 				connection = DriverManager.getConnection(connectionURL, userName, password);
 			}
 			//Prepared Statement used to write and execute SQL commands

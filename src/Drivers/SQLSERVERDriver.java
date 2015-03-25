@@ -19,7 +19,7 @@ public class SQLSERVERDriver {
 			String s = sql.createSQLFile("name", SQLType.SQLSERVER);
 			FileUtility.writeFile("TestData/test.sql", s);
 			sql.createDatabase("", "test2", SQLType.SQLSERVER, "sa", "test");
-			sql.createTable("", "test2", SQLType.SQLSERVER, "sa", "test");
+			sql.createTable("", "test2", SQLType.SQLSERVER, "sa", "test", true, -1);
 			sql.insertDatabase("", "test2", SQLType.SQLSERVER, "sa", "test");
 			System.out.println("Heyo");
 

@@ -19,7 +19,7 @@ public class POSTGRESQLDriver {
 			String s = sql.createSQLFile("name", SQLType.POSTGRESQL);
 			FileUtility.writeFile("TestData/test.sql", s);
 			sql.createDatabase("", "tst5", SQLType.POSTGRESQL, "postgres", "test");
-			sql.createTable("", "tst5", SQLType.POSTGRESQL, "postgres", "test");
+			sql.createTable("", "tst5", SQLType.POSTGRESQL, "postgres", "test", true, -1);
 			sql.insertDatabase("", "tst5", SQLType.POSTGRESQL, "postgres", "test");
 		} catch (Exception e) {
 			e.printStackTrace();
