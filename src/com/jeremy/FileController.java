@@ -373,7 +373,7 @@ public class FileController {
 	 * @throws IOException
 	 */
 	public void outputToSQLFile(File file, String databaseName, SQLType sqlType) throws IOException {
-		String output = new SQLHandler(tblData).createSQLFile(databaseName, sqlType);
+		String output = new SQLHandler(tblData).createSQLFile(databaseName, sqlType, true, -1);
 
 		try {
 			FileUtility.writeFile(file, output);

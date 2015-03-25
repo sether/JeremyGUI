@@ -16,7 +16,7 @@ public class POSTGRESQLDriver {
 			TableData td = csv.readCSV("TestData/testDataType.csv");
 
 			SQLHandler sql = new SQLHandler(td);
-			String s = sql.createSQLFile("name", SQLType.POSTGRESQL);
+			String s = sql.createSQLFile("name", SQLType.POSTGRESQL, true, -1);
 			FileUtility.writeFile("TestData/test.sql", s);
 			sql.createDatabase("", "tst5", SQLType.POSTGRESQL, "postgres", "test");
 			sql.createTable("", "tst5", SQLType.POSTGRESQL, "postgres", "test", true, -1);

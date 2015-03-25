@@ -16,7 +16,7 @@ public class MYSQLDriver {
 			TableData td = csv.readCSV("TestData/testDataType.csv");
 
 			SQLHandler sql = new SQLHandler(td);
-			String s = sql.createSQLFile("name", SQLType.MYSQL);
+			String s = sql.createSQLFile("name", SQLType.MYSQL, true, -1);
 			FileUtility.writeFile("TestData/test.sql", s);
 		//	sql.createDatabase("", "test2", SQLType.MYSQL, "root", "");
 			sql.createTable("", "test0000", SQLType.MYSQL, "root", "", true, -1);

@@ -16,7 +16,7 @@ public class SQLSERVERDriver {
 			TableData td = csv.readCSV("TestData/testDataType.csv");
 
 			SQLHandler sql = new SQLHandler(td);
-			String s = sql.createSQLFile("name", SQLType.SQLSERVER);
+			String s = sql.createSQLFile("name", SQLType.SQLSERVER, true, -1);
 			FileUtility.writeFile("TestData/test.sql", s);
 			sql.createDatabase("", "test2", SQLType.SQLSERVER, "sa", "test");
 			sql.createTable("", "test2", SQLType.SQLSERVER, "sa", "test", true, -1);

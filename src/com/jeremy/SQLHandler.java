@@ -188,6 +188,8 @@ public class SQLHandler {
 	 * @param sqlType - An enum that specifies which designates what SQL type the database shall be
 	 * @param userName - A string that specifies the user name of the creator for SQL access
 	 * @param password - A string that specifies the password of the creator for SQL access
+	 * @param identity - A boolean that specifies whether to create a default id field
+	 * @param idColumn - An integer that specifies which column to be the id column(Cannot be used if identity is true)
 	 * <br>
 	 * <b>USAGE:</b></br>
 	 * <pre>
@@ -205,10 +207,11 @@ public class SQLHandler {
 	 * TableData tableData = csvHandler.readCSV("TestData/testDataType.csv");
 	 * 
 	 * SQLHandler sqlHandler = new SQLHandler(tableData);
-	 * sqlHandler.createTable(host, databaseName, MYSQL, userName, password);
+	 * sqlHandler.createTable(host, databaseName, MYSQL, userName, password, true, -1);
 	 * 
 	 * </pre>
 	 * @throws SQLException
+	 * @throws Error
 	 * @see TableData
 	 * @see CSVHandler
 	 */
@@ -320,7 +323,8 @@ public class SQLHandler {
 		insertString = "INSERT INTO " + tableName + "(" + tableFields + ") values ("
 			+ valuesMarker + ")";
 		return insertString;
-		}
+	}
+	
 
 	/**
 	 * Directly inserts data from a .csv file into an existing Table for the designated SQL database type
@@ -439,13 +443,17 @@ public class SQLHandler {
 			}
 		}	
 	}
+	
 
 	/**
 	 * Creates the String for the the designated SQL database type that can then be used to write the .sql file
 	 * 
 	 * @param databaseName - A string that specifies the name of the database that the table will be created in
 	 * @param sqlType - An enum that specifies which designates what SQL type the database shall be
+	 * @param identity - A boolean that specifies whether to create a default id field
+	 * @param idColumn - An integer that specifies which column to be the id column(Cannot be used if identity is true)
 	 * @return SQLFileBuildString - A string that can then be sent to the FileUtilty.writeFile() to create an sql.file
+	 * 
 	 * <br>
 	 * <b>USAGE:</b></br>
 	 * <pre>
@@ -457,16 +465,17 @@ public class SQLHandler {
 	 * TableData tableData = csvHandler.readCSV("TestData/testDataType.csv");
 	 * 
 	 * SQLHandler sqlHandler = new SQLHandler(tableData);
-	 * sqlHandler.createSQLFile(databaseName, MYSQL);
+	 * sqlHandler.createSQLFile(databaseName, MYSQL, true, -1);
 	 * 
 	 * FileUtility.writeFile("TestData/test.sql", s);
 	 * 
 	 * </pre>
 	 * @see TableData
 	 * @see CSVHandler
+	 * @throws Error
 	 * @see FileUtility
 	 */
-	public String createSQLFile(String databaseName, SQLType sqlType) {
+	public String createSQLFile(String databaseName, SQLType sqlType, boolean identity, int idColumn) {
 		String tableName = tblData.getTableName();
 		String fields = getFields();
 		String useDatabase = "";
@@ -488,9 +497,20 @@ public class SQLHandler {
 				insertFields += ", " + headings[i];
 			}
 		}
-		String idField = getIDField(sqlType);
+		String idField = "";
+		String primaryKey = "";
+		if(identity & idColumn != -1){
+			throw new Error("Conflict with 'identity' and 'idColumn' paramaters. Both cant be valid, change 'identity' to false or 'idColumn' to -1");
+		}else if(identity){
+			idField = getIDField(sqlType) + "\n";
+			primaryKey = "id";
+		}else if(idColumn > cols || idColumn < 0){
+			throw new Error("Conflict with 'idColumn' paramater. 'idColumn' cannot be less than 0 or greater than the columns in the table");
+		}else{
+			primaryKey += headings[idColumn];
+		}
 		String createTable = "CREATE TABLE " + tableName + "(\n"
-				+ idField + "\n" + fields + "PRIMARY KEY (id))";
+				+ idField + fields + "PRIMARY KEY (" + primaryKey + "));";
 		rows = tblData.getLines();
 		cols = tblData.getFields();
 		for (int i = line; i < rows; i++) {
@@ -511,7 +531,6 @@ public class SQLHandler {
 				+ ";\n" + useDatabase + "\n"
 				+ createTable + ";\n"
 				+ insertString + ";";
-		System.out.println(SQLFileBuildString);
 		return SQLFileBuildString;
 	}
 }
