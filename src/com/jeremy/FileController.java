@@ -20,6 +20,7 @@ public class FileController {
 	// TODO: javadoc
 	// TODO: decide access modifier for other classes, package maybe?
 	// TODO: add ability to change column classes by index
+	// TODO: ability to remove column
 
 	public enum OutputType {
 		XML, XML_SCHEMA, JSON, SERIALIZED
@@ -853,7 +854,7 @@ public class FileController {
 	}
 
 	public void setFirstLineUsedAsColumnHeader(
-			boolean firstLineUsedAsColumnHeader) {
+		boolean firstLineUsedAsColumnHeader) {
 		csvHandler.setFirstLineUsedAsColumnHeader(firstLineUsedAsColumnHeader);
 	}
 
