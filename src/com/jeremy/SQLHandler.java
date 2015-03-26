@@ -322,7 +322,6 @@ public class SQLHandler {
 		return insertString;
 	}
 	
-
 	/**
 	 * Directly inserts data from a .csv file into an existing Table for the designated SQL database type
 	 * 
@@ -331,6 +330,8 @@ public class SQLHandler {
 	 * @param sqlType - An enum that specifies which designates what SQL type the database shall be
 	 * @param userName - A string that specifies the user name of the creator for SQL access
 	 * @param password - A string that specifies the password of the creator for SQL access
+	 * @param identity - A boolean that specifies whether to create a default id field
+	 * @param idColumn - An integer that specifies which column to be the id column(Cannot be used if identity is true)
 	 * <br>
 	 * <b>USAGE:</b></br>
 	 * <pre>
@@ -338,6 +339,8 @@ public class SQLHandler {
 	 * String databaseName = "Example";
 	 * String userName = "";
 	 * String password = "";
+	 * boolean identity = true;
+	 * int idColumn = -1;
 	 * private enum SQLType {
 	 * 		SQLSERVER, MYSQL, POSTGRESQL
 	 * };
@@ -348,7 +351,7 @@ public class SQLHandler {
 	 * TableData tableData = csvHandler.readCSV("TestData/testDataType.csv");
 	 * 
 	 * SQLHandler sqlHandler = new SQLHandler(tableData);
-	 * sqlHandler.insertDatabase(host, databaseName, MYSQL, userName, password);
+	 * sqlHandler.insertDatabase(host, databaseName, MYSQL, userName, password, identity, idColumn);
 	 * 
 	 * </pre>
 	 * @throws SQLException
@@ -356,7 +359,7 @@ public class SQLHandler {
 	 * @see CSVHandler
 	 */
 	public void insertDatabase(String host, String databaseName,
-			SQLType sqlType, String userName, String password) throws SQLException{
+			SQLType sqlType, String userName, String password, boolean identity, int idColumn) throws SQLException{
 		final int batchSize = 1000;
 		int count = 0;
 		Object[][] data = tblData.getTableData();
@@ -399,7 +402,7 @@ public class SQLHandler {
 			DatabaseMetaData metaData = connection.getMetaData();
 			ResultSet resultSet = metaData.getTables(null, null, tableName, null);
 			if(!resultSet.next()){
-				createTable(host, databaseName, sqlType, userName, password, true, -1);
+				createTable(host, databaseName, sqlType, userName, password, identity, idColumn);
 				connection = DriverManager.getConnection(connectionURL, userName, password);
 			}
 			//Prepared Statement used to write and execute SQL commands

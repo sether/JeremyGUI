@@ -260,7 +260,7 @@ public class Cli {
 		}
 		
 		try {
-			fc.outputToDatabase(host, port, fc.getTableName(), type, userName, password);
+			fc.outputToDatabase(host, port, fc.getTableName(), type, userName, password, true, -1);
 			System.out.println("Database created successfully.");
 			
 		} catch (SQLException e) {
@@ -274,7 +274,7 @@ public class Cli {
 		String destination = scan.next();
 		
 		try {
-			fc.outputToSQLFile(new File(destination, fc.getTableName() + ".sql"), fc.getTableName(), type);
+			fc.outputToSQLFile(new File(destination, fc.getTableName() + ".sql"), fc.getTableName(), type, true, -1);
 			System.out.println(destination + "\\" + fc.getTableName() + ".SQL written to disk.");
 		} catch (IOException e) {
 			System.out.println("A disk error has occurred. Exiting...");

@@ -20,7 +20,7 @@ public class SQLSERVERDriver {
 			FileUtility.writeFile("TestData/test.sql", s);
 			sql.createDatabase("", "test2", SQLType.SQLSERVER, "sa", "test");
 			sql.createTable("", "test2", SQLType.SQLSERVER, "sa", "test", true, -1);
-			sql.insertDatabase("", "test2", SQLType.SQLSERVER, "sa", "test");
+			sql.insertDatabase("", "test2", SQLType.SQLSERVER, "sa", "test", true, -1);
 			System.out.println("Heyo");
 
 		} catch (Exception e) {
