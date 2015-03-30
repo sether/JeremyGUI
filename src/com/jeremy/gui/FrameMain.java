@@ -76,6 +76,11 @@ public class FrameMain extends JFrame {
 		pnlButtons.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
 		JButton btnEdit = new JButton("Edit");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				editTable();
+			}
+		});
 		pnlButtons.add(btnEdit);
 		
 		JButton btnConvert = new JButton("Convert");
@@ -108,7 +113,7 @@ public class FrameMain extends JFrame {
 		this.fileCon = dw.getFileController();
 		
 		if(fileCon != null){
-			tblData.setModel(new JeremyTableModel(fileCon));
+			tblData.setModel(new TableModelData(fileCon));
 			lblNameText.setText(fileCon.getTableName());
 			this.invalidate();
 		}
@@ -117,6 +122,10 @@ public class FrameMain extends JFrame {
 	// opens the conversion dialog box. provides it the current FileController object
 	public void convertTable(){
 		DialogConvert dc = new DialogConvert(fileCon);
+	}
+	
+	public void editTable(){
+		DialogEdit de = new DialogEdit(fileCon);
 	}
 	
 	public static void main(String[] args) {
