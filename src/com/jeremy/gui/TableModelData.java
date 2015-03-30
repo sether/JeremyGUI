@@ -9,10 +9,10 @@ import com.jeremy.FileController;
  * @author Scott Micklethwaite
  * @version 1.0
  */
-public class JeremyTableModel extends AbstractTableModel{
+public class TableModelData extends AbstractTableModel{
 	private FileController fc;
 	
-	public JeremyTableModel(FileController fc){
+	public TableModelData(FileController fc){
 		this.fc = fc;
 	}
 	
