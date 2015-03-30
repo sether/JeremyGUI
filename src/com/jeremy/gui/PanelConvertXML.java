@@ -1,17 +1,19 @@
 package com.jeremy.gui;
 
 import java.io.File;
+import java.util.logging.Level;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 
 import com.jeremy.FileController;
 import com.jeremy.FileController.OutputType;
+import com.jeremy.Logging;
 
+import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -20,89 +22,48 @@ import java.awt.event.ActionEvent;
  * @author Scott Micklethwaite
  * @version 1.0
  */
-public class PanelConvertXML extends JPanel implements ConvertI{
-	private JTextField txtXMLPath, txtXSDPath;
-	private JButton btnBrowseXML, btnBrowseXSD;
-	private JCheckBox cbxOutputSchema;
+public class PanelConvertXML extends JPanel{
+	private JButton btnSaveXML, btnSaveXSD;
 	
 	private FileController fileCon;
-	private File xsdFile;
-	private File xmlFile;
 
 	public PanelConvertXML(FileController fileCon) {
 		this.fileCon = fileCon;
 		setLayout(null);
-		
-		//schema option textbox
-		cbxOutputSchema = new JCheckBox("Output schema");
-		cbxOutputSchema.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(cbxOutputSchema.isSelected()){
-					btnBrowseXSD.setEnabled(true);
-				} else {
-					btnBrowseXSD.setEnabled(false);
-				}
-				
-			}
-		});
-		cbxOutputSchema.setSelected(true);
-		cbxOutputSchema.setBounds(10, 57, 312, 23);
-		add(cbxOutputSchema);
 		
 		//xml label
 		JLabel lblXML = new JLabel("XML Output:");
 		lblXML.setBounds(10, 11, 74, 14);
 		add(lblXML);
 		
-		//xml file path textbox
-		txtXMLPath = new JTextField();
-		txtXMLPath.setEnabled(false);
-		txtXMLPath.setBounds(94, 8, 197, 20);
-		add(txtXMLPath);
-		txtXMLPath.setColumns(10);
-		
 		//xml browse button and save file dialog
-		btnBrowseXML = new JButton("Browse");
-		btnBrowseXML.addActionListener(new ActionListener() {
+		btnSaveXML = new JButton("Save");
+		btnSaveXML.addActionListener(new ActionListener() {
+			
+			@Override
 			public void actionPerformed(ActionEvent e) {
-				xmlFile = setSaveFile();
-				if(xmlFile != null){
-					txtXMLPath.setText(xmlFile.getPath());
-				} else {
-					txtXMLPath.setText("");
-				}
-				
+				saveXML();
 			}
 		});
-		btnBrowseXML.setBounds(301, 7, 89, 23);
-		add(btnBrowseXML);
+		btnSaveXML.setBounds(81, 7, 89, 23);
+		add(btnSaveXML);
 		
 		//xsd label
 		JLabel lblXSD = new JLabel("XSD Output:");
 		lblXSD.setBounds(10, 36, 74, 14);
 		add(lblXSD);
 		
-		//xsd file path
-		txtXSDPath = new JTextField();
-		txtXSDPath.setEnabled(false);
-		txtXSDPath.setColumns(10);
-		txtXSDPath.setBounds(94, 33, 197, 20);
-		add(txtXSDPath);
-		
 		//xsd browse button and save file dialog
-		btnBrowseXSD = new JButton("Browse");
-		btnBrowseXSD.addActionListener(new ActionListener() {
+		btnSaveXSD = new JButton("Save");
+		btnSaveXSD.addActionListener(new ActionListener() {
+			
+			@Override
 			public void actionPerformed(ActionEvent e) {
-				xsdFile = setSaveFile();
-				if(xsdFile != null){
-					txtXSDPath.setText(xsdFile.getPath());
-				} else {
-					txtXSDPath.setText("");
-				}
+				saveXSD();
 			}
 		});
-		btnBrowseXSD.setBounds(301, 32, 89, 23);
-		add(btnBrowseXSD);
+		btnSaveXSD.setBounds(81, 32, 89, 23);
+		add(btnSaveXSD);
 	}
 	
 	//open file save dialog and return selected file
@@ -113,15 +74,29 @@ public class PanelConvertXML extends JPanel implements ConvertI{
 		return ofd.getSelectedFile();
 	}
 	
+	public void saveXSD(){
+		File file = setSaveFile();
+		try {
+			fileCon.outputData(file, OutputType.XML_SCHEMA);
+		} catch (Exception e) {
+			Logging.getInstance().log(Level.WARNING, "Unable to save file", e);
+			JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), "Error saving file. See log for details.", "Save Error", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+	
+	public void saveXML(){
+		File file = setSaveFile();
+		try {
+			fileCon.outputData(file, OutputType.XML);
+		} catch (Exception e) {
+			Logging.getInstance().log(Level.WARNING, "Unable to save file", e);
+			JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), "Error saving file. See log for details.", "Save Error", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+	
 	@Override
 	public String toString(){
 		return "XML";
-	}
-
-	@Override
-	public void convert() throws Exception{
-		fileCon.outputData(xmlFile, OutputType.XML);
-		fileCon.outputData(xsdFile, OutputType.XML_SCHEMA);
 	}
 
 }

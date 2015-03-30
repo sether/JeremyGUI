@@ -10,7 +10,7 @@ import com.jeremy.FileController;
  * @author Scott Micklethwaite
  * @version 1.0
  */
-public class PanelConvertJSON extends JPanel implements ConvertI{
+public class PanelConvertJSON extends JPanel{
 	private FileController fileCon;
 
 	public PanelConvertJSON(FileController fileCon) {
@@ -22,12 +22,6 @@ public class PanelConvertJSON extends JPanel implements ConvertI{
 	@Override
 	public String toString(){
 		return "JSON";
-	}
-
-	@Override
-	public void convert() throws Exception{
-		// TODO Auto-generated method stub
-		
 	}
 
 }

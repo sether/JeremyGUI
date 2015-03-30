@@ -10,7 +10,7 @@ import com.jeremy.FileController;
  * @author Scott Micklethwaite
  * @version 1.0
  */
-public class PanelConvertSQL extends JPanel implements ConvertI{
+public class PanelConvertSQL extends JPanel{
 	private FileController fileCon;
 
 	public PanelConvertSQL(FileController fileCon) {
@@ -22,12 +22,6 @@ public class PanelConvertSQL extends JPanel implements ConvertI{
 	@Override
 	public String toString(){
 		return "SQL";
-	}
-
-	@Override
-	public void convert() throws Exception{
-		// TODO Auto-generated method stub
-		
 	}
 
 }
