@@ -1,36 +1,74 @@
 package com.jeremy.gui;
 
 import javax.swing.JPanel;
-import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.event.EventListenerList;
+
 import java.awt.FlowLayout;
 
+import javax.swing.JCheckBox;
+
 public class PanelEditGroup extends JPanel{
-	private JTextField textField;
-	public PanelEditGroup(){
-		setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+	
+	private JTextField txtColumnName;
+	private JComboBox<String> cbxType;
+	private JCheckBox cbxDelete;
+	
+	private int colIndex;
+	
+	public PanelEditGroup(int columnNum, String columnName, Class<?> dataType, Class<?>[] typeList){
+		colIndex = columnNum;
+		setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
 		
-		JLabel lblColumn = new JLabel("Column");
+		JLabel lblColumn = new JLabel("" + (columnNum + 1));
 		add(lblColumn);
 		
-		JLabel lblName = new JLabel("Name:");
-		add(lblName);
+		JPanel pnlName = new JPanel();
+		add(pnlName);
 		
-		textField = new JTextField();
-		add(textField);
-		textField.setColumns(10);
+		JLabel lblName = new JLabel("Name:" );
+		pnlName.add(lblName);
+		
+		txtColumnName = new JTextField(columnName);
+		pnlName.add(txtColumnName);
+		txtColumnName.setColumns(10);
+		
+		JPanel pnlType = new JPanel();
+		add(pnlType);
 		
 		JLabel lblType = new JLabel("Type");
-		add(lblType);
+		pnlType.add(lblType);
 		
-		JComboBox comboBox = new JComboBox();
-		add(comboBox);
+		cbxType = new JComboBox<String>();
+		for(int i = 0; i < typeList.length; i++){
+			cbxType.addItem(typeList[i].getSimpleName());
+			if(dataType.getSimpleName().toLowerCase().equals(typeList[i].getSimpleName().toLowerCase())){
+				cbxType.setSelectedIndex(i);
+			}
+		}
 		
-		JButton btnDelete = new JButton("Delete");
-		add(btnDelete);
+		pnlType.add(cbxType);
 		
+		cbxDelete = new JCheckBox("Delete");
+		add(cbxDelete);
+	}
+	
+	public int getColIndex(){
+		return this.colIndex;
+	}
+	
+	public boolean getDelete(){
+		return cbxDelete.isSelected();
+	}
+	
+	public int getComboIndex(){
+		return cbxType.getSelectedIndex();
+	}
+	
+	public String getColName(){
+		return txtColumnName.getText();
 	}
 }

@@ -1,39 +1,40 @@
 package com.jeremy.gui;
 
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-
 import javax.swing.JDialog;
 
 import com.jeremy.FileController;
 
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.JPanel;
+import javax.swing.JButton;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-
-import javax.swing.JPanel;
-
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class DialogEdit extends JDialog{
 	private FileController con;
 	
 	private JPanel pnlFields;
-	private JTable table;
 	private ArrayList<PanelEditGroup> fields = new ArrayList<PanelEditGroup>();
+	private JTextField txtTableName;
+	
+	private final Class<?>[] typeList = {byte.class, char.class, short.class, int.class, long.class, float.class, 
+			double.class, boolean.class, String.class};
 	
 	public DialogEdit(FileController con){
 		this.con = con;
 		
-		this.setSize(400, 300);
-		
+		//setup dialog
+		this.setSize(450, 300);
 		this.setModal(true);
+		this.setResizable(false);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		//edit panel - to contain the PanelEditGroup objects
@@ -48,6 +49,18 @@ public class DialogEdit extends JDialog{
 		cont.add(space, BorderLayout.CENTER);
 		cont.add(pnlFields, BorderLayout.NORTH);
 		
+		JPanel pnlTableName = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) pnlTableName.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		pnlFields.add(pnlTableName);
+		
+		JLabel lblTableName = new JLabel("Table Name:");
+		pnlTableName.add(lblTableName);
+		
+		txtTableName = new JTextField(con.getTableName());
+		pnlTableName.add(txtTableName);
+		txtTableName.setColumns(10);
+		
 		//button panel
 		JPanel buttonPanel = new JPanel();
 		FlowLayout fl_buttonPanel = new FlowLayout();
@@ -56,20 +69,27 @@ public class DialogEdit extends JDialog{
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				closeDialog();
+			}
+		});
 		buttonPanel.add(btnCancel);
 		
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				removeField(0);
+				update();
 			}
 		});
 		buttonPanel.add(btnUpdate);
 		
-		for(int i = 0; i < 10; i++){
-			PanelEditGroup pg = new PanelEditGroup();
-			fields.add(pg);
-			pnlFields.add(pg);
+		
+		//add edit panels
+		for(int i = 0; i < con.getFields(); i++){
+			PanelEditGroup pe = new PanelEditGroup(i, con.getColumnHeader(i), con.getColumnClasses(i), typeList);
+			fields.add(pe);
+			pnlFields.add(pe);
 		}
 		
 		JScrollPane scrollPane = new JScrollPane(cont);
@@ -77,11 +97,27 @@ public class DialogEdit extends JDialog{
 		this.setVisible(true);
 	}
 	
-	public void removeField(int i){
-		pnlFields.remove(fields.get(i));
-		fields.remove(fields.get(i));
+	public void closeDialog(){
+		this.dispose();
+	}
+	
+	public void update(){
+		//update table name
+		con.setTableName(txtTableName.getText());
 		
-		pnlFields.revalidate();
-		this.repaint();
+		//iterate through edit panel and update data
+		for(PanelEditGroup pe : fields){
+			con.getColumnHeader()[pe.getColIndex()] = pe.getColName();
+			con.getColumnClasses()[pe.getColIndex()] = typeList[pe.getComboIndex()];
+		}
+		
+		//iterate through edit panel and delete if delete checked
+		for(PanelEditGroup pe : fields){
+			if(pe.getDelete()){
+				//TODO delete
+			}
+		}
+		
+		closeDialog();
 	}
 }
