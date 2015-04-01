@@ -32,10 +32,12 @@ public class FrameMain extends JFrame {
 	private JPanel contentPane;
 	private JTable tblData;
 	private JLabel lblNameText;
+	private JButton btnConvert, btnEdit;
 	
 	private FileController fileCon;
 	
 	public FrameMain() {
+		setTitle("Jeremy CSV Converter");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 683, 465);
 		contentPane = new JPanel();
@@ -50,7 +52,7 @@ public class FrameMain extends JFrame {
 		JMenu mnuFile = new JMenu("File");
 		menuBar.add(mnuFile);
 		
-		JMenuItem mntmOpen = new JMenuItem("Open");
+		JMenuItem mntmOpen = new JMenuItem("Open CSV...");
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				importCSV();
@@ -58,8 +60,14 @@ public class FrameMain extends JFrame {
 		});
 		mnuFile.add(mntmOpen);
 		
-		JMenuItem mntmSave = new JMenuItem("Save");
-		mnuFile.add(mntmSave);
+		JMenu mnNewMenu = new JMenu("Table Data");
+		mnuFile.add(mnNewMenu);
+		
+		JMenuItem mntmImport = new JMenuItem("Import...");
+		mnNewMenu.add(mntmImport);
+		
+		JMenuItem mntmExport = new JMenuItem("Export...");
+		mnNewMenu.add(mntmExport);
 		
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mnuFile.add(mntmExit);
@@ -75,7 +83,8 @@ public class FrameMain extends JFrame {
 		contentPane.add(pnlButtons, BorderLayout.SOUTH);
 		pnlButtons.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
-		JButton btnEdit = new JButton("Edit");
+		btnEdit = new JButton("Edit");
+		btnEdit.setEnabled(false);
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				editTable();
@@ -83,7 +92,8 @@ public class FrameMain extends JFrame {
 		});
 		pnlButtons.add(btnEdit);
 		
-		JButton btnConvert = new JButton("Convert");
+		btnConvert = new JButton("Convert");
+		btnConvert.setEnabled(false);
 		btnConvert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				convertTable();
@@ -100,9 +110,6 @@ public class FrameMain extends JFrame {
 		contentPane.add(pnlTableDetails, BorderLayout.NORTH);
 		pnlTableDetails.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JLabel lblName = new JLabel("Table Name:");
-		pnlTableDetails.add(lblName);
-		
 		lblNameText = new JLabel("");
 		pnlTableDetails.add(lblNameText);
 	}
@@ -111,12 +118,7 @@ public class FrameMain extends JFrame {
 	public void importCSV(){
 		DialogWizard dw = new DialogWizard();
 		this.fileCon = dw.getFileController();
-		
-		if(fileCon != null){
-			tblData.setModel(new TableModelData(fileCon));
-			lblNameText.setText(fileCon.getTableName());
-			this.invalidate();
-		}
+		updateTable();
 	}
 	
 	// opens the conversion dialog box. provides it the current FileController object
@@ -126,6 +128,19 @@ public class FrameMain extends JFrame {
 	
 	public void editTable(){
 		DialogEdit de = new DialogEdit(fileCon);
+		updateTable();
+	}
+	
+	public void updateTable(){
+		if(fileCon != null){
+			tblData.setModel(new TableModelData(fileCon));
+			lblNameText.setText("Table Name: " + fileCon.getTableName());
+			this.invalidate();
+			
+			//enable buttons
+			btnEdit.setEnabled(true);
+			btnConvert.setEnabled(true);
+		}
 	}
 	
 	public static void main(String[] args) {
