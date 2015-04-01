@@ -874,4 +874,38 @@ public class FileController {
 		csvHandler.setColumnDelimiter(columnDelimiter);
 	}
 
+	public void removeColumn(int colPos){
+		int newFields = tblData.getFields() - 1;
+		String[] newColumnHeader = new String[newFields];
+		Class<?>[] newColumnClasses = new Class<?>[newFields];
+		Object[][] newTableData = new Object[tblData.getLines()][newFields];
+		boolean firstPass = true;
+		for (int i = 0; i < tblData.getFields(); i++) {
+			if (i == colPos && firstPass) {
+				firstPass = false;
+			} else {
+				if (firstPass) {
+					newColumnHeader[i] = tblData.getColumnHeader()[i];
+					newColumnClasses[i] = tblData.getColumnClasses()[i];
+					
+					for (int j = 0; j < tblData.getLines(); j++) {
+						newTableData[j][i] = tblData.getTableData()[j][i];
+					}
+				} else {
+					newColumnHeader[i - 1] = tblData.getColumnHeader()[i];
+					newColumnClasses[i - 1] = tblData.getColumnClasses()[i];
+					
+					for (int j = 0; j < tblData.getLines(); j++) {
+						newTableData[j][i - 1] = tblData.getTableData()[j][i];
+					}
+				}
+				
+			}
+		}
+		tblData.setFields(newFields);
+		tblData.setColumnHeader(newColumnHeader);
+		tblData.setColumnClasses(newColumnClasses);
+		tblData.setTableData(newTableData);
+	}
+
 }
