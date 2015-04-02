@@ -18,8 +18,6 @@ public class MYSQLDriver {
 			SQLHandler sql = new SQLHandler(td);
 			String s = sql.createSQLFile("name", SQLType.MYSQL, true, -1);
 			FileUtility.writeFile("TestData/test.sql", s);
-		//	sql.createDatabase("", "test2", SQLType.MYSQL, "root", "");
-		//	sql.createTable("", "test000000", SQLType.MYSQL, "root", "", true, -1);
 			sql.insertDatabase("", "test8000", SQLType.MYSQL, "root", "", true, -1);
 
 		} catch (Exception e) {
