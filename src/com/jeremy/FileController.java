@@ -438,7 +438,7 @@ public class FileController {
 
 			// insert the data
 			sql.insertDatabase(host + ":" + port, databaseName, sqlType,
-					userName, password, true, -1);
+					userName, password, identity, idColumn);
 		} catch (SQLException e) {
 			if (logErrors) {
 				Logging.getInstance().log(Level.SEVERE,
