@@ -106,15 +106,14 @@ public class DialogEdit extends JDialog{
 		con.setTableName(txtTableName.getText());
 		
 		//iterate through edit panel and update data
+		int delShift = 0;
 		for(PanelEditGroup pe : fields){
-			con.getColumnHeader()[pe.getColIndex()] = pe.getColName();
-			con.getColumnClasses()[pe.getColIndex()] = typeList[pe.getComboIndex()];
-		}
-		
-		//iterate through edit panel and delete if delete checked
-		for(PanelEditGroup pe : fields){
-			if(pe.getDelete()){
-				//TODO delete
+			if(!pe.getDelete()){
+				con.getColumnHeader()[pe.getColIndex() - delShift] = pe.getColName();
+				con.getColumnClasses()[pe.getColIndex() - delShift] = typeList[pe.getComboIndex()];
+			} else {
+				con.removeColumn(pe.getColIndex() - delShift);
+				delShift++;
 			}
 		}
 		
