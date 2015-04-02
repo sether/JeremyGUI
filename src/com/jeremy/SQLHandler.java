@@ -141,7 +141,7 @@ public class SQLHandler {
 	 * @see TableData
 	 * @see CSVHandler
 	 */
-	public void createDatabase(String host, String databaseName,
+	private void createDatabase(String host, String databaseName,
 			SQLType sqlType, String userName, String password) throws SQLException{
 		Connection connection = null;
 		Statement statement = null;
@@ -212,7 +212,7 @@ public class SQLHandler {
 	 * @see TableData
 	 * @see CSVHandler
 	 */
-	public void createTable(String host, String databaseName, SQLType sqlType,
+	private void createTable(String host, String databaseName, SQLType sqlType,
 			String userName, String password, boolean identity, int idColumn)  throws SQLException, Error{
 		Statement statement = null;
 		try {
