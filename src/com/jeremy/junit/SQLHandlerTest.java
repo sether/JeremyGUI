@@ -31,25 +31,7 @@ public class SQLHandlerTest {
 			e.printStackTrace();
 		}
 	}
-	
-	@Test
-	public void testDatabaseCreation(){
-		try{	
-			sql.createDatabase("", "test", SQLType.MYSQL, "root", "");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Test
-	public void testTableCreation(){
-		try{
-			sql.createTable("", "test", SQLType.MYSQL, "root", "", true, -1);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
+		
 	@Test
 	public void testInsert(){
 		try{
