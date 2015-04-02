@@ -431,12 +431,10 @@ public class FileController {
 		try {
 
 			// create the database
-			sql.createDatabase(host + ":" + port, databaseName, sqlType,
-					userName, password);
+			//sql.createDatabase(host + ":" + port, databaseName, sqlType, userName, password);
 
 			// create the table
-			sql.createTable(host + ":" + port, databaseName, sqlType, userName,
-					password, identity, idColumn);
+			//sql.createTable(host + ":" + port, databaseName, sqlType, userName, password, identity, idColumn);
 
 			// insert the data
 			sql.insertDatabase(host + ":" + port, databaseName, sqlType,
