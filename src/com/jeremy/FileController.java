@@ -19,8 +19,6 @@ public class FileController {
 	// TODO: Decide on name of class, JeremyController?
 	// TODO: javadoc
 	// TODO: decide access modifier for other classes, package maybe?
-	// TODO: add ability to change column classes by index
-	// TODO: ability to remove column
 
 	public enum OutputType {
 		XML, XML_SCHEMA, JSON, SERIALIZED
@@ -210,7 +208,7 @@ public class FileController {
 	/**
 	 * Reads a Serialized file into the tblData TableData object
 	 * 
-	 * @param csvFile
+	 * @param serFile
 	 *            - The file object that you wish to read in <br/>
 	 *            <b>USAGE:</b><br/>
 	 * 
@@ -301,7 +299,7 @@ public class FileController {
 	/**
 	 * Outputs data in the specified format to the file specified
 	 * 
-	 * @param csvFile
+	 * @param file
 	 *            - The file object that you wish to write to
 	 * @param outputType
 	 *            - The format type that you wish to output as <br/>
