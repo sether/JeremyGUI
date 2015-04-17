@@ -204,8 +204,11 @@ public class FrameMain extends JFrame {
 				ob = oi.readObject();
 				oi.close();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(this,
+					    "Invalid file",
+					    "Import Error",
+					    JOptionPane.WARNING_MESSAGE);
+				return;
 			}
 			
 			FileController fc = new FileController();
@@ -215,8 +218,12 @@ public class FrameMain extends JFrame {
 				//get password
 				String password = requestEncryptPassword();
 				try {
-					System.out.println(password);
-					fc.decryptFile(file, password);
+					if(password != null){
+						fc.decryptFile(file, password);
+					} else { // return if password not entered. cancelled
+						return;
+					}
+					
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(this,
 						    "Incorrect encryption password or invalid file",
@@ -234,6 +241,7 @@ public class FrameMain extends JFrame {
 				}
 			}
 			
+			//set new file controller if no errors and refresh
 			this.fileCon = fc;
 			updateTable();
 		}
@@ -299,7 +307,7 @@ public class FrameMain extends JFrame {
 		                         JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
 		                         null, options, options[1]);
 		
-		if(option == 1){// OK button
+		if(option == 0){// OK button
 			System.out.println("password value set");
 			password = String.valueOf(entPassword.getPassword());
 		}
