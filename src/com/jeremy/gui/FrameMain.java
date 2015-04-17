@@ -257,6 +257,9 @@ public class FrameMain extends JFrame {
 			if(selectedOption == 0){ // if yes selected
 				//get a password
 				String password = createEncryptPassword();
+				if(password == null){
+					return; //password entry cancelled. don't save.
+				}
 				
 				//select save location
 				File file = exportSaveDialog(".etd");
@@ -308,7 +311,6 @@ public class FrameMain extends JFrame {
 		                         null, options, options[1]);
 		
 		if(option == 0){// OK button
-			System.out.println("password value set");
 			password = String.valueOf(entPassword.getPassword());
 		}
 		
