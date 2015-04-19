@@ -1,5 +1,5 @@
-stwwring,cqwhar,iqwnt,dqwouble,daqwte,lqwong,fqwakebool,faqwkedate
-blah.blah,C,27,82.33,01/02/2003,5000000000,True,23/01/2111
-asdiashgdiuas,A,88,11.7,11/11/2011,92,false,20/04/2001
-asdi.ashgdiuas,T,174228,49.1262,11/12/2013,16383927373,bananas,21/12/2112
-23.2312.1,K,52,52.1,05/02/2052,36383923423,true,MOREBANANAS
+stwwring,cqwhar,iqwnt,dqwouble,daqwte,lqwong,fqwakebool,faqwkedate,realbool
+blah.blah,C,27,82.33,01/02/2003,5000000000,True,23/01/2111,true
+asdiashgdiuas,A,88,11.7,11/11/2011,92,false,20/04/2001,false
+asdi.ashgdiuas,T,174228,49.1262,11/12/2013,16383927373,bananas,21/12/2112,true
+23.2312.1,K,52,52.1,05/02/2052,36383923423,true,MOREBANANAS,true

@@ -1,7 +1,6 @@
 package com.jeremy.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
@@ -23,10 +22,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
-import java.io.Serializable;
 import java.util.logging.Level;
 
 import javax.swing.JScrollPane;
@@ -36,7 +33,6 @@ import com.jeremy.Encrypted;
 import com.jeremy.FileController;
 import com.jeremy.FileController.OutputType;
 import com.jeremy.Logging;
-import com.jeremy.Serialized;
 import com.jeremy.TableData;
 
 /**

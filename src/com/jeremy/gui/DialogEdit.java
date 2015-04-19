@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -25,8 +26,8 @@ public class DialogEdit extends JDialog{
 	private ArrayList<PanelEditGroup> fields = new ArrayList<PanelEditGroup>();
 	private JTextField txtTableName;
 	
-	private final Class<?>[] typeList = {byte.class, char.class, short.class, int.class, long.class, float.class, 
-			double.class, boolean.class, String.class};
+	private final Class<?>[] typeList = {Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, 
+			Double.class, Boolean.class, String.class, Date.class};
 	
 	public DialogEdit(FileController con){
 		this.con = con;
@@ -83,7 +84,6 @@ public class DialogEdit extends JDialog{
 			}
 		});
 		buttonPanel.add(btnUpdate);
-		
 		
 		//add edit panels
 		for(int i = 0; i < con.getFields(); i++){
