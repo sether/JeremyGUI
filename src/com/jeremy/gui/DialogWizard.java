@@ -27,7 +27,6 @@ import java.io.IOException;
 public class DialogWizard extends JDialog {
 	private final String title = "CSV Import Wizard";
 	
-	private JDialog dialog;
 	private JPanel contentPane, cardPanel;
 	private CardLayout cl;
 	private JButton btnBack, btnNext, btnFinish;
@@ -41,7 +40,6 @@ public class DialogWizard extends JDialog {
 
 	public DialogWizard() {
 		//dialog settings
-		this.dialog = this;
 		this.setModal(true);
 		this.setTitle(title);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -62,7 +60,7 @@ public class DialogWizard extends JDialog {
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dialog.dispose();
+				dispose();
 			}
 		});
 		southPanel.add(btnCancel);

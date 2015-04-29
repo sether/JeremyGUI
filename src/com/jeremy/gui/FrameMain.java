@@ -162,10 +162,12 @@ public class FrameMain extends JFrame {
 	
 	// opens the conversion dialog box. provides it the current FileController object
 	private void convertTable(){
+		@SuppressWarnings("unused")
 		DialogConvert dc = new DialogConvert(fileCon);
 	}
 	
 	private void editTable(){
+		@SuppressWarnings("unused")
 		DialogEdit de = new DialogEdit(fileCon);
 		updateTable();
 	}
