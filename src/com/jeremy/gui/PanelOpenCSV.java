@@ -32,7 +32,7 @@ public class PanelOpenCSV extends JPanel{
 		
 		//setup textfield
 		txtFilePath = new JTextField();
-		txtFilePath.setBounds(81, 33, 260, 20);
+		txtFilePath.setBounds(81, 33, 190, 20);
 		txtFilePath.setEditable(false);
 		add(txtFilePath);
 		
@@ -43,7 +43,7 @@ public class PanelOpenCSV extends JPanel{
 				openFile();
 			}
 		});
-		btnBrowse.setBounds(351, 32, 89, 23);
+		btnBrowse.setBounds(281, 32, 89, 23);
 		add(btnBrowse);
 	}
 	

@@ -1,6 +1,7 @@
 package com.jeremy.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -26,6 +27,7 @@ import java.io.IOException;
  */
 public class DialogWizard extends JDialog {
 	private final String title = "CSV Import Wizard";
+	private boolean submit = false;
 	
 	private JPanel contentPane, cardPanel;
 	private CardLayout cl;
@@ -43,7 +45,7 @@ public class DialogWizard extends JDialog {
 		this.setModal(true);
 		this.setTitle(title);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.setBounds(100, 100, 497, 295);
+		this.setBounds(100, 100, 420, 260);
 		this.setResizable(false);
 		
 		//create content
@@ -140,27 +142,40 @@ public class DialogWizard extends JDialog {
 	
 	//creates a FileController object for the main frame to retreive and use.
 	public void createFileController(){
-		fController = new FileController();
-		
-		//pre load settings
-		fController.setFirstLineUsedAsColumnHeader(pnlCSVSettings.getFirstAsColumn());
-		
-		//load file
-		try {
-			fController.readFile(pnlOpenCSV.getFile());
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(this, "Unable to open file. See error log for details.");
-			Logging.getInstance().log(Level.SEVERE, "Unable to open file", e);
+		try{
+			fController = new FileController();
+			
+			//pre load settings
+			fController.setFirstLineUsedAsColumnHeader(pnlCSVSettings.getFirstAsColumn());
+			fController.setColumnDelimiter(pnlCSVSettings.getColumnDelimiter());
+			fController.setDateFormat(pnlCSVSettings.getDateFormat());
+			
+			//load file
+			try {
+				fController.readFile(pnlOpenCSV.getFile());
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(this, "Unable to open file. See error log for details.");
+				Logging.getInstance().log(Level.SEVERE, "Unable to open file", e);
+			}
+			
+			// post load settings
+			fController.setTableName(pnlCSVSettings.getTableName());
+			
+			this.submit = true;
+			
+			this.dispose();
+		} catch (Exception e){
+			Logging.getInstance().log(Level.WARNING, "Unable to create table", e);
+			JOptionPane.showMessageDialog(this, "Unable to create table. Check settings.", "Import Error", JOptionPane.WARNING_MESSAGE);
 		}
-		
-		// post load settings
-		fController.setTableName(pnlCSVSettings.getTableName());
-		
-		this.dispose();
 	}
 	
 	// returns file controller generated with createFileController method.
 	public FileController getFileController(){
 		return fController;
+	}
+	
+	public boolean getSubmit(){
+		return this.submit;
 	}
 }

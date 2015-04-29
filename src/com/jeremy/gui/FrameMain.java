@@ -156,8 +156,10 @@ public class FrameMain extends JFrame {
 	// Opens the import wizard for importing a csv file. Attempts to input data into a table when complete.
 	private void importCSV(){
 		DialogWizard dw = new DialogWizard();
-		this.fileCon = dw.getFileController();
-		updateTable();
+		if(dw.getSubmit()){
+			this.fileCon = dw.getFileController();
+			updateTable();
+		}
 	}
 	
 	// opens the conversion dialog box. provides it the current FileController object
