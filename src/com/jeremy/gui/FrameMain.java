@@ -84,7 +84,7 @@ public class FrameMain extends JFrame {
 		JMenuItem mntmImport = new JMenuItem("Import...");
 		mntmImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				importTableData();
+				showImportTableDataDialog();
 			}
 		});
 		
@@ -182,7 +182,7 @@ public class FrameMain extends JFrame {
 		}
 	}
 	
-	private void importTableData(){
+	private void showImportTableDataDialog(){
 		File file;
 		JFileChooser ofd = new JFileChooser();
 		ofd.setCurrentDirectory(new File(System.getProperty("user.dir")));
@@ -190,57 +190,61 @@ public class FrameMain extends JFrame {
 		file = ofd.getSelectedFile();
 		
 		if(file != null && file.exists()){
-			Object ob = null;
-			
-			//try to deserialize
+			importTableData(file);
+		}
+	}
+	
+	public void importTableData(File file){
+		Object ob = null;
+		
+		//try to deserialize
+		try {
+			FileInputStream fs = new FileInputStream(file);
+			ObjectInput oi;
+			oi = new ObjectInputStream(fs);
+			ob = oi.readObject();
+			oi.close();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this,
+				    "Invalid file",
+				    "Import Error",
+				    JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		
+		FileController fc = new FileController();
+		
+		//load data depending on it's file type
+		if(ob instanceof Encrypted){ // encrypted file
+			//get password
+			String password = requestEncryptPassword();
 			try {
-				FileInputStream fs = new FileInputStream(file);
-				ObjectInput oi;
-				oi = new ObjectInputStream(fs);
-				ob = oi.readObject();
-				oi.close();
+				if(password != null){
+					fc.decryptFile(file, password);
+				} else { // return if password not entered. cancelled
+					return;
+				}
+				
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this,
+					    "Incorrect encryption password or invalid file",
+					    "Import Error",
+					    JOptionPane.WARNING_MESSAGE);
+			}
+		} else if(ob instanceof TableData){ // non encrypted file
+			try {
+				fc.readSerialized(file);
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this,
 					    "Invalid file",
 					    "Import Error",
 					    JOptionPane.WARNING_MESSAGE);
-				return;
 			}
-			
-			FileController fc = new FileController();
-			
-			//load data depending on it's file type
-			if(ob instanceof Encrypted){ // encrypted file
-				//get password
-				String password = requestEncryptPassword();
-				try {
-					if(password != null){
-						fc.decryptFile(file, password);
-					} else { // return if password not entered. cancelled
-						return;
-					}
-					
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(this,
-						    "Incorrect encryption password or invalid file",
-						    "Import Error",
-						    JOptionPane.WARNING_MESSAGE);
-				}
-			} else if(ob instanceof TableData){ // non encrypted file
-				try {
-					fc.readSerialized(file);
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(this,
-						    "Invalid file",
-						    "Import Error",
-						    JOptionPane.WARNING_MESSAGE);
-				}
-			}
-			
-			//set new file controller if no errors and refresh
-			this.fileCon = fc;
-			updateTable();
 		}
+		
+		//set new file controller if no errors and refresh
+		this.fileCon = fc;
+		updateTable();
 	}
 	
 	private void exportTableData(){
@@ -359,6 +363,14 @@ public class FrameMain extends JFrame {
 		try {
 			FrameMain frame = new FrameMain();
 			frame.setVisible(true);
+			
+			//Handle args - allow test importing of serialised table data to assist testing.
+			if(args.length > 0){
+				File file = new File(args[0]);
+				if(file.exists()){
+					frame.importTableData(file);
+				}
+			}
 		} catch (Exception e) {
 			Logging.getInstance().log(Level.SEVERE, "uncaught error in main", e);
 		}
