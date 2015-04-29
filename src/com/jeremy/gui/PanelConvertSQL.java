@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 
 import com.jeremy.FileController;
 import com.jeremy.Logging;
-import com.jeremy.FileController.OutputType;
 import com.jeremy.SQLHandler.SQLType;
 
 import javax.swing.JButton;
@@ -24,16 +23,10 @@ import javax.swing.ButtonGroup;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 
 import java.awt.FlowLayout;
-
-import javax.swing.border.LineBorder;
-
-import java.awt.Color;
 
 /**
  * A JPanel for displaying options regarding SQL conversion.
@@ -81,6 +74,12 @@ public class PanelConvertSQL extends JPanel{
 		add(lblSqlDatabase);
 		
 		JButton btnExport = new JButton("Export");
+		btnExport.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				exportSQL();
+			}
+		});
 		btnExport.setBounds(232, 65, 89, 23);
 		add(btnExport);
 		
@@ -163,18 +162,9 @@ public class PanelConvertSQL extends JPanel{
 		ofd.showSaveDialog(this);
 		return ofd.getSelectedFile();
 	}
-		
-	public void saveSQL(){
-		File file = setSaveFile();
+	
+	public SQLType getSQLType(){
 		SQLType st;
-		int PKCol;
-		
-		if(chkIdentity.isSelected()){
-			PKCol = -1;
-		} else {
-			PKCol = (Integer) cbxPKColumn.getSelectedItem();
-		}
-		
 		if(rdbtnMysql.isSelected()){
 			st = SQLType.MYSQL;
 		} else if(rdbtnMsSql.isSelected()){
@@ -182,14 +172,51 @@ public class PanelConvertSQL extends JPanel{
 		} else{
 			st = SQLType.POSTGRESQL;
 		}
+		return st;
+	}
+	
+	public int getPKColumn(){
+		int PKCol;
+		
+		if(chkIdentity.isSelected()){
+			PKCol = -1;
+		} else {
+			PKCol = (Integer) cbxPKColumn.getSelectedItem();
+		}
+		return PKCol;
+	}
+		
+	public void saveSQL(){
+		File file = setSaveFile();
 		
 		if(file != null){
 			try {
-				fileCon.outputToSQLFile(file, txtDBName.getText(), st, chkIdentity.isSelected(), PKCol);
+				fileCon.outputToSQLFile(file, txtDBName.getText(), getSQLType(), chkIdentity.isSelected(), getPKColumn());
 			} catch (Exception e) {
 				Logging.getInstance().log(Level.WARNING, "Unable to save file", e);
 				JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), "Error saving file. See log for details.", "Save Error", JOptionPane.WARNING_MESSAGE);
 			}
+		}
+	}
+	
+	public void exportSQL(){
+		final DialogDBInfo dbi = new DialogDBInfo();
+		
+		if(dbi.getSubmit()){
+			Thread thread = new Thread(){
+				public void run(){
+					try {
+						fileCon.outputToDatabase(dbi.getHost(), dbi.getPort(), txtDBName.getText(), getSQLType(), dbi.getUsername(), dbi.getPassword(), chkIdentity.isSelected(), getPKColumn());
+					} catch (Exception e) {
+						Logging.getInstance().log(Level.WARNING, "Unable to export database", e);
+						JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), "Error exporting database. See log for details.", "Export Error", JOptionPane.WARNING_MESSAGE);
+					}
+				}
+			};
+			
+			thread.start();
+			@SuppressWarnings("unused")
+			DialogProgress dp = new DialogProgress(thread, "Exporting to Database");
 		}
 	}
 	

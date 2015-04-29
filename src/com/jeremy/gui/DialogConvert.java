@@ -15,6 +15,7 @@ import com.jeremy.FileController;
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.border.BevelBorder;
 
 /**
@@ -30,10 +31,11 @@ public class DialogConvert extends JDialog {
 	
 	private JPanel xmlPanel;
 	private JPanel jsonPanel;
-	private JPanel sqlPanel;
+	private PanelConvertSQL sqlPanel;
 
 	public DialogConvert(FileController fileCon) {
 		this.setModal(true);
+		this.setTitle("Convert");
 		
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -68,7 +70,6 @@ public class DialogConvert extends JDialog {
 		cardPanel.setLayout(cl);
 		
 		xmlPanel = new PanelConvertXML(fileCon);
-		xmlPanel.setBorder(null);
 		jsonPanel = new PanelConvertJSON(fileCon);
 		sqlPanel = new PanelConvertSQL(fileCon);
 		
