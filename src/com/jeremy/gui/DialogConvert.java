@@ -15,6 +15,7 @@ import com.jeremy.FileController;
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.border.BevelBorder;
 
 /**
  * A dialog box for selecting a conversion type and outputting the results.
@@ -37,7 +38,7 @@ public class DialogConvert extends JDialog {
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
-		setBounds(100, 100, 400, 300);
+		setBounds(100, 100, 333, 370);
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		
@@ -61,11 +62,13 @@ public class DialogConvert extends JDialog {
 		
 		//add conversion panels to a card panel
 		cardPanel = new JPanel();
+		cardPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		getContentPane().add(cardPanel, BorderLayout.CENTER);
 		cl = new CardLayout(0, 0);
 		cardPanel.setLayout(cl);
 		
 		xmlPanel = new PanelConvertXML(fileCon);
+		xmlPanel.setBorder(null);
 		jsonPanel = new PanelConvertJSON(fileCon);
 		sqlPanel = new PanelConvertSQL(fileCon);
 		
@@ -88,5 +91,4 @@ public class DialogConvert extends JDialog {
 	public void changeConversion(JPanel con){
 		cl.show(cardPanel, con.toString());
 	}
-
 }

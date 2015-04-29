@@ -16,6 +16,8 @@ import com.jeremy.Logging;
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
+import java.awt.Font;
 
 /**
  * A JPanel for displaying options regarding XML conversion.
@@ -32,12 +34,13 @@ public class PanelConvertXML extends JPanel{
 		setLayout(null);
 		
 		//xml label
-		JLabel lblXML = new JLabel("XML Output:");
-		lblXML.setBounds(10, 11, 74, 14);
+		JLabel lblXML = new JLabel("XML File:");
+		lblXML.setBounds(10, 40, 74, 14);
 		add(lblXML);
 		
 		//xml browse button and save file dialog
 		btnSaveXML = new JButton("Save");
+		btnSaveXML.setBounds(232, 36, 89, 23);
 		btnSaveXML.addActionListener(new ActionListener() {
 			
 			@Override
@@ -45,16 +48,16 @@ public class PanelConvertXML extends JPanel{
 				saveXML();
 			}
 		});
-		btnSaveXML.setBounds(81, 7, 89, 23);
 		add(btnSaveXML);
 		
 		//xsd label
-		JLabel lblXSD = new JLabel("XSD Output:");
-		lblXSD.setBounds(10, 36, 74, 14);
+		JLabel lblXSD = new JLabel("Schema File:");
+		lblXSD.setBounds(10, 69, 111, 14);
 		add(lblXSD);
 		
 		//xsd browse button and save file dialog
 		btnSaveXSD = new JButton("Save");
+		btnSaveXSD.setBounds(232, 65, 89, 23);
 		btnSaveXSD.addActionListener(new ActionListener() {
 			
 			@Override
@@ -62,8 +65,13 @@ public class PanelConvertXML extends JPanel{
 				saveXSD();
 			}
 		});
-		btnSaveXSD.setBounds(81, 32, 89, 23);
 		add(btnSaveXSD);
+		
+		JLabel lblConvertToXml = new JLabel("Convert to XML");
+		lblConvertToXml.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblConvertToXml.setHorizontalAlignment(SwingConstants.LEFT);
+		lblConvertToXml.setBounds(10, 11, 196, 14);
+		add(lblConvertToXml);
 	}
 	
 	//open file save dialog and return selected file
@@ -76,21 +84,25 @@ public class PanelConvertXML extends JPanel{
 	
 	public void saveXSD(){
 		File file = setSaveFile();
-		try {
-			fileCon.outputData(file, OutputType.XML_SCHEMA);
-		} catch (Exception e) {
-			Logging.getInstance().log(Level.WARNING, "Unable to save file", e);
-			JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), "Error saving file. See log for details.", "Save Error", JOptionPane.WARNING_MESSAGE);
+		if(file != null){
+			try {
+				fileCon.outputData(file, OutputType.XML_SCHEMA);
+			} catch (Exception e) {
+				Logging.getInstance().log(Level.WARNING, "Unable to save file", e);
+				JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), "Error saving file. See log for details.", "Save Error", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 	}
 	
 	public void saveXML(){
 		File file = setSaveFile();
-		try {
-			fileCon.outputData(file, OutputType.XML);
-		} catch (Exception e) {
-			Logging.getInstance().log(Level.WARNING, "Unable to save file", e);
-			JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), "Error saving file. See log for details.", "Save Error", JOptionPane.WARNING_MESSAGE);
+		if(file != null){
+				try {
+					fileCon.outputData(file, OutputType.XML);
+				} catch (Exception e) {
+					Logging.getInstance().log(Level.WARNING, "Unable to save file", e);
+					JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), "Error saving file. See log for details.", "Save Error", JOptionPane.WARNING_MESSAGE);
+				}
 		}
 	}
 	
@@ -98,5 +110,4 @@ public class PanelConvertXML extends JPanel{
 	public String toString(){
 		return "XML";
 	}
-
 }
