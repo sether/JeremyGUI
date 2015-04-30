@@ -1,6 +1,7 @@
 package com.jeremy.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
@@ -22,8 +23,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 
 import javax.swing.JScrollPane;
@@ -34,6 +38,10 @@ import com.jeremy.FileController;
 import com.jeremy.FileController.OutputType;
 import com.jeremy.Logging;
 import com.jeremy.TableData;
+
+import javax.swing.KeyStroke;
+
+import java.awt.event.KeyEvent;
 
 /**
  * The main window for the Jeremy GUI. Displays csv data in a table allowing modifications and exporting to multiple file types.
@@ -115,6 +123,17 @@ public class FrameMain extends JFrame {
 		menuBar.add(mnuHelp);
 		
 		JMenuItem mntmAbout = new JMenuItem("About");
+		mntmAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Desktop dt = Desktop.getDesktop();
+				try {
+					dt.browse(new File(System.getProperty("user.dir") + "\\docs\\index.html").toURI());
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+			}
+		});
+		mntmAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 		mnuHelp.add(mntmAbout);
 		
 		// panel for right aligned lower buttons
