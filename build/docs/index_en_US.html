@@ -1,8 +1,85 @@
+<!DOCTYPE HTML>
+<!--
+	Solarize by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
 <html>
-<header>
-</header>
-<body>
-	<h1>CSV Conversion Tutorial</h1>
-	<p>Place instructions here</p>
-</body>
+	<head>
+		<title>Jeremy CSV Converter - Help</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.dropotron.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-layers.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel.css" />
+			<link rel="stylesheet" href="css/style.css" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+	</head>
+	<body>
+		<!-- Header Wrapper -->
+			<div class="wrapper style1">
+			
+			<!-- Header -->
+				<div id="header">
+					<div class="container">
+							
+						<!-- Logo -->
+							<h1><a href="#" id="logo">Jeremy CSV Converter</a></h1>
+					</div>
+				</div>
+			</div>
+		
+		<!-- Main -->
+			<div id="main" class="wrapper style4">
+
+				<!-- Content -->
+				<div id="content" class="container">
+					<section>
+						<header class="major">
+							<h2>CSV to XML Conversion Tutorial</h2>
+							<span class="byline">A simple walkthrough to get you started</span>
+						</header>
+						<h2>Stage 1: Import a CSV File</h2>
+						<p>Open the File menu and click the Open... menu option. This will open the CSV Import Wizard.</p>
+						<img src="appimages/1.png"></img>
+						
+						<p>In this tutorial we are going to be using the LasData.csv file located in the testdata folder that came with the application. Once the Wizard has opened click the browse button and open the LasData.csv file. Click the next button to move to the next step in the Wizard.</p>
+						<img src="appimages/2.png"></img>
+						
+						<p>This step allows us to set the properties for the CSV conversion. Set the table name as "TableData" and click the First row as column names checkbox. If we were importing a CSV file that seperated it's data entries with a period instead of a comma we would make that change on this screen. Click the Finish button to complete the import.</p>
+						<img src="appimages/3.png"></img>
+						
+						<p>As shown below you should now see that the data has been inserted into a table. Click the edit button to move onto the next stage of this tutorial.</p>
+						<img src="appimages/4.png"></img>
+						
+						</br></br></br></br></br>
+						<h2>Stage 2: Modify the Imported Data</h2>
+						<p>We can perform several useful operations with this window: rename the table, rename individual columns, delete columns and set a columns data type. 
+						</br>For this tutorial we want to delete the "GRDE" column and rename the table to "TestTable". To do this check the appropriate Delete checkbox as shown below and replace the TableName with "TestTable". Click the Submit button.</p>
+						<img src="appimages/5.png"></img>
+						
+						<p>Your table on the main screen should now look like the one below. We can see that the Table Name is "TestTable" and that we now only have 3 columns instead of 4.</p>
+						<img src="appimages/6.png"></img>
+						
+						</br></br></br></br></br>
+						<h2>Stage 3: Export as an XML Document</h2>
+						<p>This is barely a step at all. Converting to XML or JSON at this point is really easy. All you have to do is select your output type with the drop down menu and click the save button to generate your required file.</p>
+						
+						<img src="appimages/7.png"></img>
+						<p>Click the Save button next to the XML File label. Save it somewhere that you can easily find again. To check that this file has converted successfully open it in any editor or browser compatible with XML files. It should look like the one below.</p>
+						
+						<img src="appimages/8.png"></img>
+						<p>If yours looks like the image above then you have done everything correctly and you now have a basic understanding of the Jeremy Converter works.</p>
+					</section>
+				</div>
+			</div>
+
+	</body>
 </html>
