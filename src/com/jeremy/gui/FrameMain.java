@@ -28,6 +28,11 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import javax.swing.JScrollPane;
@@ -57,8 +62,8 @@ public class FrameMain extends JFrame {
 	
 	private FileController fileCon;
 	
-	public FrameMain() {
-		setTitle("Jeremy CSV Converter");
+	public FrameMain(ResourceBundle rs) {
+		setTitle(rs.getString("title"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 683, 465);
 		contentPane = new JPanel();
@@ -384,9 +389,43 @@ public class FrameMain extends JFrame {
 	
 	public static void main(String[] args) {
 		try {
-			FrameMain frame = new FrameMain();
+			//load locale data
+			String language;
+		    String country;
+		    Locale currentLocale;
+		    ResourceBundle rs;
+	
+		    if (args.length == 2) {
+		    	language = new String(args[0]);
+		        country = new String(args[1]);
+		    } else {
+		    	country = System.getProperty("user.country"); 
+		    	language = System.getProperty("user.language");
+		    }
+		    
+
+	    	System.out.println(language);
+	    	System.out.println(country);
+		    
+		    currentLocale = new Locale(language, country);
+
+			File file = new File("lang/");
+			URL[] urls = new URL[]{file.toURI().toURL()};
+			ClassLoader loader = new URLClassLoader(urls);
+			try{
+				rs = ResourceBundle.getBundle("MessagesBundle", currentLocale, loader);
+			} catch (MissingResourceException ex){
+				//catch non existing local and default to US
+				Logging.getInstance().log(Level.WARNING, "Unable to find locale bundle for system. Defaulting to US English.", ex);
+				
+				//load US bundle
+				rs = ResourceBundle.getBundle("MessagesBundle", new Locale("en", "US"), loader);
+			}
+			
+			FrameMain frame = new FrameMain(rs);
 			frame.setVisible(true);
 			
+			/**
 			//Handle args - allow test importing of serialised table data to assist testing.
 			if(args.length > 0){
 				File file = new File(args[0]);
@@ -394,6 +433,8 @@ public class FrameMain extends JFrame {
 					frame.importTableData(file);
 				}
 			}
+			**/
+			
 		} catch (Exception e) {
 			Logging.getInstance().log(Level.SEVERE, "uncaught error in main", e);
 		}
