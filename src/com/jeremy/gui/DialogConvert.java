@@ -3,6 +3,8 @@ package com.jeremy.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -11,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 
 import com.jeremy.FileController;
+import com.jeremy.gui.wrapper.JeremyResourceBundle;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
@@ -32,23 +35,30 @@ public class DialogConvert extends JDialog {
 	private JPanel xmlPanel;
 	private JPanel jsonPanel;
 	private PanelConvertSQL sqlPanel;
+	private JeremyResourceBundle rs;
 
-	public DialogConvert(FileController fileCon) {
+	public DialogConvert(FileController fileCon, JeremyResourceBundle jrs) {
+		this.rs = jrs;
 		this.setModal(true);
-		this.setTitle("Convert");
+		this.setTitle(rs.getString("Convert"));
+		setSize(333, 370);
+		setResizable(false);
+		
+		//set window location
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth();
+		int height = gd.getDisplayMode().getHeight();
+		this.setLocation(width/2 - this.getWidth()/2, height/2 - this.getHeight()/2);
 		
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		
-		setBounds(100, 100, 333, 370);
-		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		
 		JPanel topPanel = new JPanel();
 		getContentPane().add(topPanel, BorderLayout.NORTH);
 		topPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
-		JLabel lblOutputType = new JLabel("Output Type:");
+		JLabel lblOutputType = new JLabel(rs.getString("lblOutputType") + ":");
 		topPanel.add(lblOutputType);
 		
 		// conversion type combobox
@@ -69,9 +79,9 @@ public class DialogConvert extends JDialog {
 		cl = new CardLayout(0, 0);
 		cardPanel.setLayout(cl);
 		
-		xmlPanel = new PanelConvertXML(fileCon);
-		jsonPanel = new PanelConvertJSON(fileCon);
-		sqlPanel = new PanelConvertSQL(fileCon);
+		xmlPanel = new PanelConvertXML(fileCon, rs);
+		jsonPanel = new PanelConvertJSON(fileCon, rs);
+		sqlPanel = new PanelConvertSQL(fileCon, rs);
 		
 		cardPanel.add(xmlPanel.toString(), (Component) xmlPanel);
 		cardPanel.add(jsonPanel.toString(), (Component) jsonPanel);

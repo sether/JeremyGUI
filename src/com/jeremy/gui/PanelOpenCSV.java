@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
+import com.jeremy.gui.wrapper.JeremyResourceBundle;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -19,25 +21,25 @@ public class PanelOpenCSV extends JPanel{
 	private JTextField txtFilePath;
 	private File file;
 
-	public PanelOpenCSV(){
+	public PanelOpenCSV(JeremyResourceBundle rs){
 		setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Specify the location of the file.");
+		JLabel lblNewLabel = new JLabel(rs.getString("msgSpecFile"));
 		lblNewLabel.setBounds(10, 11, 430, 14);
 		add(lblNewLabel);
 		
-		JLabel lblFileName = new JLabel("File Name: ");
-		lblFileName.setBounds(20, 36, 61, 14);
+		JLabel lblFileName = new JLabel(rs.getString("msgFileName") + ": ");
+		lblFileName.setBounds(20, 36, 84, 14);
 		add(lblFileName);
 		
 		//setup textfield
 		txtFilePath = new JTextField();
-		txtFilePath.setBounds(81, 33, 190, 20);
+		txtFilePath.setBounds(114, 33, 157, 20);
 		txtFilePath.setEditable(false);
 		add(txtFilePath);
 		
 		//setup browse button
-		JButton btnBrowse = new JButton("Browse");
+		JButton btnBrowse = new JButton(rs.getString("Browse"));
 		btnBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				openFile();

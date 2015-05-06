@@ -10,6 +10,8 @@ import javax.swing.plaf.basic.BasicProgressBarUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 
 /***
  * A kickin rad progress bar that blocks input to the rest of an application until a given thread dies.
@@ -27,6 +29,13 @@ public class DialogProgress extends JDialog{
 		setModal(true);
 		setSize(270,75);
 		setResizable(false);
+		
+		//set window location
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth();
+		int height = gd.getDisplayMode().getHeight();
+		this.setLocation(width/2 - this.getWidth()/2, height/2 - this.getHeight()/2);
+		
 		thread = th;
 		
 		//setup bar

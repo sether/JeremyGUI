@@ -2,8 +2,12 @@ package com.jeremy.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.Image;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -17,6 +21,8 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -26,8 +32,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Locale;
@@ -43,6 +47,7 @@ import com.jeremy.FileController;
 import com.jeremy.FileController.OutputType;
 import com.jeremy.Logging;
 import com.jeremy.TableData;
+import com.jeremy.gui.wrapper.JeremyResourceBundle;
 
 import javax.swing.KeyStroke;
 
@@ -54,6 +59,9 @@ import java.awt.event.KeyEvent;
  * @version 1.0
  */
 public class FrameMain extends JFrame {
+	public static final String VERSION = "1.0";
+	
+	private JeremyResourceBundle rs;
 
 	private JPanel contentPane;
 	private JTable tblData;
@@ -62,10 +70,36 @@ public class FrameMain extends JFrame {
 	
 	private FileController fileCon;
 	
-	public FrameMain(ResourceBundle rs) {
+	public FrameMain(JeremyResourceBundle jrs) {
+		this.rs = jrs;
 		setTitle(rs.getString("title"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 683, 465);
+		setSize(700, 500);
+		
+		try {
+			Image img = ImageIO.read(FrameMain.class.getResource("icon/icon.png"));
+			this.setIconImage(img);
+		} catch (IOException ex) {
+			Logging.getInstance().log(Level.WARNING, "unable to load icon");
+		}
+		
+		//modify UI manager to localise components like openfiledialogs etc
+		UIManager.put("FileChooser.openDialogTitleText", rs.getString("ofdOpen"));
+		UIManager.put("FileChooser.saveDialogTitleText", rs.getString("ofdSave"));
+		UIManager.put("FileChooser.cancelButtonText", rs.getString("ofdCancel"));
+		UIManager.put("FileChooser.saveButtonText", rs.getString("ofdSave"));
+		UIManager.put("FileChooser.openButtonText", rs.getString("ofdOpen"));
+		UIManager.put("FileChooser.filesOfTypeLabelText", rs.getString("ofdFilesOfType") + ":");
+		UIManager.put("FileChooser.fileNameLabelText", rs.getString("ofdFileName") + ":");
+		SwingUtilities.updateComponentTreeUI(this);
+		
+		//set window location
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth();
+		int height = gd.getDisplayMode().getHeight();
+		this.setLocation(width/2 - this.getWidth()/2, height/2 - this.getHeight()/2);
+		
+		//setup components
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -78,7 +112,7 @@ public class FrameMain extends JFrame {
 		JMenu mnuFile = new JMenu("File");
 		menuBar.add(mnuFile);
 		
-		JMenuItem mntmOpen = new JMenuItem("Open CSV...");
+		JMenuItem mntmOpen = new JMenuItem(rs.getString("mnuOpenCSV"));
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				importCSV();
@@ -87,14 +121,14 @@ public class FrameMain extends JFrame {
 		mnuFile.add(mntmOpen);
 		
 		
-		final JMenuItem mntmExport = new JMenuItem("Export...");
+		final JMenuItem mntmExport = new JMenuItem(rs.getString("mnuExport"));
 		mntmExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exportTableData();
 			}
 		});
 		
-		JMenuItem mntmImport = new JMenuItem("Import...");
+		JMenuItem mntmImport = new JMenuItem(rs.getString("mnuImport"));
 		mntmImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showImportTableDataDialog();
@@ -102,7 +136,7 @@ public class FrameMain extends JFrame {
 		});
 		
 		//code to enable or disable export option based on whether fileCon is null
-		JMenu mntmTableData = new JMenu("Table Data");
+		JMenu mntmTableData = new JMenu(rs.getString("mnuTableData"));
 		mntmTableData.addMenuListener(new MenuListener(){
 
 			@Override
@@ -121,32 +155,51 @@ public class FrameMain extends JFrame {
 		mntmTableData.add(mntmImport);
 		mntmTableData.add(mntmExport);
 		
-		JMenuItem mntmExit = new JMenuItem("Exit");
+		JMenuItem mntmExit = new JMenuItem(rs.getString("mnuExit"));
+		mntmExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
 		mnuFile.add(mntmExit);
 		
-		JMenu mnuHelp = new JMenu("Help");
+		JMenu mnuHelp = new JMenu(rs.getString("mnuHelp"));
 		menuBar.add(mnuHelp);
 		
-		JMenuItem mntmAbout = new JMenuItem("About");
+		JMenuItem mntmAbout = new JMenuItem(rs.getString("mnuAbout"));
 		mntmAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new DialogAbout(rs);
+			}
+		});
+		mnuHelp.add(mntmAbout);
+		
+		JMenuItem mntmDoc = new JMenuItem(rs.getString("mnuDocumentation"));
+		mntmDoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Desktop dt = Desktop.getDesktop();
 				try {
-					dt.browse(new File(System.getProperty("user.dir") + "\\docs\\index.html").toURI());
+					//look for native help
+					dt.browse(new File(System.getProperty("user.dir") + "\\docs\\index_" + rs.getLocale() + ".html").toURI());
 				} catch (Exception e) {
-					System.out.println(e.getMessage());
+					try {
+						//fallback to english
+						dt.browse(new File(System.getProperty("user.dir") + "\\docs\\index_en_US.html").toURI());
+					} catch (IOException e1) {
+						Logging.getInstance().log(Level.SEVERE, "Missing help file");
+					}
 				}
 			}
 		});
-		mntmAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
-		mnuHelp.add(mntmAbout);
+		mntmDoc.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+		mnuHelp.add(mntmDoc);
 		
 		// panel for right aligned lower buttons
 		JPanel pnlButtons = new JPanel();
 		contentPane.add(pnlButtons, BorderLayout.SOUTH);
 		pnlButtons.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
-		btnEdit = new JButton("Edit");
+		btnEdit = new JButton(rs.getString("btnEdit"));
 		btnEdit.setEnabled(false);
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -155,7 +208,7 @@ public class FrameMain extends JFrame {
 		});
 		pnlButtons.add(btnEdit);
 		
-		btnConvert = new JButton("Convert");
+		btnConvert = new JButton(rs.getString("btnConvert"));
 		btnConvert.setEnabled(false);
 		btnConvert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -179,7 +232,7 @@ public class FrameMain extends JFrame {
 	
 	// Opens the import wizard for importing a csv file. Attempts to input data into a table when complete.
 	private void importCSV(){
-		DialogWizard dw = new DialogWizard();
+		DialogWizard dw = new DialogWizard(rs);
 		if(dw.getSubmit()){
 			this.fileCon = dw.getFileController();
 			updateTable();
@@ -189,19 +242,19 @@ public class FrameMain extends JFrame {
 	// opens the conversion dialog box. provides it the current FileController object
 	private void convertTable(){
 		@SuppressWarnings("unused")
-		DialogConvert dc = new DialogConvert(fileCon);
+		DialogConvert dc = new DialogConvert(fileCon, rs);
 	}
 	
 	private void editTable(){
 		@SuppressWarnings("unused")
-		DialogEdit de = new DialogEdit(fileCon);
+		DialogEdit de = new DialogEdit(fileCon, rs);
 		updateTable();
 	}
 	
 	private void updateTable(){
 		if(fileCon != null){
 			tblData.setModel(new TableModelData(fileCon));
-			lblNameText.setText("Table Name: " + fileCon.getTableName());
+			lblNameText.setText(rs.getString("lblTableName") + ": " + fileCon.getTableName());
 			this.invalidate();
 			
 			//enable buttons
@@ -234,8 +287,8 @@ public class FrameMain extends JFrame {
 			oi.close();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this,
-				    "Invalid file",
-				    "Import Error",
+				    rs.getString("msgInvalidFile"),
+				    rs.getString("msgImportError"),
 				    JOptionPane.WARNING_MESSAGE);
 			return;
 		}
@@ -255,8 +308,8 @@ public class FrameMain extends JFrame {
 				
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this,
-					    "Incorrect encryption password or invalid file",
-					    "Import Error",
+					    rs.getString("msgEncryptionPass"),
+					    rs.getString("msgImportError"),
 					    JOptionPane.WARNING_MESSAGE);
 			}
 		} else if(ob instanceof TableData){ // non encrypted file
@@ -264,8 +317,8 @@ public class FrameMain extends JFrame {
 				fc.readSerialized(file);
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this,
-					    "Invalid file",
-					    "Import Error",
+						rs.getString("msgInvalidFile"),
+					    rs.getString("msgImportError"),
 					    JOptionPane.WARNING_MESSAGE);
 			}
 		}
@@ -277,8 +330,8 @@ public class FrameMain extends JFrame {
 	
 	private void exportTableData(){
 		int selectedOption = JOptionPane.showConfirmDialog(null, 
-                "Do you want to encrypt this file?", 
-                "Encryption", 
+                rs.getString("msgDoYouWantToEncryptThisFile"), 
+                rs.getString("msgEncryption"), 
                 JOptionPane.YES_NO_OPTION);
 		
 		try {
@@ -306,10 +359,10 @@ public class FrameMain extends JFrame {
 				}
 			}
 		} catch (Exception e) {
-			Logging.getInstance().log(Level.WARNING, "Error while exporting file. May not have saved.", e);
+			Logging.getInstance().log(Level.WARNING, rs.getString("msgErrorWhileExporting"), e);
 			JOptionPane.showMessageDialog(this,
-				    "Error while exporting file. May not have saved. See log for details.",
-				    "Export Error",
+					rs.getString("msgErrorWhileExporting"),
+					rs.getString("msgExportError"),
 				    JOptionPane.WARNING_MESSAGE);
 		}
 	}
@@ -327,14 +380,14 @@ public class FrameMain extends JFrame {
 		//create password dialog components
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(2,2));
-		JLabel lblEnter = new JLabel("Enter password:");
+		JLabel lblEnter = new JLabel(rs.getString("msgEnterPassword") + ":");
 		JPasswordField entPassword = new JPasswordField(10);
 		panel.add(lblEnter);
 		panel.add(entPassword);
 		
 		//show dialog
-		String[] options = new String[]{"OK", "Cancel"};
-		int option = JOptionPane.showOptionDialog(null, panel, "Encryption Password",
+		String[] options = new String[]{rs.getString("OK"), rs.getString("Cancel")};
+		int option = JOptionPane.showOptionDialog(null, panel, rs.getString("msgEncryptionPassword"),
 		                         JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
 		                         null, options, options[1]);
 		
@@ -351,9 +404,9 @@ public class FrameMain extends JFrame {
 		//create password dialog components
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(2,2));
-		JLabel lblEnter = new JLabel("Enter password:");
+		JLabel lblEnter = new JLabel(rs.getString("lblEnterPassword"));
 		JPasswordField entPassword = new JPasswordField(10);
-		JLabel lblConf = new JLabel("Confirm password:");
+		JLabel lblConf = new JLabel(rs.getString("lblConfirmPassword"));
 		JPasswordField confPassword = new JPasswordField(10);
 		panel.add(lblEnter);
 		panel.add(entPassword);
@@ -362,8 +415,8 @@ public class FrameMain extends JFrame {
 		
 		while(password == null){
 			//show dialog
-			String[] options = new String[]{"OK", "Cancel"};
-			int option = JOptionPane.showOptionDialog(null, panel, "Encryption Password",
+			String[] options = new String[]{rs.getString("OK"), rs.getString("Cancel")};
+			int option = JOptionPane.showOptionDialog(null, panel, rs.getString("msgEncryptionPassword"),
 			                         JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
 			                         null, options, options[1]);
 			
@@ -375,8 +428,8 @@ public class FrameMain extends JFrame {
 					password = String.valueOf(entPassword.getPassword());
 				} else {
 					JOptionPane.showMessageDialog(this,
-						    "Both passwords must match and must not be empty",
-						    "Password Error",
+						    rs.getString("msgMismatchPass"),
+						    rs.getString("msgPassError"),
 						    JOptionPane.WARNING_MESSAGE);
 				}
 			} else {//option other than OK is chosen
@@ -403,9 +456,10 @@ public class FrameMain extends JFrame {
 		    	language = System.getProperty("user.language");
 		    }
 		    
-
+		    /**
 	    	System.out.println(language);
 	    	System.out.println(country);
+	    	**/
 		    
 		    currentLocale = new Locale(language, country);
 
@@ -422,7 +476,10 @@ public class FrameMain extends JFrame {
 				rs = ResourceBundle.getBundle("MessagesBundle", new Locale("en", "US"), loader);
 			}
 			
-			FrameMain frame = new FrameMain(rs);
+			//wrap the resource bundle
+			JeremyResourceBundle jrs = new JeremyResourceBundle(rs);
+			
+			FrameMain frame = new FrameMain(jrs);
 			frame.setVisible(true);
 			
 			/**
@@ -439,5 +496,4 @@ public class FrameMain extends JFrame {
 			Logging.getInstance().log(Level.SEVERE, "uncaught error in main", e);
 		}
 	}
-
 }

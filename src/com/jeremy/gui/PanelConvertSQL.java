@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import com.jeremy.FileController;
 import com.jeremy.Logging;
 import com.jeremy.SQLHandler.SQLType;
+import com.jeremy.gui.wrapper.JeremyResourceBundle;
 
 import javax.swing.JButton;
 
@@ -40,25 +41,27 @@ public class PanelConvertSQL extends JPanel{
 	private JRadioButton rdbtnMysql, rdbtnMsSql, rdbtnPostgresql;
 	private JComboBox<Integer> cbxPKColumn;
 	private JLabel lblPK;
+	private JeremyResourceBundle rs;
 
-	public PanelConvertSQL(FileController fileCon) {
+	public PanelConvertSQL(FileController fileCon, JeremyResourceBundle jrs) {
+		this.rs = jrs;
 		this.fileCon = fileCon;
 		setLayout(null);
 		
 		//title
-		JLabel lblSqlOutput = new JLabel("SQL File:");
+		JLabel lblSqlOutput = new JLabel(rs.getString("lblSQLFile"));
 		lblSqlOutput.setBounds(10, 40, 136, 14);
 		add(lblSqlOutput);
 		
 		//sql file
-		JLabel lblConvertToSql = new JLabel("Convert to SQL");
+		JLabel lblConvertToSql = new JLabel(rs.getString("lblConvertTo") + " SQL");
 		lblConvertToSql.setHorizontalAlignment(SwingConstants.LEFT);
 		lblConvertToSql.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblConvertToSql.setBounds(10, 11, 100, 14);
+		lblConvertToSql.setBounds(10, 11, 311, 14);
 		add(lblConvertToSql);
 		
-		JButton btnSaveSQL = new JButton("Save");
-		btnSaveSQL.setBounds(232, 36, 89, 23);
+		JButton btnSaveSQL = new JButton(rs.getString("Save"));
+		btnSaveSQL.setBounds(213, 36, 108, 23);
 		btnSaveSQL.addActionListener(new ActionListener() {
 			
 			@Override
@@ -69,23 +72,23 @@ public class PanelConvertSQL extends JPanel{
 		add(btnSaveSQL);
 		
 		//database export
-		JLabel lblSqlDatabase = new JLabel("SQL Database:");
+		JLabel lblSqlDatabase = new JLabel(rs.getString("lblSQLDatabase") + ":");
 		lblSqlDatabase.setBounds(10, 69, 136, 14);
 		add(lblSqlDatabase);
 		
-		JButton btnExport = new JButton("Export");
+		JButton btnExport = new JButton(rs.getString("Export"));
 		btnExport.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				exportSQL();
 			}
 		});
-		btnExport.setBounds(232, 65, 89, 23);
+		btnExport.setBounds(213, 65, 108, 23);
 		add(btnExport);
 		
 		
 		//options title
-		JLabel lblOptions = new JLabel("Options");
+		JLabel lblOptions = new JLabel(rs.getString("lblOptions"));
 		lblOptions.setHorizontalAlignment(SwingConstants.LEFT);
 		lblOptions.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblOptions.setBounds(10, 94, 100, 14);
@@ -93,10 +96,10 @@ public class PanelConvertSQL extends JPanel{
 		
 		//SQL radio button options
 		JPanel pnlRadioButtons = new JPanel();
-		pnlRadioButtons.setBorder(BorderFactory.createTitledBorder("SQL Type"));
+		pnlRadioButtons.setBorder(BorderFactory.createTitledBorder(rs.getString("lblSQLType")));
 		FlowLayout radiofl = (FlowLayout) pnlRadioButtons.getLayout();
 		radiofl.setAlignment(FlowLayout.LEFT);
-		pnlRadioButtons.setBounds(194, 144, 126, 122);
+		pnlRadioButtons.setBounds(201, 144, 119, 122);
 		add(pnlRadioButtons);
 		
 		ButtonGroup bg = new ButtonGroup();
@@ -117,16 +120,16 @@ public class PanelConvertSQL extends JPanel{
 		
 		//create primary key options
 		JPanel pnlPrimaryKeys = new JPanel();
-		pnlPrimaryKeys.setBorder(BorderFactory.createTitledBorder("Primary Key"));
+		pnlPrimaryKeys.setBorder(BorderFactory.createTitledBorder(rs.getString("lblPrimaryKey")));
 		FlowLayout pkfl = (FlowLayout) pnlPrimaryKeys.getLayout();
 		pkfl.setAlignment(FlowLayout.LEFT);
-		pnlPrimaryKeys.setBounds(10, 144, 181, 105);
+		pnlPrimaryKeys.setBounds(10, 144, 196, 105);
 		add(pnlPrimaryKeys);
 		
-		chkIdentity = new JCheckBox("Add Identity Column");
+		chkIdentity = new JCheckBox(rs.getString("lblAddIdentityColumn"));
 		pnlPrimaryKeys.add(chkIdentity);
 		
-		lblPK = new JLabel("Primary Key Column");
+		lblPK = new JLabel(rs.getString("lblPrimaryKeyColumn"));
 		pnlPrimaryKeys.add(lblPK);
 		
 		cbxPKColumn = new JComboBox<Integer>();
@@ -145,11 +148,11 @@ public class PanelConvertSQL extends JPanel{
 		});
 		
 		//database name option
-		JLabel lblDatabaseName = new JLabel("Database Name: ");
+		JLabel lblDatabaseName = new JLabel(rs.getString("lblDatabaseName") + ":");
 		lblDatabaseName.setBounds(10, 119, 108, 14);
 		add(lblDatabaseName);
 		
-		txtDBName = new JTextField("EXAMPLE_DATABASE");
+		txtDBName = new JTextField(rs.getString("msgExampleDatabase"));
 		txtDBName.setBounds(117, 116, 203, 20);
 		add(txtDBName);
 		txtDBName.setColumns(10);
@@ -193,14 +196,14 @@ public class PanelConvertSQL extends JPanel{
 			try {
 				fileCon.outputToSQLFile(file, txtDBName.getText(), getSQLType(), chkIdentity.isSelected(), getPKColumn());
 			} catch (Exception e) {
-				Logging.getInstance().log(Level.WARNING, "Unable to save file", e);
-				JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), "Error saving file. See log for details.", "Save Error", JOptionPane.WARNING_MESSAGE);
+				Logging.getInstance().log(Level.WARNING, rs.getString("msgSaveErrorM"), e);
+				JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), rs.getString("msgSaveError"), rs.getString("msgSaveErrorT"), JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
 	
 	public void exportSQL(){
-		final DialogDBInfo dbi = new DialogDBInfo();
+		final DialogDBInfo dbi = new DialogDBInfo(rs);
 		
 		if(dbi.getSubmit()){
 			Thread thread = new Thread(){
@@ -208,15 +211,15 @@ public class PanelConvertSQL extends JPanel{
 					try {
 						fileCon.outputToDatabase(dbi.getHost(), dbi.getPort(), txtDBName.getText(), getSQLType(), dbi.getUsername(), dbi.getPassword(), chkIdentity.isSelected(), getPKColumn());
 					} catch (Exception e) {
-						Logging.getInstance().log(Level.WARNING, "Unable to export database", e);
-						JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), "Error exporting database. See log for details.", "Export Error", JOptionPane.WARNING_MESSAGE);
+						Logging.getInstance().log(Level.WARNING, rs.getString("msgExportError"), e);
+						JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), rs.getString("msgExportErrorM"), rs.getString("msgExportErrorT"), JOptionPane.WARNING_MESSAGE);
 					}
 				}
 			};
 			
 			thread.start();
 			@SuppressWarnings("unused")
-			DialogProgress dp = new DialogProgress(thread, "Exporting to Database");
+			DialogProgress dp = new DialogProgress(thread, rs.getString("msgExporting"));
 		}
 	}
 	

@@ -12,11 +12,14 @@ import javax.swing.JButton;
 import com.jeremy.FileController;
 import com.jeremy.FileController.OutputType;
 import com.jeremy.Logging;
+import com.jeremy.gui.wrapper.JeremyResourceBundle;
 
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.SwingConstants;
+
 import java.awt.Font;
 
 /**
@@ -28,19 +31,21 @@ public class PanelConvertXML extends JPanel{
 	private JButton btnSaveXML, btnSaveXSD;
 	
 	private FileController fileCon;
+	private JeremyResourceBundle rs;
 
-	public PanelConvertXML(FileController fileCon) {
+	public PanelConvertXML(FileController fileCon, JeremyResourceBundle jrs) {
+		this.rs = jrs;
 		this.fileCon = fileCon;
 		setLayout(null);
 		
 		//xml label
-		JLabel lblXML = new JLabel("XML File:");
+		JLabel lblXML = new JLabel(rs.getString("lblXMLFile") + ":");
 		lblXML.setBounds(10, 40, 74, 14);
 		add(lblXML);
 		
 		//xml browse button and save file dialog
-		btnSaveXML = new JButton("Save");
-		btnSaveXML.setBounds(232, 36, 89, 23);
+		btnSaveXML = new JButton(rs.getString("Save"));
+		btnSaveXML.setBounds(210, 36, 111, 23);
 		btnSaveXML.addActionListener(new ActionListener() {
 			
 			@Override
@@ -51,13 +56,13 @@ public class PanelConvertXML extends JPanel{
 		add(btnSaveXML);
 		
 		//xsd label
-		JLabel lblXSD = new JLabel("Schema File:");
+		JLabel lblXSD = new JLabel(rs.getString("lblSchema") + ":");
 		lblXSD.setBounds(10, 69, 111, 14);
 		add(lblXSD);
 		
 		//xsd browse button and save file dialog
-		btnSaveXSD = new JButton("Save");
-		btnSaveXSD.setBounds(232, 65, 89, 23);
+		btnSaveXSD = new JButton(rs.getString("Save"));
+		btnSaveXSD.setBounds(210, 65, 111, 23);
 		btnSaveXSD.addActionListener(new ActionListener() {
 			
 			@Override
@@ -67,7 +72,7 @@ public class PanelConvertXML extends JPanel{
 		});
 		add(btnSaveXSD);
 		
-		JLabel lblConvertToXml = new JLabel("Convert to XML");
+		JLabel lblConvertToXml = new JLabel(rs.getString("lblConvertTo") + " XML");
 		lblConvertToXml.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblConvertToXml.setHorizontalAlignment(SwingConstants.LEFT);
 		lblConvertToXml.setBounds(10, 11, 196, 14);
@@ -89,7 +94,7 @@ public class PanelConvertXML extends JPanel{
 				fileCon.outputData(file, OutputType.XML_SCHEMA);
 			} catch (Exception e) {
 				Logging.getInstance().log(Level.WARNING, "Unable to save file", e);
-				JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), "Error saving file. See log for details.", "Save Error", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), rs.getString("msgSaveError"), rs.getString("msgSaveErrorT"), JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
@@ -100,8 +105,8 @@ public class PanelConvertXML extends JPanel{
 				try {
 					fileCon.outputData(file, OutputType.XML);
 				} catch (Exception e) {
-					Logging.getInstance().log(Level.WARNING, "Unable to save file", e);
-					JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), "Error saving file. See log for details.", "Save Error", JOptionPane.WARNING_MESSAGE);
+					Logging.getInstance().log(Level.WARNING, rs.getString("msgSaveErrorM"), e);
+					JOptionPane.showMessageDialog((Component)getTopLevelAncestor(), rs.getString("msgSaveError"), rs.getString("msgSaveErrorT"), JOptionPane.WARNING_MESSAGE);
 				}
 		}
 	}

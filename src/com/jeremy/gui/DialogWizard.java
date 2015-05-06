@@ -1,7 +1,8 @@
 package com.jeremy.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -11,6 +12,7 @@ import javax.swing.JButton;
 
 import com.jeremy.FileController;
 import com.jeremy.Logging;
+import com.jeremy.gui.wrapper.JeremyResourceBundle;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -26,7 +28,6 @@ import java.io.IOException;
  * @version 1.0
  */
 public class DialogWizard extends JDialog {
-	private final String title = "CSV Import Wizard";
 	private boolean submit = false;
 	
 	private JPanel contentPane, cardPanel;
@@ -39,14 +40,23 @@ public class DialogWizard extends JDialog {
 	private int panelIndex = 0;
 	
 	private FileController fController;
+	private JeremyResourceBundle rs;
 
-	public DialogWizard() {
+	public DialogWizard(JeremyResourceBundle rs) {
+		this.rs = rs;
+		
 		//dialog settings
 		this.setModal(true);
-		this.setTitle(title);
+		this.setTitle(rs.getString("wizTitle"));
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.setBounds(100, 100, 420, 260);
+		this.setSize(420, 260);
 		this.setResizable(false);
+		
+		//set window location
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth();
+		int height = gd.getDisplayMode().getHeight();
+		this.setLocation(width/2 - this.getWidth()/2, height/2 - this.getHeight()/2);
 		
 		//create content
 		contentPane = new JPanel();
@@ -59,7 +69,7 @@ public class DialogWizard extends JDialog {
 		southPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
 		//cancel button
-		JButton btnCancel = new JButton("Cancel");
+		JButton btnCancel = new JButton(rs.getString("Cancel"));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -68,7 +78,7 @@ public class DialogWizard extends JDialog {
 		southPanel.add(btnCancel);
 		
 		//back button
-		btnBack = new JButton("Back");
+		btnBack = new JButton(rs.getString("Back"));
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				backPanel();
@@ -77,7 +87,7 @@ public class DialogWizard extends JDialog {
 		southPanel.add(btnBack);
 		
 		//next button
-		btnNext = new JButton("Next");
+		btnNext = new JButton(rs.getString("Next"));
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				forwardPanel();
@@ -86,7 +96,7 @@ public class DialogWizard extends JDialog {
 		southPanel.add(btnNext);
 		
 		//finish button
-		btnFinish = new JButton("Finish");
+		btnFinish = new JButton(rs.getString("Finish"));
 		btnFinish.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createFileController();
@@ -101,8 +111,8 @@ public class DialogWizard extends JDialog {
 		contentPane.add(cardPanel, BorderLayout.CENTER);
 		
 		//create and index panels
-		pnlOpenCSV = new PanelOpenCSV();
-		pnlCSVSettings = new PanelCSVSettings();
+		pnlOpenCSV = new PanelOpenCSV(rs);
+		pnlCSVSettings = new PanelCSVSettings(rs);
 		this.panelList.add(pnlOpenCSV);
 		this.panelList.add(pnlCSVSettings);
 		
@@ -154,8 +164,8 @@ public class DialogWizard extends JDialog {
 			try {
 				fController.readFile(pnlOpenCSV.getFile());
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(this, "Unable to open file. See error log for details.");
-				Logging.getInstance().log(Level.SEVERE, "Unable to open file", e);
+				JOptionPane.showMessageDialog(this, rs.getString("msgUnableOpenFile"));
+				Logging.getInstance().log(Level.SEVERE, rs.getString("msgUnableOpenFileT"), e);
 			}
 			
 			// post load settings
@@ -165,8 +175,8 @@ public class DialogWizard extends JDialog {
 			
 			this.dispose();
 		} catch (Exception e){
-			Logging.getInstance().log(Level.WARNING, "Unable to create table", e);
-			JOptionPane.showMessageDialog(this, "Unable to create table. Check settings.", "Import Error", JOptionPane.WARNING_MESSAGE);
+			Logging.getInstance().log(Level.WARNING, rs.getString("msgUnableCreateTableT"), e);
+			JOptionPane.showMessageDialog(this, rs.getString("msgUnableCreateTable"), rs.getString("msgImportError"), JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	

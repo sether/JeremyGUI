@@ -3,12 +3,15 @@ package com.jeremy.gui;
 import javax.swing.JDialog;
 
 import com.jeremy.FileController;
+import com.jeremy.gui.wrapper.JeremyResourceBundle;
 
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
 import java.awt.BorderLayout;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -25,17 +28,26 @@ public class DialogEdit extends JDialog{
 	private JPanel pnlFields;
 	private ArrayList<PanelEditGroup> fields = new ArrayList<PanelEditGroup>();
 	private JTextField txtTableName;
+	private JeremyResourceBundle rs;
 	
 	private final Class<?>[] typeList = {Byte.class, Character.class, Short.class, Integer.class, Long.class, Float.class, 
 			Double.class, Boolean.class, String.class, Date.class};
 	
-	public DialogEdit(FileController con){
+	public DialogEdit(FileController con, JeremyResourceBundle jrs){
 		this.con = con;
+		this.rs = jrs;
 		
 		//setup dialog
 		this.setSize(450, 300);
 		this.setModal(true);
 		this.setResizable(false);
+		
+		//set window location
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth();
+		int height = gd.getDisplayMode().getHeight();
+		this.setLocation(width/2 - this.getWidth()/2, height/2 - this.getHeight()/2);
+		
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		//edit panel - to contain the PanelEditGroup objects
@@ -55,7 +67,7 @@ public class DialogEdit extends JDialog{
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		pnlFields.add(pnlTableName);
 		
-		JLabel lblTableName = new JLabel("Table Name:");
+		JLabel lblTableName = new JLabel(rs.getString("lblTableName"));
 		pnlTableName.add(lblTableName);
 		
 		txtTableName = new JTextField(con.getTableName());
@@ -69,7 +81,7 @@ public class DialogEdit extends JDialog{
 		buttonPanel.setLayout(fl_buttonPanel);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		
-		JButton btnCancel = new JButton("Cancel");
+		JButton btnCancel = new JButton(rs.getString("Cancel"));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				closeDialog();
@@ -77,7 +89,7 @@ public class DialogEdit extends JDialog{
 		});
 		buttonPanel.add(btnCancel);
 		
-		JButton btnUpdate = new JButton("Update");
+		JButton btnUpdate = new JButton(rs.getString("Submit"));
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				update();
@@ -87,7 +99,7 @@ public class DialogEdit extends JDialog{
 		
 		//add edit panels
 		for(int i = 0; i < con.getFields(); i++){
-			PanelEditGroup pe = new PanelEditGroup(i, con.getColumnHeader(i), con.getColumnClasses(i), typeList);
+			PanelEditGroup pe = new PanelEditGroup(i, con.getColumnHeader(i), con.getColumnClasses(i), typeList, rs);
 			fields.add(pe);
 			pnlFields.add(pe);
 		}

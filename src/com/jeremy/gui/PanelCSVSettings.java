@@ -4,6 +4,9 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
+
+import com.jeremy.gui.wrapper.JeremyResourceBundle;
+
 import java.awt.Font;
 
 /**
@@ -17,30 +20,30 @@ public class PanelCSVSettings extends JPanel {
 	private JTextField txtDelimiter;
 	private JTextField txtDateFormat;
 
-	public PanelCSVSettings() {
+	public PanelCSVSettings(JeremyResourceBundle rs) {
 		setLayout(null);
 		
-		JLabel lblSelectImportSettings = new JLabel("Additional settings:");
+		JLabel lblSelectImportSettings = new JLabel(rs.getString("msgAdditionalSettings") + ": ");
 		lblSelectImportSettings.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblSelectImportSettings.setBounds(10, 11, 176, 14);
 		add(lblSelectImportSettings);
 		
-		JLabel lblTableName = new JLabel("Table Name:");
-		lblTableName.setBounds(10, 39, 84, 14);
+		JLabel lblTableName = new JLabel(rs.getString("lblTableName") + ":");
+		lblTableName.setBounds(10, 39, 94, 14);
 		add(lblTableName);
 		
 		txtTable = new JTextField();
-		txtTable.setText("Table");
+		txtTable.setText(rs.getString("Table"));
 		txtTable.setBounds(104, 36, 84, 20);
 		add(txtTable);
 		txtTable.setColumns(10);
 		
-		chkFirstAsCol = new JCheckBox("First row as column names");
-		chkFirstAsCol.setBounds(206, 35, 186, 23);
+		chkFirstAsCol = new JCheckBox(rs.getString("msgColumNames"));
+		chkFirstAsCol.setBounds(206, 35, 217, 23);
 		add(chkFirstAsCol);
 		
-		JLabel lblDelimiter = new JLabel("Delimeter:");
-		lblDelimiter.setBounds(10, 67, 59, 14);
+		JLabel lblDelimiter = new JLabel(rs.getString("msgDelimiter") + ":");
+		lblDelimiter.setBounds(10, 67, 94, 14);
 		add(lblDelimiter);
 		
 		txtDelimiter = new JTextField();
@@ -50,8 +53,8 @@ public class PanelCSVSettings extends JPanel {
 		txtDelimiter.setBounds(104, 64, 84, 20);
 		add(txtDelimiter);
 		
-		JLabel lblDateFormat = new JLabel("Date Format:");
-		lblDateFormat.setBounds(10, 95, 84, 14);
+		JLabel lblDateFormat = new JLabel(rs.getString("msgDateFormat") + ":");
+		lblDateFormat.setBounds(10, 95, 94, 14);
 		add(lblDateFormat);
 		
 		txtDateFormat = new JTextField();
