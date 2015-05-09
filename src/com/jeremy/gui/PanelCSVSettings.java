@@ -59,7 +59,7 @@ public class PanelCSVSettings extends JPanel {
 		
 		txtDateFormat = new JTextField();
 		txtDateFormat.setToolTipText("");
-		txtDateFormat.setText("dd/MM/yyyy");
+		txtDateFormat.setText(rs.getString("dateFormat"));
 		txtDateFormat.setColumns(10);
 		txtDateFormat.setBounds(104, 92, 84, 20);
 		add(txtDateFormat);
