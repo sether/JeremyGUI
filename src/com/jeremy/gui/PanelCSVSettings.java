@@ -8,6 +8,8 @@ import javax.swing.JCheckBox;
 import com.jeremy.gui.wrapper.JeremyResourceBundle;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * A JPanel for displaying options used when importing a CSV file.
@@ -16,6 +18,7 @@ import java.awt.Font;
  */
 public class PanelCSVSettings extends JPanel {
 	private JTextField txtTable;
+	JCheckBox chkFileNameAsTable;
 	JCheckBox chkFirstAsCol;
 	private JTextField txtDelimiter;
 	private JTextField txtDateFormat;
@@ -38,9 +41,25 @@ public class PanelCSVSettings extends JPanel {
 		add(txtTable);
 		txtTable.setColumns(10);
 		
+		chkFileNameAsTable = new JCheckBox(rs.getString("msgTableName"));
+		chkFileNameAsTable.setBounds(206, 35, 217, 23);
+		add(chkFileNameAsTable);
+		
+		chkFileNameAsTable.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (chkFileNameAsTable.isSelected()) {
+					txtTable.setEnabled(false);
+				} else {
+					txtTable.setEnabled(true);
+				}
+			}
+		});
+		
 		chkFirstAsCol = new JCheckBox(rs.getString("msgColumNames"));
-		chkFirstAsCol.setBounds(206, 35, 217, 23);
+		chkFirstAsCol.setBounds(206, 64, 217, 23);
 		add(chkFirstAsCol);
+		
 		
 		JLabel lblDelimiter = new JLabel(rs.getString("msgDelimiter") + ":");
 		lblDelimiter.setBounds(10, 67, 94, 14);
@@ -68,6 +87,11 @@ public class PanelCSVSettings extends JPanel {
 	// checks if checkbox is selected. If true the first row of data should be the column headings
 	public boolean getFirstAsColumn(){
 		return chkFirstAsCol.isSelected();
+	}
+	
+	// checks if checkbox is selected. If true the file name should be chosen.
+	public boolean getFileNameAsTable(){
+		return chkFileNameAsTable.isSelected();
 	}
 	
 	// returns the entered table name

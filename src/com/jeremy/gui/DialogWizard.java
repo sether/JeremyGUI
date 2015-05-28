@@ -168,8 +168,12 @@ public class DialogWizard extends JDialog {
 				Logging.getInstance().log(Level.SEVERE, rs.getString("msgUnableOpenFileT"), e);
 			}
 			
-			// post load settings
-			fController.setTableName(pnlCSVSettings.getTableName());
+			//if file name is not to be used as table name
+			if (!pnlCSVSettings.getFileNameAsTable()) {
+				
+				// post load settings
+				fController.setTableName(pnlCSVSettings.getTableName());
+			}
 			
 			this.submit = true;
 			
